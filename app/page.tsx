@@ -281,9 +281,77 @@ export default function MastermindTutoringWebsite() {
         </h2>
         <div className="divider" />
         <p className="font-body" style={{ color: "#64748b", marginBottom: "3rem", maxWidth: "500px" }}>
-          We cover modules across all four major faculties at Wits. If your module isn't listed, WhatsApp us — we'll find you a tutor.
+          We cover modules across all major faculties at Wits. If your module isn&apos;t listed, WhatsApp us — we&apos;ll find you a tutor.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+
+          {/* Common First Year Engineering */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>⚙️</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#818cf8", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>FEBE · All Engineering Degrees</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Common First Year Engineering</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Engineering Chemistry",
+                "Intro to Engineering Profession",
+                "Engineering Analysis & Design IA & IB",
+                "Engineering Mathematics IA & IB",
+                "Engineering Physics IA & IB",
+                "Applied Physics I",
+                "Computing for Process Engineering (2nd yr)",
+                "Engineering Chemistry IIA & IIB",
+                "Process Engineering Fundamentals A & B",
+                "Electrical Engineering",
+                "Mathematics II",
+                "Solid Mechanics (CIVN2008A)",
+                "Thermodynamics · Fluid Mechanics",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#818cf8", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Computational & Applied Mathematics */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>📐</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#22d3ee", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Science · FEBE</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Computational & Applied Maths</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Mathematical Methods & Modelling I (APPM1026A)",
+                "Mechanics I (APPM1028A)",
+                "Scientific Computing I (APPM1030A)",
+                "Algebra I (MATH1034A)",
+                "Calculus I (MATH1036A)",
+                "Basic Analysis II (MATH2001A)",
+                "Multivariable Calculus II (MATH2007A)",
+                "Linear Algebra II (MATH2019A)",
+                "Abstract Mathematics II (MATH2015A)",
+                "Advanced Analysis II (MATH2016A)",
+                "Intro to Mathematical Statistics II (STAT2012A)",
+                "Mathematical Methods & Modelling II (APPM2021A)",
+                "Mechanics II (APPM2023A)",
+                "Scientific Computing II (APPM2025A)",
+                "Basic Computer Organisation I (COMS1015A)",
+                "Intro to Algorithms & Programming I (COMS1018A)",
+                "Intro to Data Structures & Algorithms I (COMS1017A)",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#22d3ee", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Accounting Science */}
           <div className="card" style={{ padding: "2rem" }}>
@@ -304,7 +372,8 @@ export default function MastermindTutoringWebsite() {
                 "Business Enterprise Law",
                 "Mercantile Law",
                 "Information Systems Data Analytics II",
-                "Economics IA & IB",
+                "Economics IA (Microeconomics)",
+                "Economics IB (Macroeconomics)",
                 "Commercial Law I",
                 "Computational Mathematics I",
                 "Business Statistics I",
@@ -316,30 +385,69 @@ export default function MastermindTutoringWebsite() {
             </div>
           </div>
 
-          {/* Engineering */}
+          {/* BCom Accounting */}
           <div className="card" style={{ padding: "2rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
-              <div style={{ width: "40px", height: "40px", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>⚙️</div>
+              <div style={{ width: "40px", height: "40px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>💼</div>
               <div>
-                <p className="font-body" style={{ fontSize: "0.65rem", color: "#818cf8", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Engineering · FEBE</p>
-                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Engineering</h3>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#fbbf24", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Commerce · CLM</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>BCom Accounting</h3>
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {[
-                "Linear Algebra (MATH2001)",
-                "Applied Mathematics (APPM1014)",
-                "Solid Mechanics (CIVN2008A)",
-                "Engineering Mathematics I & II",
-                "Physics for Engineers (PHYS1000A)",
-                "Thermodynamics",
-                "Fluid Mechanics",
-                "Electrical Circuits",
-                "Structural Analysis",
-                "Engineering Design & Analysis",
+                "Accounting I & II",
+                "Management Accounting & Finance II",
+                "Taxation II",
+                "Auditing II",
+                "Business Enterprise Law",
+                "Mercantile Law",
+                "Information Systems Data Analytics II",
+                "Fundamentals of Information Systems",
+                "Information Systems IA",
+                "Economics IA & IB",
+                "Commercial Law I",
+                "Computational Mathematics I",
+                "Business Statistics I",
+                "Human Resources IIA",
+                "Principles of Marketing",
+                "Consumer Behaviour",
               ].map(m => (
                 <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ color: "#818cf8", fontSize: "0.5rem" }}>◆</span> {m}
+                  <span style={{ color: "#fbbf24", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Information Systems */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>💻</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#c084fc", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Commerce · CLM</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Information Systems</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Information Systems IA & IB",
+                "Information Systems IIA & IIB",
+                "Accounting I",
+                "Computational Mathematics I",
+                "Business Statistics I",
+                "Economics IA (Microeconomics)",
+                "Economics IB (Macroeconomics)",
+                "Corporate Finance II",
+                "Investment II",
+                "Economics IIA & IIB",
+                "Consumer Behaviour",
+                "Principles of Marketing",
+                "Insurance & Risk Management IIA & IIB",
+                "Human Resources IIA & IIB (Labour Relations)",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#c084fc", fontSize: "0.5rem" }}>◆</span> {m}
                 </div>
               ))}
             </div>
@@ -359,45 +467,16 @@ export default function MastermindTutoringWebsite() {
                 "Physics I (PHYS1000A)",
                 "Chemistry I",
                 "Biology (BIOL1035A)",
-                "Introductory Life Sciences",
+                "Introductory Life Sciences I",
                 "Molecular & Cell Biology II",
                 "Biochemistry & Cell Biology III",
                 "Genetics & Developmental Biology III",
+                "Microbiology & Biotechnology III",
                 "Mathematics I & II",
-                "Statistics I & II",
-                "Microbiology & Biotechnology",
+                "Statistics I (STAT2012A)",
               ].map(m => (
                 <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span style={{ color: "#4ade80", fontSize: "0.5rem" }}>◆</span> {m}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Commerce General */}
-          <div className="card" style={{ padding: "2rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
-              <div style={{ width: "40px", height: "40px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>💼</div>
-              <div>
-                <p className="font-body" style={{ fontSize: "0.65rem", color: "#fbbf24", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Commerce · CLM</p>
-                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Commerce & Finance</h3>
-              </div>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              {[
-                "Corporate Finance II (FINA3002)",
-                "Business Statistics (STAT1006)",
-                "Economics I & II",
-                "Introduction to Finance",
-                "Investment Management",
-                "Financial Mathematics",
-                "Business Law",
-                "Marketing Management",
-                "Strategic Management",
-                "Quantitative Methods",
-              ].map(m => (
-                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ color: "#fbbf24", fontSize: "0.5rem" }}>◆</span> {m}
                 </div>
               ))}
             </div>
