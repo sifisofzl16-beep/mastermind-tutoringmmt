@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
  
 export default function MastermindTutoringWebsite() {
-  const bookingFormLink =
-    "https://docs.google.com/forms/d/e/1FAIpQLSeFR9P04-aA_vJJIEukzNpAygBJl8CHMeuaDZIjaN_tiQrwlQ/viewform";
+  const bookingFormLink = "https://wa.me/27660397779?text=Hi%20MMT%2C%20I%27d%20like%20to%20book%20a%20tutoring%20session.";
   const tutorApplicationLink =
     "https://docs.google.com/forms/d/e/1FAIpQLSeD6l_WL1IftliSprtDEADDjadc88V1zAKaDap2cSQAtX3sRg/viewform";
   const whatsappLink = "https://wa.me/27660397779";
@@ -64,22 +63,22 @@ export default function MastermindTutoringWebsite() {
  
   const tutors = [
     {
-      name: "Lethabo Mokoena",
-      subject: "Engineering Mathematics & Calculus",
-      year: "3rd Year — BSc Engineering",
-      bio: "Helps first-year students build the problem-solving confidence they need to succeed in demanding engineering programmes.",
+      name: "Kagiso Mokoena",
+      subject: "Linear Algebra · Business Statistics",
+      year: "3rd Year — BSc Mathematics",
+      bio: "Breaks down complex mathematical concepts into clear, structured frameworks. Specialises in first and second year quantitative modules across Engineering and Commerce.",
     },
     {
-      name: "Jason van der Merwe",
-      subject: "Thermodynamics & Fluid Mechanics",
-      year: "4th Year — Mechanical Engineering",
-      bio: "Specialist in the modules most students fear. Breaks down complex systems into logical, understandable frameworks.",
+      name: "Zanele Moyo",
+      subject: "Physics · APPM1014",
+      year: "4th Year — BSc Physics",
+      bio: "One of MMT\'s highest-rated tutors. Combines deep theoretical understanding with an exam-focused approach that has helped dozens of Wits students pass Phys1000A.",
     },
     {
-      name: "Priyesh Naidoo",
-      subject: "Physics & Chemistry",
-      year: "3rd Year — BSc Science",
-      bio: "Combines strong theoretical grounding with an exam-focused approach that consistently helps students improve their marks.",
+      name: "Luyanda Ntuli",
+      subject: "Corporate Finance · Taxation",
+      year: "Honours — BCom Accounting",
+      bio: "Specialist in Commerce and Accounting modules. Brings Honours-level insight to students tackling Corporate Finance II, Taxation 3 and advanced BCom modules.",
     },
   ];
  
@@ -441,7 +440,7 @@ export default function MastermindTutoringWebsite() {
             <div className="contact-item">
               <div className="contact-icon">📱</div>
               <div>
-                <p className="font-body" style={{ fontSize: "0.7rem", color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.25rem" }}>Fezile (Founder)</p>
+                <p className="font-body" style={{ fontSize: "0.7rem", color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.25rem" }}>Fezile Nkosi (CEO)</p>
                 <a href="tel:0660397779" className="font-body" style={{ fontSize: "0.95rem", color: "#e2e8f0", textDecoration: "none", fontWeight: "500" }}>066 039 7779</a>
               </div>
             </div>
@@ -496,7 +495,7 @@ export default function MastermindTutoringWebsite() {
           </div>
           <div>
             <p className="font-body" style={{ fontSize: "0.7rem", color: "#334155", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.75rem" }}>Leadership</p>
-            <p className="font-body" style={{ fontSize: "0.85rem", color: "#64748b" }}>Fezile Sifiso Nkosi — Founder</p>
+            <p className="font-body" style={{ fontSize: "0.85rem", color: "#64748b" }}>Fezile Nkosi — CEO</p>
             <p className="font-body" style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "0.25rem" }}>Thandeka Valelo — COO</p>
           </div>
           <div>
