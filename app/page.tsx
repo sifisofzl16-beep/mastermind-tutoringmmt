@@ -18,45 +18,31 @@ export default function MastermindTutoringWebsite() {
  
   const packages = [
     {
-      name: "Foundation",
-      tier: "Starter",
-      inPerson: "R300",
-      online: "R250",
-      monthly: "From R1,000",
-      ideal: "First-year students building core fundamentals and academic confidence.",
+      name: "Single Session",
+      tier: "Pay as you go",
+      inPerson: "R250",
+      online: "R200",
+      monthly: null,
+      ideal: "Perfect for students who need targeted help before a test or exam.",
       features: [
-        "First-year & introductory modules",
-        "Concept building & weekly support",
-        "Assignment & homework guidance",
-        "WhatsApp support between sessions",
+        "1-hour focused session",
+        "Any module we cover",
+        "Online or in-person",
+        "WhatsApp support after session",
       ],
     },
     {
-      name: "Momentum",
+      name: "Monthly Package",
       tier: "Most Popular",
-      inPerson: "R350",
-      online: "R300",
-      monthly: "From R2,000",
-      ideal: "Second-year students needing consistent, structured academic support.",
+      inPerson: "R1,760",
+      online: "R1,440",
+      monthly: "8 sessions / month",
+      ideal: "Best value for students who want consistent, structured support throughout the semester.",
       features: [
-        "Core technical modules",
-        "Past paper & test prep focus",
-        "Test and exam preparation",
-        "Priority academic support",
-      ],
-    },
-    {
-      name: "Mastery",
-      tier: "Advanced",
-      inPerson: "R450",
-      online: "R380",
-      monthly: "From R3,000",
-      ideal: "Advanced modules requiring deep understanding and high-performance support.",
-      features: [
-        "Final-year & advanced modules",
-        "Personalised study planning",
-        "Deep problem-solving sessions",
-        "Extended support and revision guidance",
+        "8 sessions per month",
+        "Dedicated tutor assigned",
+        "Progress tracking",
+        "Priority WhatsApp support",
       ],
     },
   ];
@@ -329,13 +315,14 @@ export default function MastermindTutoringWebsite() {
                     <span className="price-unit">/ session</span>
                   </span>
                 </div>
+                {pkg.monthly && (
                 <div className="price-row price-row-highlight">
-                  <span className="price-label" style={{ color: "#22d3ee" }}>Monthly</span>
+                  <span className="price-label" style={{ color: "#22d3ee" }}>Sessions</span>
                   <span>
                     <span className="price-value" style={{ color: "#22d3ee" }}>{pkg.monthly}</span>
-                    <span className="price-unit">/ month</span>
                   </span>
                 </div>
+                )}
               </div>
  
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
