@@ -221,6 +221,7 @@ export default function MastermindTutoringWebsite() {
             </span>
           </div>
           <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: "2.5rem" }}>
+            <a href="#modules" className="nav-link">Modules</a>
             <a href="#packages" className="nav-link">Packages</a>
             <a href="#tutors" className="nav-link">Tutors</a>
             <a href="#reviews" className="nav-link">Reviews</a>
@@ -271,6 +272,148 @@ export default function MastermindTutoringWebsite() {
         </div>
       </section>
  
+
+      {/* MODULES */}
+      <section id="modules" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
+        <div className="section-label">What We Cover</div>
+        <h2 className="font-display" style={{ fontSize: "2.5rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.75rem" }}>
+          Modules We Tutor
+        </h2>
+        <div className="divider" />
+        <p className="font-body" style={{ color: "#64748b", marginBottom: "3rem", maxWidth: "500px" }}>
+          We cover modules across all four major faculties at Wits. If your module isn't listed, WhatsApp us — we'll find you a tutor.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+
+          {/* Accounting Science */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>📊</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#22d3ee", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Commerce · CLM</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Accounting Science</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Accounting Information Systems",
+                "Financial Accounting I, II, III",
+                "Management Accounting & Finance II, III",
+                "Taxation II, III",
+                "Auditing II, III",
+                "Business Enterprise Law",
+                "Mercantile Law",
+                "Information Systems Data Analytics II",
+                "Economics IA & IB",
+                "Commercial Law I",
+                "Computational Mathematics I",
+                "Business Statistics I",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#22d3ee", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Engineering */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>⚙️</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#818cf8", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Engineering · FEBE</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Engineering</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Linear Algebra (MATH2001)",
+                "Applied Mathematics (APPM1014)",
+                "Solid Mechanics (CIVN2008A)",
+                "Engineering Mathematics I & II",
+                "Physics for Engineers (PHYS1000A)",
+                "Thermodynamics",
+                "Fluid Mechanics",
+                "Electrical Circuits",
+                "Structural Analysis",
+                "Engineering Design & Analysis",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#818cf8", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Science */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>🔬</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#4ade80", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Faculty of Science</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Science</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Physics I (PHYS1000A)",
+                "Chemistry I",
+                "Biology (BIOL1035A)",
+                "Introductory Life Sciences",
+                "Molecular & Cell Biology II",
+                "Biochemistry & Cell Biology III",
+                "Genetics & Developmental Biology III",
+                "Mathematics I & II",
+                "Statistics I & II",
+                "Microbiology & Biotechnology",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#4ade80", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Commerce General */}
+          <div className="card" style={{ padding: "2rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+              <div style={{ width: "40px", height: "40px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>💼</div>
+              <div>
+                <p className="font-body" style={{ fontSize: "0.65rem", color: "#fbbf24", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", margin: 0 }}>Commerce · CLM</p>
+                <h3 className="font-display" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", margin: 0 }}>Commerce & Finance</h3>
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {[
+                "Corporate Finance II (FINA3002)",
+                "Business Statistics (STAT1006)",
+                "Economics I & II",
+                "Introduction to Finance",
+                "Investment Management",
+                "Financial Mathematics",
+                "Business Law",
+                "Marketing Management",
+                "Strategic Management",
+                "Quantitative Methods",
+              ].map(m => (
+                <div key={m} className="font-body" style={{ fontSize: "0.82rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span style={{ color: "#fbbf24", fontSize: "0.5rem" }}>◆</span> {m}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+        <div style={{ marginTop: "2rem", padding: "1.25rem 1.75rem", background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.15)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+          <p className="font-body" style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+            Don&apos;t see your module? WhatsApp us and we&apos;ll find the right tutor for you.
+          </p>
+          <a href="https://wa.me/27660397779?text=Hi%20MMT%2C%20I%20need%20help%20with%20a%20specific%20module." target="_blank" rel="noreferrer" className="btn-ghost" style={{ fontSize: "0.8rem", padding: "0.6rem 1.25rem" }}>
+            WhatsApp Us →
+          </a>
+        </div>
+      </section>
+
       {/* PACKAGES */}
       <section id="packages" style={{ maxWidth: "1200px", margin: "0 auto", padding: "6rem 1.5rem" }}>
         <div className="section-label">Pricing</div>
