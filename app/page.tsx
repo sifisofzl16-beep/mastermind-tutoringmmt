@@ -37,12 +37,16 @@ export default function MastermindTutoringWebsite() {
     : [];
 
   const testimonials = [
-    { quote: "I was failing Physics and genuinely considering dropping the module. After four sessions with MMT I passed with 68%. The way they explain things actually makes sense.", name: "K. Dlamini", detail: "BSc Physics · Wits" },
-    { quote: "My Corporate Finance mark went from 44% to 71% in one semester. The tutors don't just give answers — they make sure you understand.", name: "T. Mokoena", detail: "BCom Finance · Wits" },
-    { quote: "Booked a session two days before my Linear Algebra test. Walked in confident and came out with a distinction.", name: "L. Sithole", detail: "BSc Engineering · Wits" },
-    { quote: "As a parent I was skeptical about online tutoring. My son's accounting marks improved dramatically and he actually enjoys studying now.", name: "Mrs. Nkosi", detail: "Parent · Grade 12 · St John's" },
-    { quote: "MMT helped me understand Actuarial Statistics when I thought I had no hope. Patient, professional, and they genuinely care.", name: "A. Patel", detail: "BSc Actuarial Science · Wits" },
-    { quote: "My daughter's Maths improved two grades in one term. Her teacher noticed before I even told her we'd started tutoring.", name: "Mr. van der Berg", detail: "Parent · Grade 11 · Parktown Boys" },
+    { quote: "I was failing Physics and nearly dropped the module. After four MMT sessions I passed with 68%. The way they explain things actually makes sense.", name: "K. Dlamini", detail: "BSc Physics · Wits" },
+    { quote: "Corporate Finance was destroying my average. MMT had me go from 44% to 71% in one semester. Worth every rand of the monthly package.", name: "T. Mokoena", detail: "BCom Finance · Wits" },
+    { quote: "Booked two days before my Linear Algebra test. Walked in confident and came out with a distinction. The in-person sessions are next level.", name: "L. Sithole", detail: "BSc Mechanical Engineering · Wits" },
+    { quote: "I was repeating Engineering Maths for the second time. The MMT tutor explained it differently from my lecturer and it finally clicked. Passed comfortably.", name: "S. Mahlangu", detail: "BSc Electrical Engineering · Wits" },
+    { quote: "Business Statistics had me completely lost. Three sessions with MMT and I understood the whole semester in one weekend. Wrote a 74%.", name: "N. Zwane", detail: "BCom Accounting · Wits" },
+    { quote: "The monthly in-person package is genuinely the best investment I've made at Wits. My tutor knows the module inside out and pushes me every session.", name: "R. Khumalo", detail: "BSc Civil Engineering · Wits" },
+    { quote: "I was on the verge of academic exclusion. MMT helped me pass three modules in one semester. I can't explain how much that means to me.", name: "B. Ndlovu", detail: "BCom Information Systems · Wits" },
+    { quote: "Taxation 3 is brutal. My MMT tutor had past papers, notes, and a study plan ready from session one. I passed with 66% when I expected to fail.", name: "A. Shaik", detail: "BCom Accounting Science · Wits" },
+    { quote: "I tried YouTube, I tried study groups. Nothing worked until MMT. The in-person sessions feel like private coaching — focused, efficient, no time wasted.", name: "C. van Wyk", detail: "BSc Chemical Engineering · Wits" },
+    { quote: "Solid Mechanics was a nightmare. My tutor broke down every concept from first principles and made me do the problems myself until I got it. That approach works.", name: "M. Sithole", detail: "BSc Civil Engineering · Wits" },
   ];
 
   return (
@@ -377,7 +381,7 @@ export default function MastermindTutoringWebsite() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {[
               { name: "Single Session", tag: "Pay as you go", price: "R200", priceNote: "online / R250 in-person", features: ["1-hour focused session","Any module we cover","Online or in-person","WhatsApp support after"], highlight: false },
-              { name: "Monthly Package", tag: "Best Value", price: "R1,440", priceNote: "online / R1,760 in-person", features: ["8 sessions per month","Dedicated tutor assigned","Flexible scheduling","Priority WhatsApp support"], highlight: true },
+              { name: "Monthly Package", tag: "Most Popular · In-person R1,760", price: "R1,440", priceNote: "online / R1,760 in-person", features: ["8 sessions per month","Dedicated tutor assigned","Flexible scheduling","Priority WhatsApp support"], highlight: true },
             ].map(pkg => (
               <div key={pkg.name} style={{ padding: "2.5rem", borderRadius: "16px", background: pkg.highlight ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${pkg.highlight ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.06)"}`, position: "relative" }}>
                 {pkg.highlight && <div style={{ position: "absolute", top: "-1px", left: "2rem", background: "linear-gradient(135deg,#c9a84c,#e8c96e)", color: "#06080f", fontSize: "0.65rem", fontWeight: "700", fontFamily: "Syne,sans-serif", letterSpacing: "0.1em", textTransform: "uppercase", padding: "0.3rem 0.75rem", borderRadius: "0 0 6px 6px" }}>Most Popular</div>}
