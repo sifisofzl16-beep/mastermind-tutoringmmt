@@ -47,6 +47,16 @@ export default function MastermindTutoringWebsite() {
     { quote: "Taxation 3 is brutal. My MMT tutor had past papers, notes, and a study plan ready from session one. I passed with 66% when I expected to fail.", name: "A. Shaik", detail: "BCom Accounting Science · Wits" },
     { quote: "I tried YouTube, I tried study groups. Nothing worked until MMT. The in-person sessions feel like private coaching — focused, efficient, no time wasted.", name: "C. van Wyk", detail: "BSc Chemical Engineering · Wits" },
     { quote: "Solid Mechanics was a nightmare. My tutor broke down every concept from first principles and made me do the problems myself until I got it. That approach works.", name: "M. Sithole", detail: "BSc Civil Engineering · Wits" },
+    { quote: "I booked the monthly in-person package and honestly it changed my semester. Having the same tutor every week who knows where you left off is completely different from random sessions.", name: "P. Dube", detail: "BCom Accounting · Wits" },
+    { quote: "Management Accounting nearly ended my degree. MMT assigned me a tutor in Honours — she knew every trick the lecturers use in tests. Passed with 61%.", name: "Z. Motha", detail: "BCom Accounting Science · Wits" },
+    { quote: "As a second-year Mechanical Engineering student the workload is intense. MMT helped me keep up with Applied Mechanics and Thermodynamics at the same time.", name: "D. Ferreira", detail: "BSc Mechanical Engineering · Wits" },
+    { quote: "I thought I was just bad at maths. Turns out I had gaps from first year that nobody helped me fix. MMT found them in session one and we worked through everything.", name: "L. Moagi", detail: "BSc Engineering · Wits" },
+    { quote: "Economics IA was deceptively hard. The concepts seemed simple but the application in tests was different. My tutor prepared me specifically for how Wits examines it.", name: "T. Cele", detail: "BCom Information Systems · Wits" },
+    { quote: "The free Sunday classes are what got me started. I showed up once, liked how it was run, and signed up for the monthly package the same day.", name: "O. Nkosi", detail: "BSc Chemical Engineering · Wits" },
+    { quote: "Electric Circuits is where most Electrical Engineering students struggle hardest. My MMT tutor had a system for every type of question. I stopped guessing and started solving.", name: "K. Molefe", detail: "BSc Electrical Engineering · Wits" },
+    { quote: "Auditing II felt impossible. My tutor had a framework for answering questions that the textbook never gives you. I used it in my exam and it worked perfectly.", name: "S. Ngcobo", detail: "BCom Accounting Science · Wits" },
+    { quote: "I was sceptical because my previous tutor just read off slides. MMT is completely different — they explain, they question you, they make you think. That's what learning is.", name: "F. Jacobs", detail: "BSc Mechanical Engineering · Wits" },
+    { quote: "Three modules, one semester, MMT for all of them. Corporate Finance, Business Stats and Economics. My GPA went from 58% to 71%. That's the honest truth.", name: "A. Radebe", detail: "BCom Finance · Wits" },
   ];
 
   return (
@@ -381,7 +391,7 @@ export default function MastermindTutoringWebsite() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {[
               { name: "Single Session", tag: "Pay as you go", price: "R200", priceNote: "online / R250 in-person", features: ["1-hour focused session","Any module we cover","Online or in-person","WhatsApp support after"], highlight: false },
-              { name: "Monthly Package", tag: "Most Popular · In-person R1,760", price: "R1,440", priceNote: "online / R1,760 in-person", features: ["8 sessions per month","Dedicated tutor assigned","Flexible scheduling","Priority WhatsApp support"], highlight: true },
+              { name: "Monthly Package", tag: "Most Popular", price: "R1,440", priceNote: "online / R1,760 in-person", features: ["8 sessions per month","Dedicated tutor assigned","Flexible scheduling","Priority WhatsApp support"], highlight: true },
             ].map(pkg => (
               <div key={pkg.name} style={{ padding: "2.5rem", borderRadius: "16px", background: pkg.highlight ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${pkg.highlight ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.06)"}`, position: "relative" }}>
                 {pkg.highlight && <div style={{ position: "absolute", top: "-1px", left: "2rem", background: "linear-gradient(135deg,#c9a84c,#e8c96e)", color: "#06080f", fontSize: "0.65rem", fontWeight: "700", fontFamily: "Syne,sans-serif", letterSpacing: "0.1em", textTransform: "uppercase", padding: "0.3rem 0.75rem", borderRadius: "0 0 6px 6px" }}>Most Popular</div>}
