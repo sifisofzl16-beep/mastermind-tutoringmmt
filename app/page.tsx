@@ -158,7 +158,7 @@ export default function MastermindTutoringWebsite() {
             MMT<span className="gold">.</span>
           </a>
           <div className="hide-mobile" style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
-            {["modules","courses","packages","tutors","contact"].map(s => (
+            {["modules","courses","highschool","packages","tutors","contact"].map(s => (
               <a key={s} href={`#${s}`} className="nav-a" style={{ textTransform: "capitalize" }}>{s}</a>
             ))}
           </div>
@@ -381,6 +381,148 @@ export default function MastermindTutoringWebsite() {
         </div>
       </section>
 
+
+      {/* ── HIGH SCHOOL ─────────────────── */}
+      <section id="highschool" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+
+          {/* Header */}
+          <div className="label-tag" style={{ marginBottom: "1rem" }}>For Parents</div>
+          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", lineHeight: 1.1, marginBottom: "1rem" }}>
+            Your child is capable of<br/>
+            <span style={{ color: "#c9a84c" }}>more than their marks suggest.</span>
+          </h2>
+          <div className="divider-gold"/>
+          <p className="inter" style={{ color: "#64748b", fontSize: "1rem", lineHeight: "1.8", maxWidth: "600px", marginBottom: "3.5rem" }}>
+            Every parent has felt it — watching your child study for hours, genuinely trying, and still coming home with results that don&apos;t reflect their effort. It&apos;s not a talent problem. It&apos;s not a work ethic problem. It&apos;s a support problem. The right tutor, explaining the right concept in the right way, changes everything.
+          </p>
+
+          {/* Emotional pain points */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem", marginBottom: "4rem" }}>
+            {[
+              { icon: "😔", title: "They study but the marks don't move", body: "Your child is putting in the hours. The problem isn't effort — it's that nobody has shown them how to study this subject specifically." },
+              { icon: "⏰", title: "June exams are approaching fast", body: "The academic calendar doesn't slow down. Every week without targeted support is a week harder to recover from." },
+              { icon: "🎓", title: "University acceptance depends on this year", body: "For Grade 11 and 12 students, this isn't just about passing. It's about keeping the right doors open." },
+              { icon: "💬", title: "They won't ask their teacher for help", body: "Most teenagers are too proud or too embarrassed. A peer tutor — someone closer in age — changes that dynamic completely." },
+            ].map(p => (
+              <div key={p.title} className="card-dark" style={{ padding: "1.75rem" }}>
+                <span style={{ fontSize: "1.75rem", display: "block", marginBottom: "0.75rem" }}>{p.icon}</span>
+                <h3 className="syne" style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{p.title}</h3>
+                <p className="inter" style={{ fontSize: "0.83rem", color: "#475569", lineHeight: "1.7" }}>{p.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* The MMT difference */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", marginBottom: "4rem", alignItems: "center" }}>
+            <div>
+              <div className="label-tag" style={{ marginBottom: "0.75rem" }}>The MMT difference</div>
+              <h3 className="syne" style={{ fontSize: "2rem", fontWeight: "800", color: "#f1f5f9", lineHeight: 1.2, marginBottom: "1.25rem" }}>
+                Not a tutoring agency.<br/>A results company.
+              </h3>
+              <p className="inter" style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: "1.8", marginBottom: "1.5rem" }}>
+                Every MMT tutor is a current or recent top-performing university student. They&apos;ve sat in the same classrooms, written the same papers, and cracked the same problems your child is facing right now. They don&apos;t just know the content — they know exactly where students get stuck and why.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                {[
+                  "Tutors vetted and trained by MMT before their first session",
+                  "Structured sessions — not just homework help",
+                  "Progress tracked so you always know where your child stands",
+                  "WhatsApp communication — direct line to your child's tutor",
+                  "Flexible scheduling around school and extra-murals",
+                ].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                    <span style={{ color: "#c9a84c", marginTop: "2px", flexShrink: 0 }}>✓</span>
+                    <span className="inter" style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {[
+                { school: "St John's College", area: "Houghton" },
+                { school: "King Edward VII", area: "Houghton" },
+                { school: "Parktown Boys High", area: "Parktown" },
+                { school: "Parktown Girls High", area: "Parktown" },
+                { school: "Sacred Heart College", area: "Observatory" },
+                { school: "Greenside High School", area: "Greenside" },
+                { school: "Northcliff High School", area: "Northcliff" },
+              ].map(s => (
+                <div key={s.school} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.85rem 1.25rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "8px" }}>
+                  <span className="inter" style={{ fontSize: "0.88rem", color: "#f1f5f9", fontWeight: "500" }}>{s.school}</span>
+                  <span className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>{s.area}</span>
+                </div>
+              ))}
+              <p className="inter" style={{ fontSize: "0.75rem", color: "#374151", textAlign: "center" }}>And all surrounding Johannesburg schools</p>
+            </div>
+          </div>
+
+          {/* Subjects */}
+          <div style={{ marginBottom: "3.5rem" }}>
+            <div className="label-tag" style={{ marginBottom: "1rem" }}>Subjects we cover</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+              {[
+                { subject: "Mathematics", icon: "📐", desc: "Pure Maths and Maths Literacy. From algebra foundations to calculus. The subject most students need help with most.", grade: "Grades 8–12", color: "#c9a84c" },
+                { subject: "Physical Science", icon: "⚗️", desc: "Physics and Chemistry. Concepts, calculations, and the kind of exam technique that turns 50% into 75%.", grade: "Grades 10–12", color: "#818cf8" },
+                { subject: "Accounting", icon: "📊", desc: "From basic ledgers to financial statements. The subject where small concept gaps compound into big mark losses.", grade: "Grades 10–12", color: "#22d3ee" },
+                { subject: "English", icon: "✍️", desc: "Home Language and First Additional. Essays, language, literature. The subject that affects every other subject.", grade: "Grades 8–12", color: "#4ade80" },
+                { subject: "Economics", icon: "📈", desc: "Micro and macro. Concepts that make sense in theory but lose students in application.", grade: "Grades 10–12", color: "#f59e0b" },
+                { subject: "Life Sciences", icon: "🔬", desc: "Biology from cells to ecosystems. Strong memory work combined with understanding gets the marks.", grade: "Grades 10–12", color: "#ec4899" },
+                { subject: "Geography", icon: "🌍", desc: "Physical and human geography. Maps, case studies, and the structured answers examiners want to see.", grade: "Grades 10–12", color: "#06b6d4" },
+                { subject: "Business Studies", icon: "💼", desc: "Theory, application, scenarios. The subject where exam technique matters as much as content knowledge.", grade: "Grades 10–12", color: "#a78bfa" },
+              ].map(s => (
+                <div key={s.subject} className="card-dark" style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                  <div style={{ width: "42px", height: "42px", background: `${s.color}15`, border: `1px solid ${s.color}30`, borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>{s.icon}</div>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem" }}>
+                      <h3 className="syne" style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f1f5f9" }}>{s.subject}</h3>
+                      <span className="inter" style={{ fontSize: "0.65rem", color: s.color, background: `${s.color}15`, padding: "0.15rem 0.5rem", borderRadius: "4px" }}>{s.grade}</span>
+                    </div>
+                    <p className="inter" style={{ fontSize: "0.8rem", color: "#475569", lineHeight: "1.6" }}>{s.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Pricing */}
+          <div style={{ marginBottom: "3.5rem" }}>
+            <div className="label-tag" style={{ marginBottom: "1rem" }}>High School Pricing</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "1rem" }}>
+              {[
+                { subject: "Maths / Physical Science", per: "R350/hr", monthly: "R2,400/mo" },
+                { subject: "Accounting / Economics", per: "R320/hr", monthly: "R2,200/mo" },
+                { subject: "English / Languages", per: "R300/hr", monthly: "R2,000/mo" },
+                { subject: "All other subjects", per: "R280/hr", monthly: "R1,800/mo" },
+              ].map((p, i) => (
+                <div key={p.subject} style={{ padding: "1.25rem 1.5rem", background: i === 0 ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${i === 0 ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.06)"}`, borderRadius: "12px" }}>
+                  <p className="inter" style={{ fontSize: "0.75rem", color: "#475569", marginBottom: "0.4rem" }}>{p.subject}</p>
+                  <p className="syne" style={{ fontSize: "1.4rem", fontWeight: "800", color: "#c9a84c" }}>{p.per}</p>
+                  <p className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>{p.monthly} · 8 sessions</p>
+                </div>
+              ))}
+            </div>
+            <p className="inter" style={{ fontSize: "0.8rem", color: "#374151" }}>
+              Online sessions: R50 discount per session &nbsp;·&nbsp; First session: R150 Academic Assessment (gap analysis + personalised study plan)
+            </p>
+          </div>
+
+          {/* Parent CTA */}
+          <div style={{ padding: "3rem", background: "linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03))", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "20px", textAlign: "center" }}>
+            <h3 className="syne" style={{ fontSize: "2rem", fontWeight: "800", color: "#f1f5f9", marginBottom: "1rem", lineHeight: 1.2 }}>
+              Your child&apos;s next exam<br/>doesn&apos;t have to be a gamble.
+            </h3>
+            <p className="inter" style={{ color: "#64748b", fontSize: "0.95rem", lineHeight: "1.7", maxWidth: "480px", margin: "0 auto 2rem" }}>
+              WhatsApp us today. Tell us your child&apos;s grade and subject. We&apos;ll match them with the right tutor and have a session booked within 24 hours.
+            </p>
+            <a href="https://wa.me/27660397779?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
+              📲 Book via WhatsApp — 066 039 7779
+            </a>
+          </div>
+
+        </div>
+      </section>
+
       {/* ── PACKAGES ──────────────────────── */}
       <section id="packages" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
@@ -509,7 +651,7 @@ export default function MastermindTutoringWebsite() {
           </div>
           <p className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>© 2026 Mastermind Tutoring · Wits University · Johannesburg</p>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            {["modules","courses","packages","contact"].map(l => (
+            {["modules","courses","highschool","packages","contact"].map(l => (
               <a key={l} href={`#${l}`} className="inter" style={{ fontSize: "0.75rem", color: "#374151", textTransform: "capitalize" }}>{l}</a>
             ))}
           </div>
