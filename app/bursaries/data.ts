@@ -46,6 +46,38 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "http://studytrust.org.za/toyota",
     source: "jobs.toyota.co.za",
   },
+  {
+    slug: "wilmar",
+    company: "Wilmar South Africa",
+    emoji: "🌾",
+    status: "Open",
+    year: "2027",
+    summary:
+      "Full cost-of-study funding — tuition, accommodation, books and living allowance — for South African students entering their final undergraduate year in Commerce, Engineering or Agriculture-related fields.",
+    about:
+      "Wilmar South Africa is part of Wilmar International, one of the world's largest agribusiness groups, operating in edible oils, sugar and consumer food products across South Africa. The Wilmar SA Bursary Fund supports talented students from historically disadvantaged or underprivileged backgrounds through their final year of study, with selection based on both academic potential and genuine financial need.",
+    fields: [
+      { group: "Commerce & Finance", items: ["Accounting", "Finance", "Econometrics", "International Trade"] },
+      { group: "Operations & Supply", items: ["Operations Management", "Production Management", "Supply Chain", "Agro-economics"] },
+      { group: "People & Markets", items: ["Human Resources Management", "Marketing / Sales-related", "Engineering"] },
+    ],
+    requirements: [
+      "South African citizens only",
+      "Historically Disadvantaged Person and/or from an underprivileged background",
+      "Currently enrolled in your final undergraduate year",
+      "Studying at an accredited South African institution",
+      "Minimum 70% aggregate in your latest examinations",
+    ],
+    benefits: [
+      "Tuition fees covered",
+      "Accommodation covered",
+      "Book allowance",
+      "Living allowance",
+    ],
+    closingDate: "19 August 2026",
+    applyUrl: "https://www.cognitoforms.com/StudyTrust2/WilmarSABursaryApplication2026?qr",
+    source: "Wilmar SA bursary application (StudyTrust)",
+  },
 ];
 
 export function getBursary(slug: string) {
