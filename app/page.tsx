@@ -162,6 +162,7 @@ export default function MastermindTutoringWebsite() {
               <a key={s} href={`#${s}`} className="nav-a" style={{ textTransform: "capitalize" }}>{s}</a>
             ))}
             <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c" }}>Bursaries</a>
+            <a href="/opportunities" className="nav-a" style={{ color: "#c9a84c" }}>Opportunities</a>
           </div>
           <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold hide-mobile" style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
             Book a Session
@@ -656,6 +657,7 @@ export default function MastermindTutoringWebsite() {
               <a key={l} href={`#${l}`} className="inter" style={{ fontSize: "0.75rem", color: "#374151", textTransform: "capitalize" }}>{l}</a>
             ))}
             <a href="/bursaries" className="inter" style={{ fontSize: "0.75rem", color: "#c9a84c" }}>Bursaries</a>
+            <a href="/opportunities" className="inter" style={{ fontSize: "0.75rem", color: "#c9a84c" }}>Opportunities</a>
           </div>
         </div>
       </footer>
