@@ -53,7 +53,7 @@ const SHARED_STYLE = `
 export default function BursaryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const bursary = getBursary(slug);
-  const waLink = "https://wa.me/27660397779?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20bursaries%20open.";
+  const waLink = "https://wa.me/27693126747?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20bursaries%20open.";
 
   if (!bursary) {
     return (

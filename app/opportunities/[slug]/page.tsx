@@ -49,7 +49,7 @@ const SHARED_STYLE = `
 export default function OpportunityDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const opp = getOpportunity(slug);
-  const waLink = "https://wa.me/27660397779?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20opportunities%20open.";
+  const waLink = "https://wa.me/27693126747?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20opportunities%20open.";
 
   if (!opp) {
     return (

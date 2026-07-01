@@ -5,7 +5,7 @@ import { BURSARIES } from "./data";
 
 export default function BursariesIndexPage() {
   const waLink =
-    "https://wa.me/27660397779?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20bursaries%20open.";
+    "https://wa.me/27693126747?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20bursaries%20open.";
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {

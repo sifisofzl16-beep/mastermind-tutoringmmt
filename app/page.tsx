@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 
 export default function MastermindTutoringWebsite() {
-  const waLink = "https://wa.me/27660397779?text=Hi%20MMT%2C%20I%27d%20like%20to%20book%20a%20tutoring%20session.";
+  const waLink = "https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27d%20like%20to%20book%20a%20tutoring%20session.";
   const tutorLink = "https://docs.google.com/forms/d/e/1FAIpQLSeD6l_WL1IftliSprtDEADDjadc88V1zAKaDap2cSQAtX3sRg/viewform";
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("modules");
@@ -517,8 +517,8 @@ export default function MastermindTutoringWebsite() {
             <p className="inter" style={{ color: "#64748b", fontSize: "0.95rem", lineHeight: "1.7", maxWidth: "480px", margin: "0 auto 2rem" }}>
               WhatsApp us today. Tell us your child&apos;s grade and subject. We&apos;ll match them with the right tutor and have a session booked within 24 hours.
             </p>
-            <a href="https://wa.me/27660397779?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 Book via WhatsApp — 066 039 7779
+            <a href="https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
+              📲 Book via WhatsApp — 069 312 6747
             </a>
           </div>
 
@@ -632,7 +632,7 @@ export default function MastermindTutoringWebsite() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
             <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 066 039 7779 — WhatsApp
+              📲 069 312 6747 — WhatsApp
             </a>
             <a href="mailto:mastermindtutoringmmt@gmail.com" className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>
               mastermindtutoringmmt@gmail.com
