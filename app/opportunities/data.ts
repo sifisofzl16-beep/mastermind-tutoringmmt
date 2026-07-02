@@ -98,6 +98,49 @@ export const OPPORTUNITIES: Opportunity[] = [
     applyUrl: "https://columbus.mcidirecthire.com/external/currentopportunities",
     source: "columbus.co.za (Columbus Stainless official careers portal)",
   },
+  {
+    slug: "columbus-stainless",
+    org: "Columbus Stainless",
+    emoji: "⚙️",
+    type: "Internship",
+    status: "Open",
+    summary:
+      "Africa's only stainless steel producer is recruiting for 2027 graduate, bursary and in-service trainee roles in Middelburg, spanning Metallurgy, Engineering, Chemistry, Finance and more.",
+    about:
+      "Columbus Stainless, founded in 1964, is part of the multinational Acerinox Group and the only stainless steel producer on the African continent. Based in Middelburg, Mpumalanga, the company offers a range of 2027 intake positions across technical, scientific and commercial disciplines, from first-year bursaries to graduate-in-training laboratory roles, each with a structured pathway toward long-term employment.",
+    positions: [
+      { group: "Engineer-in-Training: Metallurgy", count: "2027 intake" },
+      { group: "Bursary: Metallurgy", count: "1st year & continuing" },
+      { group: "In-Service Trainee: Instrumentation", count: "2027 intake" },
+      { group: "In-Service Trainee: Mechanical Engineering", count: "2027 intake" },
+      { group: "In-Service Trainee: Analytical Chemistry", count: "2027 intake" },
+      { group: "In-Service Trainee: Metallurgy", count: "2027 intake" },
+      { group: "Engineer-in-Training: Electronics (B.Eng)", count: "2027 intake" },
+      { group: "Graduate-in-Training: Procurement (Honours B.Comm Supply Chain)", count: "2027 intake" },
+      { group: "Bursary: Accounting Science or Finance", count: "1st year 2027" },
+      { group: "Graduate-in-Training: Material Sciences (Laboratory, Honours)", count: "2027 intake" },
+    ],
+    requirements: [
+      "South African citizens",
+      "Enrolled in or holding the relevant qualification for the specific role (see each listing on the portal)",
+      "Accounting Science / Finance bursary: current Matric learner in 2026, intending BSc Accounting Sciences or BCom Finance in 2027",
+      "Metallurgy bursary: registered for a B.Eng Metallurgical Engineering qualification",
+      "In-service roles: enrolled and requiring practical/workplace training to complete your diploma or degree",
+    ],
+    duties: [
+      "Gain structured, hands-on training within a live industrial manufacturing environment",
+      "Work alongside experienced mentors in your specific discipline",
+      "Build toward professional competency or qualification completion",
+      "Potential pathway to long-term employment with Columbus Stainless",
+    ],
+    keyDates: [
+      { label: "Applications close", date: "28 August 2026" },
+      { label: "Location", date: "Middelburg, Mpumalanga" },
+    ],
+    closingDate: "28 August 2026",
+    applyUrl: "https://columbus.mcidirecthire.com/external/currentopportunities",
+    source: "columbus.co.za / official Columbus Stainless recruitment portal",
+  },
 ];
 
 export function getOpportunity(slug: string) {
