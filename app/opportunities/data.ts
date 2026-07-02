@@ -56,6 +56,48 @@ export const OPPORTUNITIES: Opportunity[] = [
       "https://docs.google.com/forms/d/e/1FAIpQLSdD39uhD7i3OSQdbQwaWthJ27juFvuxaBcKzvedt3w-96QKtA/viewform",
     source: "jet.org.za",
   },
+  {
+    slug: "columbus-stainless",
+    org: "Columbus Stainless",
+    emoji: "🏭",
+    type: "Vacation Work",
+    status: "Open",
+    summary:
+      "Africa's only stainless steel producer is recruiting graduates, bursary students and in-service trainees for 2027 across Metallurgy, Instrumentation, Mechanical Engineering, Analytical Chemistry, Electronics, Procurement, Accounting Science, Finance and Material Sciences.",
+    about:
+      "Columbus Stainless, founded in 1964 and part of the multinational Acerinox Group, is the only producer of stainless steel on the African continent. Based in Middelburg, Mpumalanga, Columbus is inviting applications for its 2027 intake across a wide range of technical, scientific and commercial disciplines, offering structured mentorship and a pathway toward long-term employment.",
+    positions: [
+      { group: "Engineer-in-Training: Metallurgy", count: "2027 intake" },
+      { group: "Bursary: Metallurgy (1st year & continuing)", count: "2027 intake" },
+      { group: "In-Service Trainee: Instrumentation", count: "2027 intake" },
+      { group: "In-Service Trainee: Mechanical Engineering", count: "2027 intake" },
+      { group: "In-Service Trainee: Analytical Chemistry", count: "2027 intake" },
+      { group: "In-Service Trainee: Metallurgy", count: "2027 intake" },
+      { group: "Engineer-in-Training: Electronics (B.Eng)", count: "2027 intake" },
+      { group: "Graduate-in-Training: Procurement (B.Comm Hons Supply Chain)", count: "2027 intake" },
+      { group: "Bursary: 1st Year Accounting Science or Finance", count: "2027 intake" },
+      { group: "Graduate-in-Training: Material Sciences (Lab, Hons)", count: "2027 intake" },
+    ],
+    requirements: [
+      "Studying or graduated in a matching discipline (see positions above)",
+      "In-service roles: practical training required to complete your diploma/degree",
+      "Graduate roles: relevant Honours degree",
+      "Willing to relocate to Middelburg, Mpumalanga",
+    ],
+    duties: [
+      "Structured, practical training within Columbus's operations",
+      "Hands-on exposure to real industrial and laboratory processes",
+      "Mentorship from experienced engineers and scientists",
+      "Potential pathway to long-term employment at Columbus / Acerinox Group",
+    ],
+    keyDates: [
+      { label: "Closing date", date: "Rolling basis — check portal" },
+      { label: "Location", date: "Middelburg, Mpumalanga" },
+    ],
+    closingDate: "Rolling basis — check portal",
+    applyUrl: "https://columbus.mcidirecthire.com/external/currentopportunities",
+    source: "columbus.co.za (Columbus Stainless official careers portal)",
+  },
 ];
 
 export function getOpportunity(slug: string) {
