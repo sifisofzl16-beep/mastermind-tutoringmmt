@@ -78,6 +78,39 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "https://www.cognitoforms.com/StudyTrust2/WilmarSABursaryApplication2026?qr",
     source: "Wilmar SA bursary application (StudyTrust)",
   },
+  {
+    slug: "nedbank",
+    company: "Nedbank External Bursary Programme",
+    emoji: "🏦",
+    status: "Open",
+    year: "2027",
+    summary:
+      "Nedbank funds full-time undergraduate or honours study in STEM and green economy fields for South African citizens with proven financial need.",
+    about:
+      "The Nedbank External Bursary Programme, run by the Nedbank Educational Trust, funds first undergraduate or honours degrees/diplomas at accredited South African public universities and universities of technology, with a focus on scarce-skills shortages in STEM and green economy fields.",
+    fields: [
+      { group: "STEM", items: ["Science", "Technology", "Engineering", "Mathematics"] },
+      { group: "Green Economy", items: ["Green economy / sustainability-linked skills"] },
+    ],
+    requirements: [
+      "South African citizen",
+      "Currently in Matric or completed Matric",
+      "Studying or intending to study a 1st undergraduate/Honours degree or diploma in 2027 in STEM or green economy",
+      "Full-time study at an accredited public SA university or university of technology",
+      "Passed Mathematics (not Maths Literacy) in Matric",
+      "Minimum 65% overall average for 2026 (Matric or university level), and 65% for subjects aligned to the qualification",
+      "Proven financial need (household income)",
+      "Parent/guardian consent if under 18",
+    ],
+    benefits: [
+      "Funding toward tuition for full-time undergraduate/honours study",
+      "Applies to any accredited SA public university or university of technology",
+      "Administered by the Nedbank Educational Trust",
+    ],
+    closingDate: "31 August 2026",
+    applyUrl: "https://nedbankex.fra1.qualtrics.com/jfe/form/SV_eXneIZdSSqwmFCK",
+    source: "group.nedbank.co.za/careers/graduates-and-bursaries.html",
+  },
 ];
 
 export function getBursary(slug: string) {
