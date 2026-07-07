@@ -141,6 +141,46 @@ export const OPPORTUNITIES: Opportunity[] = [
     applyUrl: "https://columbus.mcidirecthire.com/external/currentopportunities",
     source: "columbus.co.za / official Columbus Stainless recruitment portal",
   },
+  {
+    slug: "glencore-rhovan-wil",
+    org: "Glencore Rhovan Mine",
+    emoji: "⛏️",
+    type: "Vacation Work",
+    status: "Closing Soon",
+    summary:
+      "Glencore's Rhovan Mine (Brits, North West) is offering a Work Integrated Learning placement for students who've completed the S4 theory component of their qualification and only need practical workplace experience to graduate.",
+    about:
+      "Rhovan Mine is a vanadium and ferroalloys operation forming part of Glencore's South African portfolio. This programme, run with the MQA, places qualifying students at Rhovan to complete the practical workplace component required to graduate in their discipline.",
+    positions: [
+      { group: "Metallurgy", count: "S4 theory complete" },
+      { group: "Chemical Engineering", count: "S4 theory complete" },
+      { group: "Mechanical Engineering", count: "S4 theory complete" },
+      { group: "Electrical Engineering", count: "S4 theory complete" },
+      { group: "Geology", count: "S4 theory complete" },
+    ],
+    requirements: [
+      "Grade 12",
+      "Studying towards a degree in Metallurgy, Chemical/Mechanical/Electrical Engineering, or Geology",
+      "Completed the S4 theory component at a tertiary institution — only the practical WIL component remains",
+      "Completion letter from your institution confirming you meet WIL requirements",
+      "Good communication and interpersonal skills",
+      "Computer literate (MS Office)",
+      "Medically fit",
+    ],
+    duties: [
+      "Enter a work-integrated learning programme with the MQA",
+      "Gain practical workplace experience in your qualification discipline at Rhovan",
+      "Work according to safe work practices and the site's HSEC system",
+      "Support implementation of management decisions and company standards",
+    ],
+    keyDates: [
+      { label: "Applications close", date: "7 July 2026" },
+      { label: "Location", date: "Brits, North West" },
+    ],
+    closingDate: "7 July 2026",
+    applyUrl: "https://www.glencore.com/en/careers/jobs/P1%20P2%20Workplace%20Experience%20Program",
+    source: "glencore.com official careers listing",
+  },
 ];
 
 export function getOpportunity(slug: string) {
