@@ -1,20 +1,97 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type MouseEvent } from "react";
+
+function Counter({ to, prefix = "", suffix = "", duration = 1400 }: { to: number; prefix?: string; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [val, setVal] = useState(0);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !startedRef.current) {
+        startedRef.current = true;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setVal(Math.round(to * eased));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        obs.disconnect();
+      }
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [to, duration]);
+
+  return <span ref={ref}>{prefix}{val}{suffix}</span>;
+}
 
 export default function MastermindTutoringWebsite() {
   const waLink = "https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27d%20like%20to%20book%20a%20tutoring%20session.";
   const tutorLink = "https://docs.google.com/forms/d/e/1FAIpQLSeD6l_WL1IftliSprtDEADDjadc88V1zAKaDap2cSQAtX3sRg/viewform";
   const [scrolled, setScrolled] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeTab, setActiveTab] = useState("modules");
   const [mobileMenu, setMobileMenu] = useState(false);
   const [moduleSearch, setModuleSearch] = useState("");
 
   useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", h);
+    const h = () => {
+      const y = window.scrollY;
+      setScrolled(y > 60);
+      setScrollY(y);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(max > 0 ? Math.min(100, (y / max) * 100) : 0);
+    };
+    window.addEventListener("scroll", h, { passive: true });
+    h();
     return () => window.removeEventListener("scroll", h);
   }, []);
+
+  // Scroll-triggered section reveals
+  useEffect(() => {
+    const sections = document.querySelectorAll(".reveal-section");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    sections.forEach((s) => obs.observe(s));
+    return () => obs.disconnect();
+  }, []);
+
+  // Card tilt effect
+  function tiltMove(e: MouseEvent<HTMLDivElement>) {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(700px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg) translateY(-4px)`;
+  }
+  function tiltLeave(e: MouseEvent<HTMLDivElement>) {
+    e.currentTarget.style.transform = "translateY(0)";
+  }
+
+  // Magnetic button effect
+  function magMove(e: MouseEvent<HTMLAnchorElement>) {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    el.style.transform = `translate(${(x * 0.18).toFixed(1)}px, ${(y * 0.28).toFixed(1)}px)`;
+  }
+  function magLeave(e: MouseEvent<HTMLAnchorElement>) {
+    e.currentTarget.style.transform = "translate(0,0)";
+  }
 
   const modules = {
     "Common Engineering": ["Engineering Mathematics IA & IB","Engineering Physics IA & IB","Engineering Chemistry","Applied Physics I","Engineering Analysis & Design IA & IB","Introduction to Engineering Profession"],
@@ -133,6 +210,16 @@ export default function MastermindTutoringWebsite() {
         @keyframes drawline { to { stroke-dashoffset: 0; } }
         .mark-dot { opacity: 0; animation: popdot 0.4s ease forwards; }
         @keyframes popdot { to { opacity: 1; } }
+
+        .reveal-section { opacity: 0; transform: translateY(36px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+        .reveal-section.in-view { opacity: 1; transform: translateY(0); }
+
+        .card-dark { transition: border-color 0.3s, transform 0.15s ease-out; will-change: transform; }
+
+        .pill-in { animation: pillIn 0.45s cubic-bezier(0.22,1,0.36,1) backwards; }
+        @keyframes pillIn { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .btn-gold, .btn-outline { will-change: transform; }
         @media (max-width: 768px) {
           .hero-title { font-size: 2.8rem !important; line-height: 1.1 !important; }
           .hide-mobile { display: none !important; }
@@ -144,6 +231,9 @@ export default function MastermindTutoringWebsite() {
           body { padding-bottom: 72px; }
         }
       `}</style>
+
+      {/* ── SCROLL PROGRESS BAR ───────────── */}
+      <div style={{ position: "fixed", top: 0, left: 0, height: "3px", width: `${scrollProgress}%`, background: "linear-gradient(90deg, #c9a84c, #e8c96e)", zIndex: 200, transition: "width 0.1s linear", boxShadow: "0 0 8px rgba(201,168,76,0.6)" }} />
 
       {/* ── MOBILE BOTTOM CTA BAR ─────────── */}
       <div className="mobile-cta-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 998, background: "rgba(6,8,15,0.98)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "0.75rem 1rem", alignItems: "center", gap: "0.75rem" }}>
@@ -169,7 +259,7 @@ export default function MastermindTutoringWebsite() {
             <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c" }}>Bursaries</a>
             <a href="/opportunities" className="nav-a" style={{ color: "#c9a84c" }}>Opportunities</a>
           </div>
-          <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold hide-mobile" style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
+          <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold hide-mobile" onMouseMove={magMove} onMouseLeave={magLeave} style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
             Book a Session
           </a>
           <button onClick={() => setMobileMenu(!mobileMenu)} className="show-mobile" aria-label="Toggle menu" style={{ background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", color: "#f1f5f9", width: "40px", height: "40px", fontSize: "1.1rem", cursor: "pointer" }}>
@@ -191,10 +281,10 @@ export default function MastermindTutoringWebsite() {
       {/* ── HERO ──────────────────────────── */}
       <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", padding: "0 2rem" }}>
         {/* Background elements */}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(201,168,76,0.06) 0%, transparent 70%)", pointerEvents: "none" }}/>
-        <div style={{ position: "absolute", top: "20%", right: "5%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%)", pointerEvents: "none" }}/>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(201,168,76,0.06) 0%, transparent 70%)", pointerEvents: "none", transform: `translateY(${scrollY * 0.15}px)` }}/>
+        <div style={{ position: "absolute", top: "20%", right: "5%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%)", pointerEvents: "none", transform: `translateY(${scrollY * 0.3}px)` }}/>
         {/* Grid lines */}
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }}/>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none", transform: `translateY(${scrollY * 0.08}px)` }}/>
 
         <div style={{ maxWidth: "1200px", margin: "0 auto", width: "100%", paddingTop: "8rem", paddingBottom: "6rem", display: "flex", alignItems: "center", gap: "3rem" }}>
           <div style={{ maxWidth: "780px", flex: "1 1 480px" }}>
@@ -214,20 +304,27 @@ export default function MastermindTutoringWebsite() {
             </p>
 
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold">
+              <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>
                 📲 Book a Session — WhatsApp
               </a>
-              <a href="#modules" className="btn-outline">
+              <a href="#modules" className="btn-outline" onMouseMove={magMove} onMouseLeave={magLeave}>
                 See Modules →
               </a>
             </div>
 
             {/* Stats row */}
             <div style={{ display: "flex", gap: "3rem", marginTop: "4rem", flexWrap: "wrap" }}>
-              {[["200+","Students"], ["37+","Modules"], ["90%","Improved Marks"], ["R0","Free Sundays"]].map(([v, l]) => (
-                <div key={l}>
-                  <p className="syne" style={{ fontSize: "1.8rem", fontWeight: "800", color: "#c9a84c", lineHeight: 1 }}>{v}</p>
-                  <p className="inter" style={{ fontSize: "0.78rem", color: "#475569", marginTop: "0.3rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{l}</p>
+              {[
+                { to: 200, suffix: "+", label: "Students" },
+                { to: 37, suffix: "+", label: "Modules" },
+                { to: 90, suffix: "%", label: "Improved Marks" },
+                { to: 0, prefix: "R", label: "Free Sundays" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="syne" style={{ fontSize: "1.8rem", fontWeight: "800", color: "#c9a84c", lineHeight: 1 }}>
+                    <Counter to={s.to} prefix={s.prefix || ""} suffix={s.suffix || ""} />
+                  </p>
+                  <p className="inter" style={{ fontSize: "0.78rem", color: "#475569", marginTop: "0.3rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{s.label}</p>
                 </div>
               ))}
             </div>
@@ -278,7 +375,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── PROBLEM SECTION ───────────────── */}
-      <section style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Sound familiar?</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3.5rem", maxWidth: "500px", lineHeight: 1.15 }}>
@@ -291,7 +388,7 @@ export default function MastermindTutoringWebsite() {
               ["⏰", "Exams are in two weeks and you're already behind", "The semester crept up on you. There's too much to cover and not enough time."],
               ["🤷", "You don't know where to start", "You open the textbook, read the same paragraph four times, and close it again."],
             ].map(([icon, title, sub]) => (
-              <div key={title} className="card-dark" style={{ padding: "2rem" }}>
+              <div key={title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
                 <span style={{ fontSize: "2rem", display: "block", marginBottom: "1rem" }}>{icon}</span>
                 <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.75rem" }}>{title}</h3>
                 <p className="inter" style={{ fontSize: "0.85rem", color: "#475569", lineHeight: "1.7" }}>{sub}</p>
@@ -303,13 +400,13 @@ export default function MastermindTutoringWebsite() {
               <p className="syne" style={{ fontSize: "1.3rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.4rem" }}>This is exactly what MMT exists to fix.</p>
               <p className="inter" style={{ fontSize: "0.9rem", color: "#475569" }}>One session with the right tutor changes everything.</p>
             </div>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold">Book Now — WhatsApp</a>
+            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>Book Now — WhatsApp</a>
           </div>
         </div>
       </section>
 
       {/* ── HOW IT WORKS ──────────────────── */}
-      <section style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>The Process</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3.5rem", lineHeight: 1.15 }}>How it works</h2>
@@ -340,7 +437,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── MODULES ───────────────────────── */}
-      <section id="modules" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="modules" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>What we cover</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Modules</h2>
@@ -372,8 +469,8 @@ export default function MastermindTutoringWebsite() {
 
           {/* Module pills */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-            {modules[activeTab as keyof typeof modules]?.map(m => (
-              <a key={m} href={waLink} target="_blank" rel="noreferrer" className="module-pill">{m}</a>
+            {modules[activeTab as keyof typeof modules]?.map((m, i) => (
+              <a key={activeTab + m} href={waLink} target="_blank" rel="noreferrer" className="module-pill pill-in" style={{ animationDelay: `${i * 0.025}s` }}>{m}</a>
             ))}
           </div>
 
@@ -385,7 +482,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── COURSES ───────────────────────── */}
-      <section id="courses" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="courses" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Degree Curricula</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Courses</h2>
@@ -412,7 +509,7 @@ export default function MastermindTutoringWebsite() {
                 { year: "Modules", items: ["Introduction to Structures","Building Science I","Construction Technology II","Site Management","Civil Engineering Theory I","Quantities & Specifications II","Accounting in Construction","Economics IA & IB","Engineering Surveying"] },
               ]},
             ].map(course => (
-              <div key={course.title} className="card-dark" style={{ padding: "2rem" }}>
+              <div key={course.title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
                   <div style={{ width: "42px", height: "42px", background: `${course.color}15`, border: `1px solid ${course.color}30`, borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>{course.icon}</div>
                   <div>
@@ -438,7 +535,7 @@ export default function MastermindTutoringWebsite() {
 
 
       {/* ── HIGH SCHOOL ─────────────────── */}
-      <section id="highschool" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="highschool" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
 
           {/* Header */}
@@ -460,7 +557,7 @@ export default function MastermindTutoringWebsite() {
               { icon: "🎓", title: "University acceptance depends on this year", body: "For Grade 11 and 12 students, this isn't just about passing. It's about keeping the right doors open." },
               { icon: "💬", title: "They won't ask their teacher for help", body: "Most teenagers are too proud or too embarrassed. A peer tutor — someone closer in age — changes that dynamic completely." },
             ].map(p => (
-              <div key={p.title} className="card-dark" style={{ padding: "1.75rem" }}>
+              <div key={p.title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.75rem" }}>
                 <span style={{ fontSize: "1.75rem", display: "block", marginBottom: "0.75rem" }}>{p.icon}</span>
                 <h3 className="syne" style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{p.title}</h3>
                 <p className="inter" style={{ fontSize: "0.83rem", color: "#475569", lineHeight: "1.7" }}>{p.body}</p>
@@ -526,7 +623,7 @@ export default function MastermindTutoringWebsite() {
                 { subject: "Geography", icon: "🌍", desc: "Physical and human geography. Maps, case studies, and the structured answers examiners want to see.", grade: "Grades 10–12", color: "#06b6d4" },
                 { subject: "Business Studies", icon: "💼", desc: "Theory, application, scenarios. The subject where exam technique matters as much as content knowledge.", grade: "Grades 10–12", color: "#a78bfa" },
               ].map(s => (
-                <div key={s.subject} className="card-dark" style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                <div key={s.subject} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{ width: "42px", height: "42px", background: `${s.color}15`, border: `1px solid ${s.color}30`, borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>{s.icon}</div>
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem" }}>
@@ -570,7 +667,7 @@ export default function MastermindTutoringWebsite() {
             <p className="inter" style={{ color: "#64748b", fontSize: "0.95rem", lineHeight: "1.7", maxWidth: "480px", margin: "0 auto 2rem" }}>
               WhatsApp us today. Tell us your child&apos;s grade and subject. We&apos;ll match them with the right tutor and have a session booked within 24 hours.
             </p>
-            <a href="https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
+            <a href="https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
               📲 Book via WhatsApp — 069 312 6747
             </a>
           </div>
@@ -579,7 +676,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── PACKAGES ──────────────────────── */}
-      <section id="packages" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="packages" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Pricing</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Simple, transparent pricing</h2>
@@ -616,7 +713,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── TUTORS ────────────────────────── */}
-      <section id="tutors" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="tutors" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>The Team</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Tutors who know the work</h2>
@@ -630,7 +727,7 @@ export default function MastermindTutoringWebsite() {
               { name: "Zanele Moyo", subject: "Physics · APPM1014", year: "4th Year — BSc Physics", bio: "Combines deep theoretical understanding with an exam-focused approach that has helped dozens of Wits students pass Phys1000A." },
               { name: "Luyanda Ntuli", subject: "Corporate Finance · Taxation", year: "Honours — BCom Accounting", bio: "Brings Honours-level insight to students tackling Corporate Finance II, Taxation 3 and advanced BCom modules." },
             ].map(t => (
-              <div key={t.name} className="card-dark" style={{ padding: "2rem" }}>
+              <div key={t.name} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
                 <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05))", border: "1px solid rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
                   <span className="syne" style={{ fontWeight: "800", color: "#c9a84c", fontSize: "1rem" }}>{t.name[0]}</span>
                 </div>
@@ -646,13 +743,13 @@ export default function MastermindTutoringWebsite() {
               <p className="syne" style={{ fontWeight: "700", color: "#f1f5f9", marginBottom: "0.3rem" }}>Are you a top-performing Wits student?</p>
               <p className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>Join the MMT tutor pool. Earn R150–R300/hr on your own schedule.</p>
             </div>
-            <a href={tutorLink} target="_blank" rel="noreferrer" className="btn-outline">Apply as a Tutor →</a>
+            <a href={tutorLink} target="_blank" rel="noreferrer" className="btn-outline" onMouseMove={magMove} onMouseLeave={magLeave}>Apply as a Tutor →</a>
           </div>
         </div>
       </section>
 
       {/* ── REVIEWS ───────────────────────── */}
-      <section style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Results</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>What students say</h2>
@@ -661,7 +758,7 @@ export default function MastermindTutoringWebsite() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {testimonials.map((t, i) => (
-              <div key={i} className="card-dark" style={{ padding: "2rem" }}>
+              <div key={i} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
                 <div style={{ display: "flex", gap: "0.2rem", marginBottom: "1.25rem" }}>
                   {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#c9a84c", fontSize: "0.85rem" }}>★</span>)}
                 </div>
@@ -677,7 +774,7 @@ export default function MastermindTutoringWebsite() {
       </section>
 
       {/* ── CONTACT ───────────────────────── */}
-      <section id="contact" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <section className="reveal-section" id="contact" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Get in touch</div>
           <h2 className="syne" style={{ fontSize: "3rem", fontWeight: "800", marginBottom: "1rem", lineHeight: 1.1 }}>
@@ -687,7 +784,7 @@ export default function MastermindTutoringWebsite() {
             WhatsApp us your module and we&apos;ll match you with the right tutor — usually within the hour.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
+            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
               📲 069 312 6747 — WhatsApp
             </a>
             <a href="mailto:mastermindtutoringmmt@gmail.com" className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>
