@@ -41,22 +41,10 @@ export default function MastermindTutoringWebsite() {
     { quote: "Corporate Finance was destroying my average. MMT had me go from 44% to 71% in one semester. Worth every rand of the monthly package.", name: "T. Mokoena", detail: "BCom Finance · Wits" },
     { quote: "Booked two days before my Linear Algebra test. Walked in confident and came out with a distinction. The in-person sessions are next level.", name: "L. Sithole", detail: "BSc Mechanical Engineering · Wits" },
     { quote: "I was repeating Engineering Maths for the second time. The MMT tutor explained it differently from my lecturer and it finally clicked. Passed comfortably.", name: "S. Mahlangu", detail: "BSc Electrical Engineering · Wits" },
-    { quote: "Business Statistics had me completely lost. Three sessions with MMT and I understood the whole semester in one weekend. Wrote a 74%.", name: "N. Zwane", detail: "BCom Accounting · Wits" },
     { quote: "The monthly in-person package is genuinely the best investment I've made at Wits. My tutor knows the module inside out and pushes me every session.", name: "R. Khumalo", detail: "BSc Civil Engineering · Wits" },
-    { quote: "I was on the verge of academic exclusion. MMT helped me pass three modules in one semester. I can't explain how much that means to me.", name: "B. Ndlovu", detail: "BCom Information Systems · Wits" },
     { quote: "Taxation 3 is brutal. My MMT tutor had past papers, notes, and a study plan ready from session one. I passed with 66% when I expected to fail.", name: "A. Shaik", detail: "BCom Accounting Science · Wits" },
-    { quote: "I tried YouTube, I tried study groups. Nothing worked until MMT. The in-person sessions feel like private coaching — focused, efficient, no time wasted.", name: "C. van Wyk", detail: "BSc Chemical Engineering · Wits" },
-    { quote: "Solid Mechanics was a nightmare. My tutor broke down every concept from first principles and made me do the problems myself until I got it. That approach works.", name: "M. Sithole", detail: "BSc Civil Engineering · Wits" },
-    { quote: "I booked the monthly in-person package and honestly it changed my semester. Having the same tutor every week who knows where you left off is completely different from random sessions.", name: "P. Dube", detail: "BCom Accounting · Wits" },
-    { quote: "Management Accounting nearly ended my degree. MMT assigned me a tutor in Honours — she knew every trick the lecturers use in tests. Passed with 61%.", name: "Z. Motha", detail: "BCom Accounting Science · Wits" },
-    { quote: "As a second-year Mechanical Engineering student the workload is intense. MMT helped me keep up with Applied Mechanics and Thermodynamics at the same time.", name: "D. Ferreira", detail: "BSc Mechanical Engineering · Wits" },
     { quote: "I thought I was just bad at maths. Turns out I had gaps from first year that nobody helped me fix. MMT found them in session one and we worked through everything.", name: "L. Moagi", detail: "BSc Engineering · Wits" },
-    { quote: "Economics IA was deceptively hard. The concepts seemed simple but the application in tests was different. My tutor prepared me specifically for how Wits examines it.", name: "T. Cele", detail: "BCom Information Systems · Wits" },
-    { quote: "The free Sunday classes are what got me started. I showed up once, liked how it was run, and signed up for the monthly package the same day.", name: "O. Nkosi", detail: "BSc Chemical Engineering · Wits" },
-    { quote: "Electric Circuits is where most Electrical Engineering students struggle hardest. My MMT tutor had a system for every type of question. I stopped guessing and started solving.", name: "K. Molefe", detail: "BSc Electrical Engineering · Wits" },
     { quote: "Auditing II felt impossible. My tutor had a framework for answering questions that the textbook never gives you. I used it in my exam and it worked perfectly.", name: "S. Ngcobo", detail: "BCom Accounting Science · Wits" },
-    { quote: "I was sceptical because my previous tutor just read off slides. MMT is completely different — they explain, they question you, they make you think. That's what learning is.", name: "F. Jacobs", detail: "BSc Mechanical Engineering · Wits" },
-    { quote: "Three modules, one semester, MMT for all of them. Corporate Finance, Business Stats and Economics. My GPA went from 58% to 71%. That's the honest truth.", name: "A. Radebe", detail: "BCom Finance · Wits" },
   ];
 
   return (
@@ -129,6 +117,7 @@ export default function MastermindTutoringWebsite() {
           display: flex; align-items: center; gap: 0.5rem; transition: transform 0.2s, box-shadow 0.2s;
         }
         .sticky-wa:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(37,211,102,0.4); }
+        @media (max-width: 768px) { .sticky-wa { display: none; } }
         .divider-gold { width: 40px; height: 3px; background: linear-gradient(90deg, #c9a84c, transparent); border-radius: 2px; margin: 1rem 0 1.5rem; }
         .label-tag { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a84c; }
         .search-input {
@@ -138,13 +127,29 @@ export default function MastermindTutoringWebsite() {
         }
         .search-input:focus { border-color: rgba(201,168,76,0.4); }
         .search-input::placeholder { color: #475569; }
+        .show-mobile { display: none; }
+        .mobile-cta-bar { display: none; }
+        .mark-line { stroke-dasharray: 900; stroke-dashoffset: 900; animation: drawline 2.2s 0.4s cubic-bezier(0.65,0,0.35,1) forwards; }
+        @keyframes drawline { to { stroke-dashoffset: 0; } }
+        .mark-dot { opacity: 0; animation: popdot 0.4s ease forwards; }
+        @keyframes popdot { to { opacity: 1; } }
         @media (max-width: 768px) {
           .hero-title { font-size: 2.8rem !important; line-height: 1.1 !important; }
           .hide-mobile { display: none !important; }
+          .show-mobile { display: flex !important; }
           .stack-mobile { flex-direction: column !important; }
           .full-mobile { width: 100% !important; }
+          .hero-visual { display: none !important; }
+          .mobile-cta-bar { display: flex !important; }
+          body { padding-bottom: 72px; }
         }
       `}</style>
+
+      {/* ── MOBILE BOTTOM CTA BAR ─────────── */}
+      <div className="mobile-cta-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 998, background: "rgba(6,8,15,0.98)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "0.75rem 1rem", alignItems: "center", gap: "0.75rem" }}>
+        <a href="tel:+27693126747" style={{ flex: "0 0 auto", width: "44px", height: "44px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", color: "#e2e8f0", fontSize: "1.1rem" }}>📞</a>
+        <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ flex: 1, justifyContent: "center" }}>💬 Book via WhatsApp</a>
+      </div>
 
       {/* ── STICKY WA BUTTON ───────────────── */}
       <a href={waLink} target="_blank" rel="noreferrer" className="sticky-wa">
@@ -152,7 +157,7 @@ export default function MastermindTutoringWebsite() {
       </a>
 
       {/* ── NAV ───────────────────────────── */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, transition: "all 0.3s", background: scrolled ? "rgba(6,8,15,0.95)" : "transparent", backdropFilter: scrolled ? "blur(20px)" : "none", borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "1.25rem 2rem" }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, transition: "all 0.3s", background: scrolled || mobileMenu ? "rgba(6,8,15,0.95)" : "transparent", backdropFilter: scrolled || mobileMenu ? "blur(20px)" : "none", borderBottom: scrolled || mobileMenu ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "1.25rem 2rem" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <a href="#" className="syne" style={{ fontSize: "1.1rem", fontWeight: "800", letterSpacing: "0.04em" }}>
             MMT<span className="gold">.</span>
@@ -167,8 +172,20 @@ export default function MastermindTutoringWebsite() {
           <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold hide-mobile" style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
             Book a Session
           </a>
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="hide-mobile" style={{ display: "none" }}>☰</button>
+          <button onClick={() => setMobileMenu(!mobileMenu)} className="show-mobile" aria-label="Toggle menu" style={{ background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", color: "#f1f5f9", width: "40px", height: "40px", fontSize: "1.1rem", cursor: "pointer" }}>
+            {mobileMenu ? "✕" : "☰"}
+          </button>
         </div>
+        {mobileMenu && (
+          <div className="show-mobile" style={{ maxWidth: "1200px", margin: "1.25rem auto 0", display: "flex", flexDirection: "column", gap: "0.25rem", paddingBottom: "0.5rem" }}>
+            {["modules","courses","highschool","packages","tutors","contact"].map(s => (
+              <a key={s} href={`#${s}`} onClick={() => setMobileMenu(false)} className="nav-a" style={{ textTransform: "capitalize", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>{s}</a>
+            ))}
+            <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>Bursaries</a>
+            <a href="/opportunities" className="nav-a" style={{ color: "#c9a84c", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>Opportunities</a>
+            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ marginTop: "1rem", justifyContent: "center" }}>Book a Session</a>
+          </div>
+        )}
       </nav>
 
       {/* ── HERO ──────────────────────────── */}
@@ -179,8 +196,8 @@ export default function MastermindTutoringWebsite() {
         {/* Grid lines */}
         <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none" }}/>
 
-        <div style={{ maxWidth: "1200px", margin: "0 auto", width: "100%", paddingTop: "8rem", paddingBottom: "6rem" }}>
-          <div style={{ maxWidth: "780px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", width: "100%", paddingTop: "8rem", paddingBottom: "6rem", display: "flex", alignItems: "center", gap: "3rem" }}>
+          <div style={{ maxWidth: "780px", flex: "1 1 480px" }}>
             <div className="label-tag" style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
               <span style={{ width: "24px", height: "1px", background: "#c9a84c", display: "inline-block" }}/>
               Wits University · Johannesburg
@@ -214,6 +231,42 @@ export default function MastermindTutoringWebsite() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Signature visual — mark trajectory */}
+          <div className="hero-visual" style={{ flex: "1 1 340px", position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="100%" height="420" viewBox="0 0 400 420" fill="none" style={{ overflow: "visible" }}>
+              <defs>
+                <radialGradient id="glowA" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#e8c96e" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#e8c96e" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+
+              <text x="0" y="28" fill="#374151" fontFamily="Inter, sans-serif" fontSize="12" letterSpacing="0.1em">BEFORE MMT</text>
+              <text x="272" y="28" fill="#c9a84c" fontFamily="Inter, sans-serif" fontSize="12" letterSpacing="0.1em">AFTER MMT</text>
+
+              {[100,170,240,310,380].map(y => (
+                <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="rgba(255,255,255,0.045)" strokeWidth="1" />
+              ))}
+
+              <path d="M 0 260 L 45 300 L 90 245 L 135 320 L 180 265 L 210 305"
+                stroke="#374151" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+
+              <path className="mark-line" d="M 210 305 C 250 292, 265 195, 300 150 C 330 112, 355 85, 400 60"
+                stroke="#c9a84c" strokeWidth="4" fill="none" strokeLinecap="round" />
+
+              <circle cx="400" cy="60" r="48" fill="url(#glowA)" />
+
+              <circle className="mark-dot" style={{ animationDelay: "0.5s" }} cx="210" cy="305" r="5.5" fill="#374151" />
+              <circle className="mark-dot" style={{ animationDelay: "1.9s" }} cx="300" cy="150" r="5.5" fill="#c9a84c" />
+              <circle className="mark-dot" style={{ animationDelay: "2.5s" }} cx="400" cy="60" r="7" fill="#e8c96e" />
+
+              <g className="mark-dot" style={{ animationDelay: "2.7s" }}>
+                <rect x="340" y="18" width="60" height="34" rx="8" fill="#0d1117" stroke="#c9a84c" strokeWidth="1.5" />
+                <text x="370" y="41" fill="#e8c96e" fontFamily="Syne, sans-serif" fontWeight="800" fontSize="20" textAnchor="middle">A+</text>
+              </g>
+            </svg>
           </div>
         </div>
 
@@ -569,7 +622,7 @@ export default function MastermindTutoringWebsite() {
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Tutors who know the work</h2>
           <div className="divider-gold"/>
           <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            Every MMT tutor is a current or recent Wits student who excelled in the exact modules they teach.
+            Every MMT tutor is a current or recent Wits student who excelled in the exact modules they teach. Meet three of our 20+ active tutors below.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
             {[
@@ -602,7 +655,10 @@ export default function MastermindTutoringWebsite() {
       <section style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Results</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3rem", lineHeight: 1.15 }}>What students say</h2>
+          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>What students say</h2>
+          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
+            A few of the results from MMT&apos;s 200+ students this year.
+          </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {testimonials.map((t, i) => (
               <div key={i} className="card-dark" style={{ padding: "2rem" }}>
