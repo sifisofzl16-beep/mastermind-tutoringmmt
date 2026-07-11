@@ -300,12 +300,12 @@ export default function MastermindTutoringWebsite() {
             </h1>
 
             <p className="inter" style={{ fontSize: "1.15rem", color: "#64748b", lineHeight: "1.8", maxWidth: "520px", marginBottom: "3rem" }}>
-              MMT connects Wits students with peer tutors who actually know the modules — not generalists, not AI. Real students who passed the same tests you&apos;re studying for right now.
+              MMT connects Wits students with real peer tutors who passed the exact modules they teach. No generalists, no AI, just people who sat the same tests you&apos;re studying for right now.
             </p>
 
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>
-                📲 Book a Session — WhatsApp
+                📲 Book a Session via WhatsApp
               </a>
               <a href="#modules" className="btn-outline" onMouseMove={magMove} onMouseLeave={magLeave}>
                 See Modules →
@@ -400,7 +400,7 @@ export default function MastermindTutoringWebsite() {
               <p className="syne" style={{ fontSize: "1.3rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.4rem" }}>This is exactly what MMT exists to fix.</p>
               <p className="inter" style={{ fontSize: "0.9rem", color: "#475569" }}>One session with the right tutor changes everything.</p>
             </div>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>Book Now — WhatsApp</a>
+            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>Book Now via WhatsApp</a>
           </div>
         </div>
       </section>
@@ -412,7 +412,7 @@ export default function MastermindTutoringWebsite() {
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3.5rem", lineHeight: 1.15 }}>How it works</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "2rem" }}>
             {[
-              ["1", "WhatsApp us your module", "Tell us what you need help with. We respond within minutes — not hours."],
+              ["1", "WhatsApp us your module", "Tell us what you need help with. We respond within minutes, not hours."],
               ["2", "Get matched to a tutor", "We assign you a tutor who has passed that specific module and knows it deeply."],
               ["3", "Book your first session", "Online or in-person. Flexible scheduling. First session can happen within 24 hours."],
             ].map(([num, title, desc]) => (
@@ -428,7 +428,7 @@ export default function MastermindTutoringWebsite() {
           <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
             <span style={{ fontSize: "1.5rem" }}>🌅</span>
             <div>
-              <p className="inter" style={{ fontWeight: "600", color: "#f1f5f9", fontSize: "0.9rem" }}>Free Sunday Classes — every week</p>
+              <p className="inter" style={{ fontWeight: "600", color: "#f1f5f9", fontSize: "0.9rem" }}>Free Sunday Classes, every week</p>
               <p className="inter" style={{ color: "#475569", fontSize: "0.82rem" }}>No booking, no payment. Just show up. Group sessions covering the most requested modules.</p>
             </div>
             <a href={waLink} target="_blank" rel="noreferrer" className="inter" style={{ marginLeft: "auto", color: "#c9a84c", fontSize: "0.85rem", fontWeight: "600" }}>Join Sunday Class →</a>
@@ -546,16 +546,16 @@ export default function MastermindTutoringWebsite() {
           </h2>
           <div className="divider-gold"/>
           <p className="inter" style={{ color: "#64748b", fontSize: "1rem", lineHeight: "1.8", maxWidth: "600px", marginBottom: "3.5rem" }}>
-            Every parent has felt it — watching your child study for hours, genuinely trying, and still coming home with results that don&apos;t reflect their effort. It&apos;s not a talent problem. It&apos;s not a work ethic problem. It&apos;s a support problem. The right tutor, explaining the right concept in the right way, changes everything.
+            Every parent has felt it: watching your child study for hours, genuinely trying, and still coming home with results that don&apos;t reflect their effort. It&apos;s not a talent problem. It&apos;s not a work ethic problem. It&apos;s a support problem. The right tutor, explaining the right concept in the right way, changes everything.
           </p>
 
           {/* Emotional pain points */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem", marginBottom: "4rem" }}>
             {[
-              { icon: "😔", title: "They study but the marks don't move", body: "Your child is putting in the hours. The problem isn't effort — it's that nobody has shown them how to study this subject specifically." },
+              { icon: "😔", title: "They study but the marks don't move", body: "Your child is putting in the hours. The problem isn't effort. It's that nobody has shown them how to study this subject specifically." },
               { icon: "⏰", title: "June exams are approaching fast", body: "The academic calendar doesn't slow down. Every week without targeted support is a week harder to recover from." },
               { icon: "🎓", title: "University acceptance depends on this year", body: "For Grade 11 and 12 students, this isn't just about passing. It's about keeping the right doors open." },
-              { icon: "💬", title: "They won't ask their teacher for help", body: "Most teenagers are too proud or too embarrassed. A peer tutor — someone closer in age — changes that dynamic completely." },
+              { icon: "💬", title: "They won't ask their teacher for help", body: "Most teenagers are too proud or too embarrassed. A peer tutor, someone closer in age, changes that dynamic completely." },
             ].map(p => (
               <div key={p.title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.75rem" }}>
                 <span style={{ fontSize: "1.75rem", display: "block", marginBottom: "0.75rem" }}>{p.icon}</span>
@@ -573,14 +573,14 @@ export default function MastermindTutoringWebsite() {
                 Not a tutoring agency.<br/>A results company.
               </h3>
               <p className="inter" style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: "1.8", marginBottom: "1.5rem" }}>
-                Every MMT tutor is a current or recent top-performing university student. They&apos;ve sat in the same classrooms, written the same papers, and cracked the same problems your child is facing right now. They don&apos;t just know the content — they know exactly where students get stuck and why.
+                Every MMT tutor is a current or recent top-performing university student. They&apos;ve sat in the same classrooms, written the same papers, and cracked the same problems your child is facing right now. They don&apos;t just know the content. They know exactly where students get stuck and why.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {[
                   "Tutors vetted and trained by MMT before their first session",
-                  "Structured sessions — not just homework help",
+                  "Structured sessions, not just homework help",
                   "Progress tracked so you always know where your child stands",
-                  "WhatsApp communication — direct line to your child's tutor",
+                  "WhatsApp communication, a direct line to your child's tutor",
                   "Flexible scheduling around school and extra-murals",
                 ].map(f => (
                   <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
@@ -668,7 +668,7 @@ export default function MastermindTutoringWebsite() {
               WhatsApp us today. Tell us your child&apos;s grade and subject. We&apos;ll match them with the right tutor and have a session booked within 24 hours.
             </p>
             <a href="https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 Book via WhatsApp — 069 312 6747
+              📲 Book via WhatsApp: 069 312 6747
             </a>
           </div>
 
@@ -681,7 +681,7 @@ export default function MastermindTutoringWebsite() {
           <div className="label-tag" style={{ marginBottom: "1rem" }}>Pricing</div>
           <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Simple, transparent pricing</h2>
           <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", fontSize: "0.95rem", lineHeight: "1.7" }}>No hidden fees. No contracts. Book one session or commit to a month — your choice.</p>
+          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", fontSize: "0.95rem", lineHeight: "1.7" }}>No hidden fees. No contracts. Book one session or commit to a month, your choice.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
             {[
               { name: "Single Session", tag: "Pay as you go", price: "R200", priceNote: "online / R250 in-person", features: ["1-hour focused session","Any module we cover","Online or in-person","WhatsApp support after"], highlight: false },
@@ -723,9 +723,9 @@ export default function MastermindTutoringWebsite() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
             {[
-              { name: "Kagiso Mokoena", subject: "Linear Algebra · Business Statistics", year: "3rd Year — BSc Mathematics", bio: "Breaks down complex mathematical concepts into clear, structured frameworks. Specialises in first and second year quantitative modules." },
-              { name: "Zanele Moyo", subject: "Physics · APPM1014", year: "4th Year — BSc Physics", bio: "Combines deep theoretical understanding with an exam-focused approach that has helped dozens of Wits students pass Phys1000A." },
-              { name: "Luyanda Ntuli", subject: "Corporate Finance · Taxation", year: "Honours — BCom Accounting", bio: "Brings Honours-level insight to students tackling Corporate Finance II, Taxation 3 and advanced BCom modules." },
+              { name: "Kagiso Mokoena", subject: "Linear Algebra · Business Statistics", year: "3rd Year, BSc Mathematics", bio: "Breaks down complex mathematical concepts into clear, structured frameworks. Specialises in first and second year quantitative modules." },
+              { name: "Zanele Moyo", subject: "Physics · APPM1014", year: "4th Year, BSc Physics", bio: "Combines deep theoretical understanding with an exam-focused approach that has helped dozens of Wits students pass Phys1000A." },
+              { name: "Luyanda Ntuli", subject: "Corporate Finance · Taxation", year: "Honours, BCom Accounting", bio: "Brings Honours-level insight to students tackling Corporate Finance II, Taxation 3 and advanced BCom modules." },
             ].map(t => (
               <div key={t.name} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
                 <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05))", border: "1px solid rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
@@ -781,11 +781,11 @@ export default function MastermindTutoringWebsite() {
             Ready to turn things around?
           </h2>
           <p className="inter" style={{ color: "#475569", marginBottom: "3rem", fontSize: "1rem", lineHeight: "1.7" }}>
-            WhatsApp us your module and we&apos;ll match you with the right tutor — usually within the hour.
+            WhatsApp us your module and we&apos;ll match you with the right tutor, usually within the hour.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
             <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 069 312 6747 — WhatsApp
+              📲 WhatsApp: 069 312 6747
             </a>
             <a href="mailto:mastermindtutoringmmt@gmail.com" className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>
               mastermindtutoringmmt@gmail.com

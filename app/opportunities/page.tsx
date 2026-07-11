@@ -83,7 +83,7 @@ export default function OpportunitiesIndexPage() {
         <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
           <div className="label-tag" style={{ marginBottom: "1rem" }}>MMT Opportunity Watch</div>
           <h1 className="syne" style={{ fontSize: "3rem", fontWeight: "800", lineHeight: "1.1", letterSpacing: "-0.02em", marginBottom: "1.25rem", maxWidth: "680px" }}>
-            Marking contracts, internships<br />and vacation work — in one place.
+            Marking contracts, internships<br />and vacation work, in one place.
           </h1>
           <p className="inter" style={{ fontSize: "1.05rem", color: "#64748b", lineHeight: "1.8", maxWidth: "620px" }}>
             Paid opportunities for students and graduates, checked against the official source before they go up. Tap one for the full breakdown.
@@ -136,7 +136,7 @@ export default function OpportunitiesIndexPage() {
               Marking contracts, internships, and vacation work postings appear here throughout the year. WhatsApp us to get notified the moment a new one goes live.
             </p>
             <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "0.95rem", padding: "0.95rem 2.25rem" }}>
-              📲 Get Notified — WhatsApp
+              📲 Get Notified via WhatsApp
             </a>
           </div>
         </div>

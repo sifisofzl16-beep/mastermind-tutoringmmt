@@ -89,7 +89,7 @@ export default function BursariesIndexPage() {
             We track the bursaries.<br />You focus on the application.
           </h1>
           <p className="inter" style={{ fontSize: "1.05rem", color: "#64748b", lineHeight: "1.8", maxWidth: "620px" }}>
-            Every bursary below is checked against the company&apos;s official page before it goes up — fields, requirements, and closing dates included. Tap one to see the full details.
+            Every bursary below is checked against the company&apos;s official page before it goes up, fields, requirements, and closing dates included. Tap one to see the full details.
           </p>
         </div>
       </section>
@@ -139,7 +139,7 @@ export default function BursariesIndexPage() {
               NSFAS, Sasol, Eskom, Anglo American and others open at different points in the year. WhatsApp us and we&apos;ll message you the day a new one goes live.
             </p>
             <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "0.95rem", padding: "0.95rem 2.25rem" }}>
-              📲 Get Notified — WhatsApp
+              📲 Get Notified via WhatsApp
             </a>
           </div>
         </div>

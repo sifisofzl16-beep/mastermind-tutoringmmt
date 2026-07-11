@@ -23,7 +23,7 @@ export const OPPORTUNITIES: Opportunity[] = [
     type: "Marking Contract",
     status: "Open",
     summary:
-      "JET Education Services is recruiting short-term contract markers for the Western Cape Education Department's Grade 9 Systemic Testing — a paid opportunity that suits students and graduates strong in English, Afrikaans or Maths.",
+      "JET Education Services is recruiting short-term contract markers for the Western Cape Education Department's Grade 9 Systemic Testing, a paid opportunity that suits students and graduates strong in English, Afrikaans or Maths.",
     about:
       "JET Education Services is building a register of markers to mark scripts for WCED Grades 3, 6 and 9 Systemic Testing. Recruitment is starting with Grade 9. Markers are assigned to a subject matching their qualifications and experience, and work under a Senior Marker at a Marking Centre for the duration of the contract.",
     positions: [
@@ -91,10 +91,10 @@ export const OPPORTUNITIES: Opportunity[] = [
       "Potential pathway to long-term employment at Columbus / Acerinox Group",
     ],
     keyDates: [
-      { label: "Closing date", date: "Rolling basis — check portal" },
+      { label: "Closing date", date: "Rolling basis, check portal" },
       { label: "Location", date: "Middelburg, Mpumalanga" },
     ],
-    closingDate: "Rolling basis — check portal",
+    closingDate: "Rolling basis, check portal",
     applyUrl: "https://columbus.mcidirecthire.com/external/currentopportunities",
     source: "columbus.co.za (Columbus Stainless official careers portal)",
   },
@@ -161,7 +161,7 @@ export const OPPORTUNITIES: Opportunity[] = [
     requirements: [
       "Grade 12",
       "Studying towards a degree in Metallurgy, Chemical/Mechanical/Electrical Engineering, or Geology",
-      "Completed the S4 theory component at a tertiary institution — only the practical WIL component remains",
+      "Completed the S4 theory component at a tertiary institution. Only the practical WIL component remains",
       "Completion letter from your institution confirming you meet WIL requirements",
       "Good communication and interpersonal skills",
       "Computer literate (MS Office)",

@@ -24,7 +24,7 @@ export const BURSARIES: Bursary[] = [
     summary:
       "Funding full-time South African students across Engineering, Commerce and Science, with vacation work and a path into Toyota's graduate programme.",
     about:
-      "Toyota South Africa Motors (TSAM) has run its bursary fund since incorporating as a Toyota Motor Corporation subsidiary in 2002, aiming to support academically strong students from its communities. Beyond tuition funding, recipients get vacation work placements and potential exposure to Toyota's flagship graduate programme — a real bridge from study into employment.",
+      "Toyota South Africa Motors (TSAM) has run its bursary fund since incorporating as a Toyota Motor Corporation subsidiary in 2002, aiming to support academically strong students from its communities. Beyond tuition funding, recipients get vacation work placements and potential exposure to Toyota's flagship graduate programme, a real bridge from study into employment.",
     fields: [
       { group: "Engineering", items: ["Chemical", "Electrical", "Civil", "Industrial", "Mechanical", "Mechatronics"] },
       { group: "Commerce", items: ["Accounting (Non-CA)", "Analytics", "Economics", "Environmental Science", "Financial Management", "Human Resource Management", "Law (LLB)", "Marketing Management"] },
@@ -53,7 +53,7 @@ export const BURSARIES: Bursary[] = [
     status: "Open",
     year: "2027",
     summary:
-      "Full cost-of-study funding — tuition, accommodation, books and living allowance — for South African students entering their final undergraduate year in Commerce, Engineering or Agriculture-related fields.",
+      "Full cost-of-study funding, tuition, accommodation, books and living allowance, for South African students entering their final undergraduate year in Commerce, Engineering or Agriculture-related fields.",
     about:
       "Wilmar South Africa is part of Wilmar International, one of the world's largest agribusiness groups, operating in edible oils, sugar and consumer food products across South Africa. The Wilmar SA Bursary Fund supports talented students from historically disadvantaged or underprivileged backgrounds through their final year of study, with selection based on both academic potential and genuine financial need.",
     fields: [

@@ -210,7 +210,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ sl
               <a href="/opportunities" className="btn-outline">See other opportunities</a>
             </div>
             <p className="inter" style={{ fontSize: "0.68rem", color: "#374151", marginTop: "1.5rem" }}>
-              Verified against {o.source}. Applications are processed by {o.org.split(" ")[0]} directly — MMT does not handle submissions or selection.
+              Verified against {o.source}. Applications are processed by {o.org.split(" ")[0]} directly. MMT does not handle submissions or selection.
             </p>
           </div>
         </div>

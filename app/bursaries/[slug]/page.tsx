@@ -198,7 +198,7 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
               <a href="/bursaries" className="btn-outline">See other bursaries</a>
             </div>
             <p className="inter" style={{ fontSize: "0.68rem", color: "#374151", marginTop: "1.5rem" }}>
-              Verified against {b.source}. Applications are processed by {b.company.split(" ")[0]} directly — MMT does not handle submissions or selection.
+              Verified against {b.source}. Applications are processed by {b.company.split(" ")[0]} directly. MMT does not handle submissions or selection.
             </p>
           </div>
         </div>
