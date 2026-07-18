@@ -253,7 +253,7 @@ export default function MastermindTutoringWebsite() {
             MMT<span className="gold">.</span>
           </a>
           <div className="hide-mobile" style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
-            {["modules","courses","highschool","packages","tutors","contact"].map(s => (
+            {["modules","courses","highschool","packages","tutors","careers","contact"].map(s => (
               <a key={s} href={`#${s}`} className="nav-a" style={{ textTransform: "capitalize" }}>{s}</a>
             ))}
             <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c" }}>Bursaries</a>
@@ -268,7 +268,7 @@ export default function MastermindTutoringWebsite() {
         </div>
         {mobileMenu && (
           <div className="show-mobile" style={{ maxWidth: "1200px", margin: "1.25rem auto 0", display: "flex", flexDirection: "column", gap: "0.25rem", paddingBottom: "0.5rem" }}>
-            {["modules","courses","highschool","packages","tutors","contact"].map(s => (
+            {["modules","courses","highschool","packages","tutors","careers","contact"].map(s => (
               <a key={s} href={`#${s}`} onClick={() => setMobileMenu(false)} className="nav-a" style={{ textTransform: "capitalize", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>{s}</a>
             ))}
             <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>Bursaries</a>
@@ -748,6 +748,62 @@ export default function MastermindTutoringWebsite() {
         </div>
       </section>
 
+      {/* ── HIRING ────────────────────────── */}
+      <section className="reveal-section" id="careers" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="label-tag" style={{ marginBottom: "1rem" }}>Join The Team</div>
+          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>We&apos;re hiring tutors</h2>
+          <div className="divider-gold"/>
+          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "600px", fontSize: "0.95rem", lineHeight: "1.7" }}>
+            We&apos;re expanding our tutor team and looking for high-performing students to join us. MMT clients invest real money into their education. We take that seriously, and we need tutors who do too.
+          </p>
+
+          {/* Open roles */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "3rem" }}>
+            {[
+              { role: "Mathematics Tutor", req: "Strong academic record in Mathematics" },
+              { role: "Accounting Tutor", req: "BSc/BCom Accounting, 3rd year, strong academic standing" },
+              { role: "Mechanical Engineering Tutor", req: "3rd year, strong academic standing" },
+              { role: "Construction Studies Tutor", req: "3rd year, strong academic standing" },
+              { role: "Economics Tutor", req: "3rd year, strong academic standing" },
+            ].map(r => (
+              <div key={r.role} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.5rem" }}>
+                <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{r.role}</h3>
+                <p className="inter" style={{ fontSize: "0.82rem", color: "#64748b", lineHeight: "1.6" }}>{r.req}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* What we're looking for */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", marginBottom: "3rem" }}>
+            <div>
+              <p className="syne" style={{ fontSize: "1.05rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "1.25rem" }}>What we&apos;re looking for</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                {[
+                  "High academic performance in your field, not just a pass. We want proof you actually understand the work.",
+                  "Ability to explain concepts clearly, not just know them.",
+                  "Patience, especially with students who are struggling or anxious.",
+                  "Reliability. Showing up prepared, on time, every time.",
+                  "A genuine interest in helping students improve, not just earning an income.",
+                ].map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                    <span style={{ color: "#c9a84c", marginTop: "2px", flexShrink: 0 }}>✓</span>
+                    <span className="inter" style={{ fontSize: "0.88rem", color: "#94a3b8", lineHeight: "1.6" }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.12)", borderRadius: "14px", padding: "2rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <p className="syne" style={{ fontWeight: "700", color: "#f1f5f9", marginBottom: "0.75rem", fontSize: "1.05rem" }}>Ready to apply?</p>
+              <p className="inter" style={{ color: "#64748b", fontSize: "0.85rem", lineHeight: "1.7", marginBottom: "1.5rem" }}>
+                Tell us your module(s), your current average, and a bit about your teaching or tutoring experience, if any. Quality is non-negotiable. Let&apos;s build something students can actually trust.
+              </p>
+              <a href={tutorLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ alignSelf: "flex-start" }}>Apply to Join MMT →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── REVIEWS ───────────────────────── */}
       <section className="reveal-section" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -806,7 +862,7 @@ export default function MastermindTutoringWebsite() {
           </div>
           <p className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>© 2026 Mastermind Tutoring · Wits University · Johannesburg</p>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            {["modules","courses","highschool","packages","contact"].map(l => (
+            {["modules","courses","highschool","packages","careers","contact"].map(l => (
               <a key={l} href={`#${l}`} className="inter" style={{ fontSize: "0.75rem", color: "#374151", textTransform: "capitalize" }}>{l}</a>
             ))}
             <a href="/bursaries" className="inter" style={{ fontSize: "0.75rem", color: "#c9a84c" }}>Bursaries</a>
