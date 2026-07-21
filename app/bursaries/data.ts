@@ -111,6 +111,36 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "https://nedbankex.fra1.qualtrics.com/jfe/form/SV_eXneIZdSSqwmFCK",
     source: "group.nedbank.co.za/careers/graduates-and-bursaries.html",
   },
+  {
+    slug: "glencore-alloys-electrical",
+    company: "Glencore South Africa (Alloys Division)",
+    emoji: "⚡",
+    status: "Open",
+    year: "2027",
+    summary:
+      "Glencore's Alloys Division, based at Rhovan PSV in Brits, is funding Electrical Engineering students, covering tuition, residence, textbooks and a monthly allowance.",
+    about:
+      "Glencore is a major global diversified mining group listed on the London and Swiss Stock Exchanges, with operations spanning four continents and eighteen countries. Its South African Alloys Division, based at Rhovan PSV near Brits, offers this bursary to Grade 12 learners and current university students studying Electrical Engineering, with selection based on academic results and an interview with the Bursary Committee.",
+    fields: [
+      { group: "Engineering", items: ["Electrical Engineering"] },
+    ],
+    requirements: [
+      "Grade 12 learners or current university students",
+      "At least a C+ symbol at Higher Grade for both Mathematics and Science",
+      "Selection based on academic results and an interview with Glencore Alloy's Bursary Committee",
+      "Cannot be held at the same time as any other significant industry bursary",
+    ],
+    benefits: [
+      "Composite registration and tuition fees",
+      "Residence fees, including meals",
+      "Prescribed textbooks",
+      "Monthly cash allowance for incidental expenses",
+      "Financial assistance toward a personal computer from 2nd year of study, if prescribed by the university",
+    ],
+    closingDate: "1 August 2026",
+    applyUrl: "https://www.glencore.com/en/careers/jobs/07O%20-%2000195726",
+    source: "glencore.com official careers listing (Job ID 07O - 00195726)",
+  },
 ];
 
 export function getBursary(slug: string) {
