@@ -141,6 +141,42 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "https://www.glencore.com/en/careers/jobs/07O%20-%2000195726",
     source: "glencore.com official careers listing (Job ID 07O - 00195726)",
   },
+  {
+    slug: "sanparks-external",
+    company: "SANParks External Bursary Programme",
+    emoji: "🌳",
+    status: "Open",
+    year: "2027",
+    summary:
+      "South African National Parks is funding first-year undergraduate study for youth aged 18 to 35 from communities neighbouring national parks, across an unusually wide range of fields from conservation to artisan trades.",
+    about:
+      "SANParks was established under the National Environmental Management: Protected Areas Act, 2003, to conserve South Africa's biodiversity, landscapes and heritage through its national parks, while ensuring those operations create educational and economic benefit for neighbouring communities. This bursary is one of its most direct investments in those communities, covering degree, diploma, TVET and artisan qualifications at any accredited public South African institution.",
+    fields: [
+      { group: "Environmental Sciences", items: ["Nature Conservation", "Environmental Management", "Green Energy", "Environmental Engineering", "Sustainable Development", "Game Ranch Management"] },
+      { group: "Tourism", items: ["Hospitality Management", "Tourism Management", "Resort Management", "Tour Guiding", "Events & Conference Management"] },
+      { group: "Social Sciences", items: ["Community Development", "Economic Development", "Socio-Economic Development"] },
+      { group: "Infrastructure & Built Environment", items: ["Civil Engineering", "Mechanical Engineering", "Electrical Engineering", "Construction Management", "Quantity Surveying", "Architecture", "Project Management"] },
+      { group: "Technical & Artisan Trades", items: ["Electricians", "Plumbers", "Welders", "Millwrights", "Mechanics", "Technicians", "Solar Technicians", "Refrigeration Technicians", "Water & Wastewater Technicians"] },
+      { group: "Emerging Scarce Skills", items: ["GIS", "Analytics", "Cyber Security", "Renewable Energy", "Climate Change Adaptation", "Biodiversity Economics", "Entrepreneurship"] },
+    ],
+    requirements: [
+      "South African citizen",
+      "From a community living adjacent to a National Park, as defined in that park's management plan",
+      "Aged 18 to 35",
+      "Entering first-year post-Matric study in 2027 (university, university of technology, or TVET college)",
+      "Household or applicant income not exceeding R350,000 per year",
+      "If already registered at an institution, a 100% pass rate for all completed study periods",
+      "Proof of application and admission to an accredited institution",
+    ],
+    benefits: [
+      "Comprehensive bursary covering approved study-related expenses",
+      "Selection considers academic merit alongside SANParks' commitment to women, people with disabilities, and designated groups",
+      "Covers degree, National Diploma, TVET and artisan qualifications",
+    ],
+    closingDate: "21 August 2026",
+    applyUrl: "mailto:happy.nhlangwini@sanparks.org?subject=SANParks%20External%20Bursary%20Programme%202027%20Application",
+    source: "sanparks.org official vacancies listing",
+  },
 ];
 
 export function getBursary(slug: string) {
