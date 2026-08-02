@@ -43,7 +43,7 @@ export const BURSARIES: Bursary[] = [
       "Applications administered by StudyTrust",
     ],
     closingDate: "30 September 2026",
-    applyUrl: "http://studytrust.org.za/toyota",
+    applyUrl: "https://studytrust.org.za/toyota/",
     source: "jobs.toyota.co.za",
   },
   {
