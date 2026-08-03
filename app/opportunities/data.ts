@@ -2,7 +2,7 @@ export type Opportunity = {
   slug: string;
   org: string;
   emoji: string;
-  type: "Marking Contract" | "Internship" | "Vacation Work" | "Part-Time";
+  type: "Marking Contract" | "Internship" | "Vacation Work" | "Part-Time" | "Learnership";
   status: "Open" | "Closing Soon" | "Closed";
   summary: string;
   about: string;
@@ -180,6 +180,42 @@ export const OPPORTUNITIES: Opportunity[] = [
     closingDate: "7 July 2026",
     applyUrl: "https://www.glencore.com/en/careers/jobs/P1%20P2%20Workplace%20Experience%20Program",
     source: "glencore.com official careers listing",
+  },
+  {
+    slug: "standard-bank-internal-audit-learnership",
+    org: "Standard Bank",
+    emoji: "🏦",
+    type: "Learnership",
+    status: "Open",
+    summary:
+      "A 24-month contract learnership in Johannesburg leading to the Occupational Certificate: Internal Auditor, open to graduates from a wide range of fields including IT, Finance, Engineering and Risk.",
+    about:
+      "Standard Bank Group is Africa's largest bank by assets, with operations across more than 20 countries. This learnership sits within its Internal Audit function and combines structured formal training with supervised workplace experience, covering audit planning, internal controls, business processes, risk management, working papers and evidence-based recommendations, leading to a nationally recognised Occupational Certificate.",
+    positions: [
+      { group: "Internal Auditing Learnership", count: "Job ref: 80454408A-0001" },
+    ],
+    requirements: [
+      "South African citizen, under 30 years old",
+      "Completed undergraduate qualification in Information Technology or Computer Science, Business Management Sciences, Auditing, Finance, Economics, Engineering, ESG and Environmental Studies, Insurance and Risk Management, or Risk and Compliance Management",
+      "Not currently studying at another institution",
+      "Not registered on another learnership or internship programme",
+      "Available to start 1 October 2026 and commit to the full 24-month contract",
+      "Proficient in spoken and written English",
+    ],
+    duties: [
+      "Gain supervised exposure to audit planning, internal controls and business process analysis",
+      "Work on risk management, working papers and evidence-based recommendations",
+      "Complete formal training modules toward the Occupational Certificate: Internal Auditor",
+      "Based at Standard Bank's Johannesburg offices (30 Baker Street and/or 5 Simmonds Street, Rosebank)",
+    ],
+    keyDates: [
+      { label: "Programme starts", date: "1 October 2026" },
+      { label: "Duration", date: "24 months" },
+      { label: "Closing date", date: "Not stated, apply as soon as possible" },
+    ],
+    closingDate: "Not specified, apply while the listing remains active",
+    applyUrl: "https://www.standardbank.com/sbg/standard-bank-group/careers/early-careers/learnerships",
+    source: "standardbank.com official careers portal (Job ref: 80454408A-0001)",
   },
 ];
 
