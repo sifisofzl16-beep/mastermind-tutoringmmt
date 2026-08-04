@@ -73,7 +73,6 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
   const [showReview, setShowReview] = useState(false);
 
   function handleApply() {
-    window.open(b.applyUrl, "_blank", "noopener,noreferrer");
     setShowReview(true);
   }
 
@@ -219,7 +218,7 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
         </div>
       </footer>
 
-      <ReviewPrompt open={showReview} onClose={() => setShowReview(false)} />
+      <ReviewPrompt open={showReview} applyUrl={b.applyUrl} onClose={() => setShowReview(false)} />
     </div>
   );
 }

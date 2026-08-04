@@ -4,16 +4,28 @@ const REVIEW_LINK = "https://g.page/r/CbdZCEZW3YHKEAE/review";
 
 export default function ReviewPrompt({
   open,
+  applyUrl,
   onClose,
 }: {
   open: boolean;
+  applyUrl: string;
   onClose: () => void;
 }) {
   if (!open) return null;
 
+  function goToApplication() {
+    onClose();
+    window.location.href = applyUrl;
+  }
+
+  function rateAndContinue() {
+    window.open(REVIEW_LINK, "_blank", "noopener,noreferrer");
+    goToApplication();
+  }
+
   return (
     <div
-      onClick={onClose}
+      onClick={goToApplication}
       style={{
         position: "fixed",
         inset: 0,
@@ -46,26 +58,6 @@ export default function ReviewPrompt({
           boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
         }}
       >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          style={{
-            position: "absolute",
-            top: "1rem",
-            right: "1rem",
-            background: "rgba(255,255,255,0.06)",
-            border: "none",
-            borderRadius: "50%",
-            width: "28px",
-            height: "28px",
-            color: "#64748b",
-            fontSize: "0.9rem",
-            cursor: "pointer",
-          }}
-        >
-          ✕
-        </button>
-
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: "1rem", fontWeight: 800, color: "#f1f5f9", marginBottom: "0.25rem" }}>
           MMT<span style={{ color: "#c9a84c" }}>.</span>
         </p>
@@ -75,20 +67,18 @@ export default function ReviewPrompt({
         </p>
 
         <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: "1.15rem", fontWeight: 800, color: "#f1f5f9", marginBottom: "0.6rem", lineHeight: 1.3 }}>
-          Good luck with your application!
+          Quick favour before you apply?
         </h3>
 
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.87rem", color: "#94a3b8", lineHeight: 1.6, marginBottom: "1.75rem" }}>
-          Your application is opening in a new tab. If MMT&apos;s bursary and opportunity hub helped you, a quick Google review helps other Wits students find us too.
+          If MMT&apos;s bursary and opportunity hub has helped you, a Google review helps other Wits students find us. Totally optional, your application comes first either way.
         </p>
 
-        <a
-          href={REVIEW_LINK}
-          target="_blank"
-          rel="noreferrer"
-          onClick={onClose}
+        <button
+          onClick={rateAndContinue}
           style={{
             display: "block",
+            width: "100%",
             background: "linear-gradient(135deg, #c9a84c, #e8c96e)",
             color: "#06080f",
             fontFamily: "'Syne', sans-serif",
@@ -96,26 +86,31 @@ export default function ReviewPrompt({
             fontSize: "0.9rem",
             padding: "0.85rem",
             borderRadius: "8px",
-            textDecoration: "none",
-            marginBottom: "0.75rem",
+            border: "none",
+            cursor: "pointer",
+            marginBottom: "0.85rem",
           }}
         >
-          ⭐ Leave us a Google Review
-        </a>
+          ⭐ Rate MMT & Continue
+        </button>
 
         <button
-          onClick={onClose}
+          onClick={goToApplication}
           style={{
+            display: "block",
+            width: "100%",
             background: "none",
-            border: "none",
-            color: "#475569",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: "8px",
+            color: "#94a3b8",
             fontFamily: "'Inter', sans-serif",
-            fontSize: "0.82rem",
+            fontWeight: 600,
+            fontSize: "0.85rem",
+            padding: "0.75rem",
             cursor: "pointer",
-            padding: "0.5rem",
           }}
         >
-          Maybe later
+          Skip → Continue to Application
         </button>
       </div>
     </div>

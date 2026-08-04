@@ -69,7 +69,6 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ sl
   const [showReview, setShowReview] = useState(false);
 
   function handleApply() {
-    window.open(o.applyUrl, "_blank", "noopener,noreferrer");
     setShowReview(true);
   }
 
@@ -231,7 +230,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ sl
         </div>
       </footer>
 
-      <ReviewPrompt open={showReview} onClose={() => setShowReview(false)} />
+      <ReviewPrompt open={showReview} applyUrl={o.applyUrl} onClose={() => setShowReview(false)} />
     </div>
   );
 }
