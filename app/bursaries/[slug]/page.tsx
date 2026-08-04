@@ -1,7 +1,8 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { getBursary } from "../data";
+import ReviewPrompt from "../../components/ReviewPrompt";
 
 const SHARED_STYLE = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap');
@@ -69,6 +70,12 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
   }
 
   const b = bursary;
+  const [showReview, setShowReview] = useState(false);
+
+  function handleApply() {
+    window.open(b.applyUrl, "_blank", "noopener,noreferrer");
+    setShowReview(true);
+  }
 
   return (
     <div style={{ background: "#06080f", minHeight: "100vh", color: "#e2e8f0", fontFamily: "system-ui, sans-serif" }}>
@@ -113,9 +120,9 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
           </p>
 
           <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
-            <a href={b.applyUrl} target="_blank" rel="noreferrer" className="btn-gold">
+            <button onClick={handleApply} className="btn-gold">
               Apply via {b.company.split(" ")[0]} →
-            </a>
+            </button>
             <div>
               <p className="inter" style={{ fontSize: "0.68rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.06em" }}>Closes</p>
               <p className="syne" style={{ fontSize: "1.1rem", fontWeight: "800", color: "#f1f5f9" }}>{b.closingDate}</p>
@@ -192,9 +199,9 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
               You&apos;ll be taken to {b.company.split(" ")[0]}&apos;s official application platform.
             </p>
             <div style={{ display: "flex", gap: "0.85rem", justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={b.applyUrl} target="_blank" rel="noreferrer" className="btn-gold">
+              <button onClick={handleApply} className="btn-gold">
                 Apply via {b.company.split(" ")[0]} →
-              </a>
+              </button>
               <a href="/bursaries" className="btn-outline">See other bursaries</a>
             </div>
             <p className="inter" style={{ fontSize: "0.68rem", color: "#374151", marginTop: "1.5rem" }}>
@@ -211,6 +218,8 @@ export default function BursaryDetailPage({ params }: { params: Promise<{ slug: 
           <p className="inter" style={{ fontSize: "0.72rem", color: "#374151" }}>© 2026 Mastermind Tutoring · Wits University</p>
         </div>
       </footer>
+
+      <ReviewPrompt open={showReview} onClose={() => setShowReview(false)} />
     </div>
   );
 }
