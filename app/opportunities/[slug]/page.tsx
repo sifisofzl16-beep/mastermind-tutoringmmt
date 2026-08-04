@@ -66,19 +66,26 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ sl
   }
 
   const o = opp;
-  const [showReview, setShowReview] = useState(false);
+  const [reviewDestination, setReviewDestination] = useState<string | null>(null);
+  const [reviewLabel, setReviewLabel] = useState("Continue");
 
   function handleApply() {
-    setShowReview(true);
+    setReviewLabel("Continue to Application");
+    setReviewDestination(o.applyUrl);
+  }
+
+  function handleGetAlerts() {
+    setReviewLabel("Continue to WhatsApp");
+    setReviewDestination(waLink);
   }
 
   return (
     <div style={{ background: "#06080f", minHeight: "100vh", color: "#e2e8f0", fontFamily: "system-ui, sans-serif" }}>
       <style>{SHARED_STYLE}</style>
 
-      <a href={waLink} target="_blank" rel="noreferrer" className="sticky-wa">
+      <button onClick={handleGetAlerts} className="sticky-wa">
         <span>💬</span> Get Alerts
-      </a>
+      </button>
 
       {/* ── NAV ───────────────────────────── */}
       <nav style={{ padding: "1.5rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
@@ -230,7 +237,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ sl
         </div>
       </footer>
 
-      <ReviewPrompt open={showReview} applyUrl={o.applyUrl} onClose={() => setShowReview(false)} />
+      <ReviewPrompt open={reviewDestination !== null} destinationUrl={reviewDestination || ""} continueLabel={reviewLabel} onClose={() => setReviewDestination(null)} />
     </div>
   );
 }

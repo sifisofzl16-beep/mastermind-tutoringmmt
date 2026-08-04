@@ -2,11 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { BURSARIES } from "./data";
+import ReviewPrompt from "../components/ReviewPrompt";
 
 export default function BursariesIndexPage() {
   const waLink =
     "https://wa.me/27693126747?text=Hi%20MMT%2C%20please%20notify%20me%20when%20new%20bursaries%20open.";
   const [scrolled, setScrolled] = useState(false);
+  const [showReview, setShowReview] = useState(false);
+
+  function handleGetAlerts() {
+    setShowReview(true);
+  }
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -62,9 +68,9 @@ export default function BursariesIndexPage() {
         }
       `}</style>
 
-      <a href={waLink} target="_blank" rel="noreferrer" className="sticky-wa">
+      <button onClick={handleGetAlerts} className="sticky-wa">
         <span>💬</span> Get Bursary Alerts
-      </a>
+      </button>
 
       {/* ── NAV ───────────────────────────── */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, transition: "all 0.3s", background: scrolled ? "rgba(6,8,15,0.95)" : "transparent", backdropFilter: scrolled ? "blur(20px)" : "none", borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "1.25rem 2rem" }}>
@@ -74,9 +80,9 @@ export default function BursariesIndexPage() {
           </a>
           <a href="/" className="nav-a hide-mobile">← Back to mastermindtutoring.co.za</a>
           <a href="/opportunities" className="nav-a hide-mobile">Opportunities</a>
-          <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
+          <button onClick={handleGetAlerts} className="btn-gold" style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
             Get Alerts
-          </a>
+          </button>
         </div>
       </nav>
 
@@ -138,9 +144,9 @@ export default function BursariesIndexPage() {
             <p className="inter" style={{ color: "#64748b", fontSize: "0.92rem", lineHeight: "1.7", maxWidth: "480px", margin: "0 auto 2rem" }}>
               NSFAS, Sasol, Eskom, Anglo American and others open at different points in the year. WhatsApp us and we&apos;ll message you the day a new one goes live.
             </p>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ fontSize: "0.95rem", padding: "0.95rem 2.25rem" }}>
+            <button onClick={handleGetAlerts} className="btn-gold" style={{ fontSize: "0.95rem", padding: "0.95rem 2.25rem" }}>
               📲 Get Notified via WhatsApp
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -153,6 +159,8 @@ export default function BursariesIndexPage() {
           <a href="/" className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>mastermindtutoring.co.za</a>
         </div>
       </footer>
+
+      <ReviewPrompt open={showReview} destinationUrl={waLink} continueLabel="Continue to WhatsApp" onClose={() => setShowReview(false)} />
     </div>
   );
 }

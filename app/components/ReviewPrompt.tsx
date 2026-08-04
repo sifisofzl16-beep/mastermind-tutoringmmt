@@ -4,28 +4,30 @@ const REVIEW_LINK = "https://g.page/r/CbdZCEZW3YHKEAE/review";
 
 export default function ReviewPrompt({
   open,
-  applyUrl,
+  destinationUrl,
+  continueLabel = "Continue",
   onClose,
 }: {
   open: boolean;
-  applyUrl: string;
+  destinationUrl: string;
+  continueLabel?: string;
   onClose: () => void;
 }) {
   if (!open) return null;
 
-  function goToApplication() {
+  function goToDestination() {
     onClose();
-    window.location.href = applyUrl;
+    window.location.href = destinationUrl;
   }
 
   function rateAndContinue() {
     window.open(REVIEW_LINK, "_blank", "noopener,noreferrer");
-    goToApplication();
+    goToDestination();
   }
 
   return (
     <div
-      onClick={goToApplication}
+      onClick={goToDestination}
       style={{
         position: "fixed",
         inset: 0,
@@ -67,11 +69,11 @@ export default function ReviewPrompt({
         </p>
 
         <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: "1.15rem", fontWeight: 800, color: "#f1f5f9", marginBottom: "0.6rem", lineHeight: 1.3 }}>
-          Quick favour before you apply?
+          Quick favour first?
         </h3>
 
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.87rem", color: "#94a3b8", lineHeight: 1.6, marginBottom: "1.75rem" }}>
-          If MMT&apos;s bursary and opportunity hub has helped you, a Google review helps other Wits students find us. Totally optional, your application comes first either way.
+          If MMT&apos;s bursary and opportunity hub has helped you, a Google review helps other Wits students find us. Totally optional, we&apos;ll take you through either way.
         </p>
 
         <button
@@ -95,7 +97,7 @@ export default function ReviewPrompt({
         </button>
 
         <button
-          onClick={goToApplication}
+          onClick={goToDestination}
           style={{
             display: "block",
             width: "100%",
@@ -110,7 +112,7 @@ export default function ReviewPrompt({
             cursor: "pointer",
           }}
         >
-          Skip → Continue to Application
+          Skip → {continueLabel}
         </button>
       </div>
     </div>
