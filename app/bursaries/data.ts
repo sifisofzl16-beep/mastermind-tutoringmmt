@@ -177,6 +177,67 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "mailto:happy.nhlangwini@sanparks.org?subject=SANParks%20External%20Bursary%20Programme%202027%20Application",
     source: "sanparks.org official vacancies listing",
   },
+  {
+    slug: "mad-leadership-foundation",
+    company: "MAD Leadership Foundation",
+    emoji: "🎓",
+    status: "Open",
+    year: "2027",
+    summary:
+      "The Make A Difference Leadership Foundation, founded by Francois Pienaar, funds academically strong South African students in STEM, Commerce and Chartered Accountancy, alongside leadership mentorship.",
+    about:
+      "MAD Leadership Foundation was founded in 2003 to give academically gifted students from financially disadvantaged backgrounds access to funded education plus structured leadership development and mentorship. For 2027, three tracks are open: a high school scholarship for current Grade 8 learners entering Grade 9, an undergraduate STEM/Commerce scholarship, and a Chartered Accountancy (CA(SA)) scholarship for 1st or 2nd year students.",
+    fields: [
+      { group: "Undergraduate STEM & Commerce", items: ["Science", "Technology", "Engineering", "Mathematics", "Commerce"] },
+      { group: "Chartered Accountancy", items: ["CA(SA) — 1st or 2nd year undergraduate"] },
+      { group: "High School", items: ["Grade 9 entry (current Grade 8 learners at public schools)"] },
+    ],
+    requirements: [
+      "South African citizen",
+      "STEM/Commerce track: Grade 12 (2026) or 1st year tertiary, minimum 65% average",
+      "CA(SA) track: 1st or 2nd year undergraduate, minimum 70% in Financial Accounting",
+      "Gross household income not exceeding R35,000 per month",
+      "Strong leadership qualities and community involvement preferred",
+    ],
+    benefits: [
+      "Funded tuition and study costs",
+      "Structured mentorship and leadership development",
+      "Access to a long-term scholar support network",
+    ],
+    closingDate: "26 July 2026",
+    applyUrl: "https://madleadership.jotform.com/261122534255550",
+    source: "uwc.ac.za official financial aid listing",
+  },
+  {
+    slug: "rhodes-scholarship",
+    company: "Rhodes Scholarship (Southern Africa)",
+    emoji: "🏛️",
+    status: "Open",
+    year: "2027",
+    summary:
+      "A fully funded postgraduate scholarship to study at the University of Oxford, open to graduates from South Africa, Botswana, Lesotho, Malawi, Namibia and Eswatini.",
+    about:
+      "The Rhodes Scholarship, established in 1902, is the oldest international postgraduate scholarship in the world. Ten scholarships are awarded annually across the Southern Africa constituency for full-time Masters or Doctoral study at Oxford, commencing October 2027. It covers Oxford's application fee, tuition for at least two years, and an annual stipend for living costs.",
+    fields: [
+      { group: "Postgraduate Study at Oxford", items: ["Most disciplines and fields of study offered at the University of Oxford"] },
+    ],
+    requirements: [
+      "Citizen or legal permanent resident of South Africa, Botswana, Lesotho, Malawi, Namibia or Eswatini",
+      "Lived in one of these countries for at least 5 of the last 10 years",
+      "Completed, or will complete by July 2027, an undergraduate degree",
+      "Aged 19 to 25 on 1 October 2027",
+      "Meets the specific Oxford course entry requirements for your chosen programme",
+      "Preference given to First Class Honours, GPA 3.70+, an Honours year, or Masters-level study",
+    ],
+    benefits: [
+      "Oxford application fee and tuition fees for at least two years",
+      "Annual stipend covering accommodation and living expenses",
+      "Access to a global community of Rhodes Scholars",
+    ],
+    closingDate: "3 August 2026, 23:59 SAST",
+    applyUrl: "https://www.rhodeshouse.ox.ac.uk/scholarships/applications/southern-africa/",
+    source: "rhodeshouse.ox.ac.uk official Rhodes Trust site",
+  },
 ];
 
 export function getBursary(slug: string) {
