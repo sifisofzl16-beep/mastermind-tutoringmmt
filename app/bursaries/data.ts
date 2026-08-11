@@ -238,6 +238,35 @@ export const BURSARIES: Bursary[] = [
     applyUrl: "https://www.rhodeshouse.ox.ac.uk/scholarships/applications/southern-africa/",
     source: "rhodeshouse.ox.ac.uk official Rhodes Trust site",
   },
+  {
+    slug: "investec-tertiary",
+    company: "Investec Tertiary Bursary Programme",
+    emoji: "🦓",
+    status: "Open",
+    year: "2027",
+    summary:
+      "Investec, in partnership with StudyTrust, funds financial sector-related degrees for South African students with academic potential and financial need, plus mentorship and a Work Readiness programme.",
+    about:
+      "Investec's Tertiary Bursary Programme goes beyond funding, pairing every bursar with an Investec staff mentor for the duration of their studies and running a week-long Work Readiness programme at their Sandton office for third and final year students. Out of thousands of applicants each year, roughly 50 to 55 are shortlisted, with up to 30 ultimately awarded the bursary.",
+    fields: [
+      { group: "Financial Sector-Related Degrees", items: ["Accounting", "Finance", "Economics", "Actuarial Science", "Information Technology / Computer Science", "Other finance-adjacent degrees"] },
+    ],
+    requirements: [
+      "South African citizen with academic potential and financial need",
+      "Matric exemption (or working towards one) with a minimum 70% in English and Mathematics (not Maths Literacy)",
+      "Minimum 60% pass rate in all other subjects",
+      "Studying towards a financial sector-related degree at a South African university",
+    ],
+    benefits: [
+      "Full bursary per year toward study-related expenses",
+      "Mentorship pairing with an Investec staff member for the duration of study",
+      "Work Readiness programme in third/final year, held at Investec's Sandton office",
+      "Support with job search and the transition from university into employment",
+    ],
+    closingDate: "30 September 2026",
+    applyUrl: "https://studytrust.org.za/investec-bursary-programme/",
+    source: "investec.com official bursaries page",
+  },
 ];
 
 export function getBursary(slug: string) {
