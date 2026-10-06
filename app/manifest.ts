@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Mastermind Tutoring",
-    short_name: "MMT",
-    description: "Your MMT Full Course: study guides, practice questions and live classes.",
+    short_name: "Mastermind",
+    description: "Your Mastermind Tutoring Full Course: study guides, practice questions and live classes.",
     start_url: "/course",
     display: "standalone",
     background_color: "#0D1B2A",

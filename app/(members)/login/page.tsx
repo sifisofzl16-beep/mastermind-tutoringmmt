@@ -100,7 +100,7 @@ export default async function LoginPage({
             </>
           ) : (
             <>
-              New to MMT?{" "}
+              New to Mastermind Tutoring?{" "}
               <Link href="/login?mode=signup" className="font-semibold text-[#0D1B2A] underline decoration-[#F4A024] underline-offset-4">
                 Create an account
               </Link>

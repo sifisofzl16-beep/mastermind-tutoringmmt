@@ -11,13 +11,13 @@ export default async function Header() {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
         <Link
           href="/course"
-          className="text-3xl leading-none text-[#F4A024]"
+          className="text-2xl leading-none text-[#F4A024] sm:text-3xl"
           style={{ fontFamily: "Caveat, cursive" }}
         >
-          MMT
+          Mastermind Tutoring
         </Link>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/course" className="hover:text-[#F4A024]">
+          <Link href="/course" className="hidden hover:text-[#F4A024] sm:inline">
             My courses
           </Link>
           {profile?.is_admin && (

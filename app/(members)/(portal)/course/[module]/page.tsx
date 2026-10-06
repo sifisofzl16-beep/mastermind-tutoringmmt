@@ -68,7 +68,7 @@ export default async function ModulePage({
         </p>
         <a
           href={whatsappLink(
-            `Hi MMT, I'd like to ${expired ? "renew" : "join"} the ${mod.title} Full Course.`,
+            `Hi Mastermind Tutoring, I'd like to ${expired ? "renew" : "join"} the ${mod.title} Full Course.`,
           )}
           target="_blank"
           rel="noopener noreferrer"
@@ -116,7 +116,7 @@ export default async function ModulePage({
       {daysLeft !== null && daysLeft <= 7 && (
         <p className="mt-4 rounded-lg bg-[#F4A024]/15 px-4 py-3 text-sm">
           Your access ends in {daysLeft} {daysLeft === 1 ? "day" : "days"} (
-          {formatDate(paidUntil!)}). Message MMT on WhatsApp to renew.
+          {formatDate(paidUntil!)}). Message Mastermind Tutoring on WhatsApp to renew.
         </p>
       )}
 

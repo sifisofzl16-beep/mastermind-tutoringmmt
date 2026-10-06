@@ -34,7 +34,7 @@ export default async function CoursePage() {
       <h1 className="text-3xl font-semibold">
         {firstName ? `Welcome, ${firstName}` : "Welcome"}
       </h1>
-      <p className="mt-2 text-[#0D1B2A]/70">Your MMT Full Course modules.</p>
+      <p className="mt-2 text-[#0D1B2A]/70">Your Mastermind Tutoring Full Course modules.</p>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
         {((modules ?? []) as ModuleRow[]).map((m) => {
@@ -81,7 +81,7 @@ export default async function CoursePage() {
                 <div className="mt-5">
                   <a
                     href={whatsappLink(
-                      `Hi MMT, I'd like to ${expired ? "renew" : "join"} the ${m.title} Full Course.`,
+                      `Hi Mastermind Tutoring, I'd like to ${expired ? "renew" : "join"} the ${m.title} Full Course.`,
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
