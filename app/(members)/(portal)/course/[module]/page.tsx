@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession, todayISO } from "@/lib/session";
 import { whatsappLink } from "@/lib/contact";
+import { toEmbed } from "@/lib/video";
 
 type Resource = {
   id: string;
@@ -10,7 +11,10 @@ type Resource = {
   storage_path: string | null;
   video_url: string | null;
   sort_order: number;
+  created_at: string;
 };
+
+const KIND_RANK: Record<Resource["kind"], number> = { video: 0, notes: 1, practice: 2, other: 3 };
 type Topic = { id: string; title: string; sort_order: number; resources: Resource[] };
 
 const KIND_LABEL: Record<Resource["kind"], string> = {
@@ -87,13 +91,18 @@ export default async function ModulePage({
 
   const { data: topicRows } = await supabase
     .from("topics")
-    .select("id,title,sort_order,resources(id,kind,title,storage_path,video_url,sort_order)")
+    .select("id,title,sort_order,resources(id,kind,title,storage_path,video_url,sort_order,created_at)")
     .eq("module_id", mod.id)
     .order("sort_order");
 
   const topics = ((topicRows ?? []) as Topic[]).map((t) => ({
     ...t,
-    resources: [...t.resources].sort((a, b) => a.sort_order - b.sort_order),
+    resources: [...t.resources].sort(
+      (a, b) =>
+        KIND_RANK[a.kind] - KIND_RANK[b.kind] ||
+        a.sort_order - b.sort_order ||
+        a.created_at.localeCompare(b.created_at),
+    ),
   }));
 
   const daysLeft =
@@ -142,6 +151,35 @@ export default async function ModulePage({
             ) : (
               <ul className="mt-4 divide-y divide-[#0D1B2A]/10">
                 {t.resources.map((r) => {
+                  const embed = r.kind === "video" ? toEmbed(r.video_url) : null;
+                  if (embed) {
+                    return (
+                      <li key={r.id} className="py-4">
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <p className="font-medium">{r.title}</p>
+                          <a
+                            href={embed.openUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 text-xs underline underline-offset-4"
+                          >
+                            Open in new tab
+                          </a>
+                        </div>
+                        <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
+                          <iframe
+                            src={embed.src}
+                            title={r.title}
+                            loading="lazy"
+                            allow="fullscreen; encrypted-media; picture-in-picture"
+                            allowFullScreen
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            className="h-full w-full border-0"
+                          />
+                        </div>
+                      </li>
+                    );
+                  }
                   const href =
                     r.kind === "video" && r.video_url
                       ? r.video_url

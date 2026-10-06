@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getSession, todayISO } from "@/lib/session";
 import { addTopic, deleteResource, enrol, saveLiveClass, unenrol } from "./actions";
 import UploadForm from "./UploadForm";
+import VideoForm from "./VideoForm";
 
 type Module = { id: string; slug: string; title: string; live_class_info: string | null };
 type Resource = { id: string; kind: string; title: string; storage_path: string | null };
@@ -140,6 +141,17 @@ export default async function AdminPage() {
         <div className={card}>
           {uploadTopics.length > 0 ? (
             <UploadForm topics={uploadTopics} />
+          ) : (
+            <p className="text-sm text-[#0D1B2A]/70">Add a topic first.</p>
+          )}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4 text-xl font-semibold">Add a video link</h2>
+        <div className={card}>
+          {uploadTopics.length > 0 ? (
+            <VideoForm topics={uploadTopics.map(({ id, label }) => ({ id, label }))} />
           ) : (
             <p className="text-sm text-[#0D1B2A]/70">Add a topic first.</p>
           )}
