@@ -4,7 +4,7 @@ import { logout } from "../login/actions";
 
 export default async function Header() {
   const { profile } = await getSession();
-  const name = profile?.full_name?.split(" ")[0] ?? profile?.email ?? "";
+  const name = profile?.full_name?.split(" ")[0] ?? "";
 
   return (
     <header className="bg-[#0D1B2A] text-white">
@@ -25,7 +25,7 @@ export default async function Header() {
               Admin
             </Link>
           )}
-          <span className="hidden text-white/60 sm:inline">{name}</span>
+          {name && <span className="hidden text-white/60 sm:inline">{name}</span>}
           <form action={logout}>
             <button
               type="submit"

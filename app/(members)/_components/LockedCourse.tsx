@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { whatsappLink } from "@/lib/contact";
 import { formatDate, type CourseModule } from "@/lib/course";
 
 export default function LockedCourse({
@@ -19,16 +18,9 @@ export default function LockedCourse({
           ? `Your access ended on ${formatDate(paidUntil)}. Renew to open your notes again.`
           : "You are not enrolled in this course yet."}
       </p>
-      <a
-        href={whatsappLink(
-          `Hi Mastermind Tutoring, I'd like to ${expired ? "renew" : "join"} the ${mod.title} Full Course.`,
-        )}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-6 inline-block rounded-xl bg-[#0D1B2A] px-5 py-2.5 font-semibold text-white hover:bg-[#16293f]"
-      >
-        {expired ? "Renew on WhatsApp" : "Enquire on WhatsApp"}
-      </a>
+      <p className="mt-4 text-sm text-[#0D1B2A]/65">
+        {expired ? "Contact Mastermind Tutoring to renew." : "Contact Mastermind Tutoring to join."}
+      </p>
       <div className="mt-4">
         <Link href="/course" className="text-sm underline underline-offset-4">
           Back to my courses

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import LockedCourse from "../../../../_components/LockedCourse";
 import VideoPlayer, { type PlayerVideo } from "./VideoPlayer";
+import Quiz, { type QuizQuestion } from "./Quiz";
 import {
   ALWAYS_FILES,
   bySection,
@@ -16,9 +17,10 @@ import {
   slugify,
   type Resource,
 } from "@/lib/course";
+import { getSession } from "@/lib/session";
 import { toEmbed } from "@/lib/video";
 
-type Tab = { key: string; label: string; items: Resource[] };
+type Tab = { key: string; label: string; items: Resource[]; count: number };
 
 export default async function ChapterPage({
   params,
@@ -36,6 +38,7 @@ export default async function ChapterPage({
   }
 
   const { mod, topics } = course;
+  const { supabase } = await getSession();
   const index = topics.findIndex((t) => t.slug === topicSlug);
   if (index === -1) notFound();
   const topic = topics[index];
@@ -48,16 +51,26 @@ export default async function ChapterPage({
   const fileGroups = new Map(bySection(topic.resources.filter((r) => !isPlayable(r))));
   for (const s of ALWAYS_FILES) if (!fileGroups.has(s)) fileGroups.set(s, []);
 
+  const { data: quizRows } = await supabase
+    .from("quiz_questions")
+    .select("id,section,prompt,options,sort_order")
+    .eq("topic_id", topic.id)
+    .order("sort_order");
+  const questions = (quizRows ?? []) as QuizQuestion[];
+
   const tabs: Tab[] = [
-    { key: "videos", label: "Videos", items: playable },
+    { key: "videos", label: "Videos", items: playable, count: playable.length },
     ...[...fileGroups.entries()]
       .sort((a, b) => rank(a[0]) - rank(b[0]) || a[0].localeCompare(b[0]))
-      .map(([label, items]) => ({ key: slugify(label), label, items })),
+      .map(([label, items]) => ({ key: slugify(label), label, items, count: items.length })),
+    ...(questions.length > 0
+      ? [{ key: "quiz", label: "Quiz", items: [] as Resource[], count: questions.length }]
+      : []),
   ];
 
   const wantedTab = first(sp.tab);
   const activeTab =
-    tabs.find((t) => t.key === wantedTab) ?? tabs.find((t) => t.items.length > 0) ?? tabs[0];
+    tabs.find((t) => t.key === wantedTab) ?? tabs.find((t) => t.count > 0) ?? tabs[0];
 
   const videos: PlayerVideo[] = [...playable]
     .sort((a, b) => rank(sectionOf(a)) - rank(sectionOf(b)))
@@ -127,7 +140,7 @@ export default async function ChapterPage({
                   on ? "bg-[#F4A024]/25" : "bg-[#0D1B2A]/8 text-[#0D1B2A]/60"
                 }`}
               >
-                {t.items.length}
+                {t.count}
               </span>
             </Link>
           );
@@ -135,7 +148,9 @@ export default async function ChapterPage({
       </nav>
 
       <section className="mt-6" aria-label={activeTab.label}>
-        {activeTab.items.length === 0 ? (
+        {activeTab.key === "quiz" ? (
+          <Quiz key={topic.id} questions={questions} />
+        ) : activeTab.items.length === 0 ? (
           <div className="rounded-2xl bg-white p-8 text-center ring-1 ring-[#0D1B2A]/10">
             <p className="font-semibold">{activeTab.label} for this chapter are coming soon.</p>
             <p className="mt-1 text-sm text-[#0D1B2A]/60">
