@@ -59,7 +59,7 @@ export default async function CoursePage({
       {daysLeft !== null && daysLeft <= 7 && (
         <p className="mt-4 rounded-xl bg-[#F4A024]/15 px-4 py-3 text-sm">
           Your access ends in {daysLeft} {daysLeft === 1 ? "day" : "days"} (
-          {formatDate(paidUntil!)}). Contact Mastermind Tutoring to renew.
+          {formatDate(paidUntil!)}). Message Mastermind Tutoring on WhatsApp to renew.
         </p>
       )}
 

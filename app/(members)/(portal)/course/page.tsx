@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSession, todayISO } from "@/lib/session";
+import { whatsappLink } from "@/lib/contact";
 
 type ModuleRow = { id: string; slug: string; title: string; description: string | null };
 type EnrolmentRow = { module_id: string; paid_until: string };
@@ -77,11 +78,18 @@ export default async function CoursePage() {
                   </Link>
                 </div>
               ) : (
-                <p className="mt-5 text-sm text-[#0D1B2A]/65">
-                  {expired
-                    ? "Your access has ended. Contact Mastermind Tutoring to renew."
-                    : "Contact Mastermind Tutoring to join this course."}
-                </p>
+                <div className="mt-5">
+                  <a
+                    href={whatsappLink(
+                      `Hi Mastermind Tutoring, I'd like to ${expired ? "renew" : "join"} the ${m.title} Full Course.`,
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block rounded-lg border border-[#0D1B2A] px-5 py-2.5 font-semibold hover:bg-[#0D1B2A] hover:text-white"
+                  >
+                    {expired ? "Renew on WhatsApp" : "Enquire on WhatsApp"}
+                  </a>
+                </div>
               )}
             </section>
           );
