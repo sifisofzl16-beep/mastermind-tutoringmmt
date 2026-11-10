@@ -7,6 +7,7 @@ export const WA = {
   fullCourse: whatsappLink("Hi Mastermind Tutoring, I'd like to join the Full Course."),
   session: whatsappLink("Hi Mastermind Tutoring, I'd like to book a tutoring session."),
   highSchool: whatsappLink("Hi Mastermind Tutoring, I'm looking for a high school tutor."),
+  grade12: whatsappLink("Hi Mastermind Tutoring, my child is going into Grade 12 and needs help with Maths and Physical Sciences."),
   general: whatsappLink("Hi Mastermind Tutoring, I have a question."),
   bursaryAlerts: whatsappLink("Hi Mastermind Tutoring, please let me know when new bursaries open."),
   opportunityAlerts: whatsappLink("Hi Mastermind Tutoring, please let me know about new opportunities."),

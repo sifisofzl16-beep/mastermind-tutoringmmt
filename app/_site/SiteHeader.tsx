@@ -4,30 +4,50 @@ import Link from "next/link";
 import { useState } from "react";
 import Icon from "./Icons";
 
-const links = [
-  { href: "/#full-course", label: "Full Course" },
-  { href: "/#tutoring", label: "Tutoring" },
-  { href: "/#high-school", label: "High school" },
-  { href: "/bursaries", label: "Bursaries" },
-  { href: "/opportunities", label: "Opportunities" },
+type Section = "school" | "university" | "other";
+
+const links: { href: string; label: string; section: Section }[] = [
+  { href: "/", label: "High school", section: "school" },
+  { href: "/university", label: "University", section: "university" },
+  { href: "/bursaries", label: "Bursaries", section: "other" },
+  { href: "/opportunities", label: "Opportunities", section: "other" },
 ];
 
-export default function SiteHeader({ whatsapp }: { whatsapp: string }) {
+export default function SiteHeader({ whatsapp, current = "other" }: { whatsapp: string; current?: Section }) {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-navy/10 bg-cream/90 backdrop-blur-md">
+      {current === "school" && (
+        <Link
+          href="/university"
+          className="group block bg-navy px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-navy-3"
+        >
+          <span className="text-gold">University student?</span> Full Courses, Wits tutoring and bursaries are here
+          <Icon name="arrow" className="ml-1.5 inline h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      )}
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[4.5rem] sm:px-6">
         <Link href="/" className="font-hand text-[1.7rem] font-bold leading-none text-navy sm:text-3xl" onClick={() => setOpen(false)}>
           Mastermind Tutoring<span className="text-gold">.</span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-7 text-[0.95rem] font-medium lg:flex">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className="text-navy/75 underline-offset-8 hover:text-navy hover:underline hover:decoration-gold hover:decoration-2">
-              {l.label}
-            </Link>
-          ))}
+          {links.map((l) => {
+            const on = l.section !== "other" && l.section === current;
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                aria-current={on ? "page" : undefined}
+                className={`underline-offset-8 hover:text-navy hover:underline hover:decoration-gold hover:decoration-2 ${
+                  on ? "text-navy underline decoration-gold decoration-2" : "text-navy/75"
+                }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">

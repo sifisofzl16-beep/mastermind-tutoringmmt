@@ -140,7 +140,7 @@ export default async function LoginPage({
             ) : (
               <>
                 Not a student yet?{" "}
-                <Link href="/#full-course" className="font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
+                <Link href="/university#full-course" className="font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
                   See the Full Course
                 </Link>{" "}
                 or{" "}

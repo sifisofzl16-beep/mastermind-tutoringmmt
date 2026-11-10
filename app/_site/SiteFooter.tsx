@@ -5,19 +5,25 @@ import { TUTOR_FORM, WA } from "@/lib/site";
 export default function SiteFooter() {
   return (
     <footer className="bg-night text-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
         <div>
           <p className="font-hand text-4xl font-bold leading-none text-gold">Mastermind Tutoring</p>
           <p className="mt-3 text-sm tracking-wide text-white/60">Discipline. Understanding. Systems. Results.</p>
           <p className="mt-6 max-w-xs text-sm text-white/60">
-            Full Courses and one-on-one tutoring for Wits University students, and for Grades 10 to 12 in Johannesburg.
+            Maths and Physical Sciences tutoring for Grades 10 to 12, and Full Courses and tutoring for university
+            students. Johannesburg and online.
           </p>
         </div>
-        <FooterCol title="Learn">
-          <FooterLink href="/#full-course">The Full Course</FooterLink>
-          <FooterLink href="/#syllabus">What is inside</FooterLink>
-          <FooterLink href="/#tutoring">One-on-one tutoring</FooterLink>
-          <FooterLink href="/#high-school">High school</FooterLink>
+        <FooterCol title="High school">
+          <FooterLink href="/#grade-12">Grade 12 (matric)</FooterLink>
+          <FooterLink href="/#how-it-works">How it works</FooterLink>
+          <FooterLink href="/#pricing">Prices</FooterLink>
+          <FooterLink href="/#faq">Questions parents ask</FooterLink>
+        </FooterCol>
+        <FooterCol title="University">
+          <FooterLink href="/university#full-course">The Full Course</FooterLink>
+          <FooterLink href="/university#syllabus">What is inside</FooterLink>
+          <FooterLink href="/university#tutoring">One-on-one tutoring</FooterLink>
           <FooterLink href="/login">Student login</FooterLink>
         </FooterCol>
         <FooterCol title="Funding and work">

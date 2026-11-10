@@ -7,9 +7,9 @@ const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--ff-displa
 const body = DM_Sans({ subsets: ["latin"], variable: "--ff-body", display: "swap" });
 const hand = Caveat({ subsets: ["latin"], weight: ["600", "700"], variable: "--ff-hand", display: "swap" });
 
-const title = "Mastermind Tutoring | Wits Full Courses and Tutoring, Johannesburg";
+const title = "Mastermind Tutoring | Maths and Science Tutors, Johannesburg";
 const description =
-  "Full Courses for Wits first-year Engineering Physics, Mathematics and Applied Physics: videos, study guides, problem sets and live classes in one student portal. Plus one-on-one tutoring for Wits modules and Grades 10 to 12.";
+  "Maths and Physical Sciences tutoring for Grades 10 to 12, focused on matric, from Wits students who did well in these subjects. Plus Full Courses and tutoring for university students. Online, or in person in Johannesburg.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mastermindtutoring.co.za"),
