@@ -17,8 +17,13 @@ export default function Syllabus({
   courses: CatalogueCourse[];
   joinLinks: Record<string, string>;
 }) {
-  const [active, setActive] = useState(courses[0]?.slug);
-  const course = courses.find((c) => c.slug === active) ?? courses[0];
+  const semesters = [1, 2].filter((n) => courses.some((c) => c.semester === n));
+  // Open on the semester that has material in it today.
+  const firstWithContent = courses.find((c) => c.topics.length > 0) ?? courses[0];
+  const [semester, setSemester] = useState<number | null>(firstWithContent?.semester ?? null);
+  const inSemester = semesters.length > 1 ? courses.filter((c) => c.semester === semester) : courses;
+  const [active, setActive] = useState(firstWithContent?.slug);
+  const course = inSemester.find((c) => c.slug === active) ?? inSemester[0];
   if (!course) return null;
 
   const groups: { name: string | null; topics: CatalogueCourse["topics"] }[] = [];
@@ -32,8 +37,25 @@ export default function Syllabus({
 
   return (
     <div>
+      {semesters.length > 1 && (
+        <div role="group" aria-label="Semester" className="mb-5 inline-flex rounded-full bg-white/[0.06] p-1 ring-1 ring-white/15">
+          {semesters.map((n) => (
+            <button
+              key={n}
+              type="button"
+              aria-pressed={semester === n}
+              onClick={() => setSemester(n)}
+              className={`min-h-11 rounded-full px-5 text-sm font-semibold outline-offset-2 focus-visible:outline-2 focus-visible:outline-gold ${
+                semester === n ? "bg-white text-navy" : "text-white/75 hover:text-white"
+              }`}
+            >
+              Semester {n}
+            </button>
+          ))}
+        </div>
+      )}
       <div role="tablist" aria-label="Courses" className="flex gap-2 overflow-x-auto pb-2">
-        {courses.map((c) => {
+        {inSemester.map((c) => {
           const on = c.slug === course.slug;
           return (
             <button
@@ -46,7 +68,7 @@ export default function Syllabus({
                 on ? "bg-gold text-navy" : "bg-white/5 text-white/80 ring-1 ring-white/15 hover:bg-white/10"
               }`}
             >
-              {c.title.replace(/\s*\(.*\)$/, "")}
+              {c.title.replace(/^Integrated Science for Medical Students \(ISMS\).*$/, "ISMS")}
             </button>
           );
         })}
@@ -57,7 +79,9 @@ export default function Syllabus({
           <div>
             <h3 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{course.title}</h3>
             <p className="mt-2 text-white/65">
-              {course.topics.length} sections, {videos} videos, {files} notes and problem files
+              {course.topics.length === 0
+                ? (course.description ?? "")
+                : `${course.topics.length} sections, ${videos} videos, ${files} notes and problem files`}
             </p>
           </div>
           {joinLinks[course.slug] && (
@@ -72,6 +96,12 @@ export default function Syllabus({
           )}
         </div>
 
+        {course.topics.length === 0 && (
+          <p className="mt-8 rounded-2xl border border-dashed border-white/25 p-6 text-white/75">
+            We are loading this course for the first semester of 2027. Chapters will show here as they go into the
+            portal. Message us and we will tell you the moment it opens.
+          </p>
+        )}
         <div className="mt-8 space-y-8">
           {groups.map((g) => (
             <div key={g.name ?? "all"}>

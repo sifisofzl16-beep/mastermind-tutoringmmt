@@ -12,7 +12,6 @@ import Syllabus from "./_site/Syllabus";
 
 export const revalidate = 3600;
 
-const FULL_COURSE_SLUGS = ["engineering-physics-1", "engineering-mathematics-1", "applied-physics"];
 
 function chapterParts(title: string) {
   const m = title.match(/^chapter\s+(\d+)\s*[:\-]?\s*(.*)$/i);
@@ -30,7 +29,6 @@ export default async function HomePage() {
   const openOpportunities = OPPORTUNITIES.filter((o) => liveStatus(o.closingDate, o.status) !== "Closed").length;
 
   const joinLinks = Object.fromEntries(courses.map((c) => [c.slug, WA.course(c.title)]));
-  const courseNames = courses.filter((c) => FULL_COURSE_SLUGS.includes(c.slug)).map((c) => c.title);
 
   const features = [
     { icon: "play", title: "Recorded lessons", text: "Every section explained on video, in the order your lecturer teaches it. Pause, rewind and watch again before a test." },
@@ -74,9 +72,9 @@ export default async function HomePage() {
                 Your whole module, <span className="marker">in order</span>, in one place.
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy/75 sm:text-xl">
-                The Mastermind Tutoring Full Course takes you through first-year Engineering Physics, Mathematics and
-                Applied Physics chapter by chapter, with recorded lessons, study guides, problem sets and a live class
-                every week.
+                The Mastermind Tutoring Full Course takes you through first-year Engineering Physics, Mathematics,
+                Chemistry and Applied Physics chapter by chapter, with recorded lessons, study guides, problem sets and
+                a live class every week.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
@@ -151,7 +149,7 @@ export default async function HomePage() {
                   Pay by the month. Add modules and the price per module drops.
                 </h3>
                 <p className="mt-4 text-white/70">
-                  {courseNames.length > 0 ? `Available for ${listOf(courseNames)}.` : "Available for Engineering Physics I, Engineering Mathematics I and Applied Physics."}{" "}
+                  Available for first-year Engineering Physics, Engineering Mathematics, Engineering Chemistry and Applied Physics, in both semesters.{" "}
                   No contract. Your access runs for the month you have paid for.
                 </p>
                 <ol className="mt-7 space-y-3 text-white/85">
@@ -424,8 +422,7 @@ export default async function HomePage() {
                 month is in, we create your login and you can open the portal straight away.
               </Faq>
               <Faq q="Which modules does the Full Course cover?">
-                {courseNames.length > 0 ? listOf(courseNames) : "Engineering Physics I, Engineering Mathematics I and Applied Physics"}.
-                {courses.some((c) => c.slug === "isms") ? " We also run material for Integrated Science for Medical Students. Message us for details." : ""}{" "}
+                First semester: Engineering Physics (PHYS1032 and PHYS1000), Engineering Mathematics (MATH1042) and Engineering Chemistry. Second semester: Engineering Physics (PHYS1033), Engineering Mathematics (MATH1043) and Applied Physics (PHYS1034). We also run Integrated Science for Medical Students in both semesters.{" "}
                 For any other module, one-on-one tutoring is the way to go.
               </Faq>
               <Faq q="Can I use the portal on my phone?">
@@ -482,11 +479,6 @@ export default async function HomePage() {
       <SiteFooter />
     </>
   );
-}
-
-function listOf(items: string[]) {
-  if (items.length <= 1) return items.join("");
-  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -558,7 +550,7 @@ function PortalPreview({ courses }: { courses: CatalogueCourse[] }) {
             <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-white/10 font-hand text-4xl font-bold text-gold">{leadParts.num}</span>
             <div className="min-w-0">
               <p className="truncate font-display text-lg font-semibold leading-tight">{leadParts.name}</p>
-              <p className="text-sm text-white/60">{course?.title ?? "Engineering Physics I"}</p>
+              <p className="text-sm text-white/60">{course?.title ?? "Engineering Physics"}</p>
             </div>
           </div>
           <div className="mt-3 flex gap-1 overflow-hidden border-b border-navy/15 text-[0.8rem] font-semibold">

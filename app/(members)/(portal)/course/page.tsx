@@ -4,7 +4,7 @@ import { whatsappLink } from "@/lib/contact";
 import { chapterParts, formatDate, isPlayable, loadOpened, resourceHref, type Resource } from "@/lib/course";
 import Icon from "../../../_site/Icons";
 
-type ModuleRow = { id: string; slug: string; title: string; description: string | null; live_class_info: string | null };
+type ModuleRow = { id: string; slug: string; title: string; description: string | null; live_class_info: string | null; semester: number | null };
 type EnrolmentRow = { module_id: string; paid_until: string };
 type TopicRow = { id: string; module_id: string; slug: string; title: string; sort_order: number; resources: Resource[] };
 
@@ -22,7 +22,7 @@ export default async function CoursePage() {
   if (!user) return null;
 
   const [{ data: modules }, { data: enrolments }, { data: topicRows }, opened] = await Promise.all([
-    supabase.from("modules").select("id,slug,title,description,live_class_info").order("sort_order"),
+    supabase.from("modules").select("id,slug,title,description,live_class_info,semester").order("sort_order"),
     supabase.from("enrolments").select("module_id,paid_until").eq("user_id", user.id),
     supabase
       .from("topics")
@@ -132,6 +132,7 @@ export default async function CoursePage() {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-navy/65">
+                    {m.semester ? `Semester ${m.semester}. ` : ""}
                     {mt.length} sections, {videos} videos, {resources.length - videos} files
                   </p>
 
@@ -172,6 +173,7 @@ export default async function CoursePage() {
                       {m.title}
                     </h3>
                     <p className="mt-1 text-sm text-navy/60">
+                      {m.semester ? `Semester ${m.semester}. ` : ""}
                       {expired && paidUntil ? `Your access ended on ${formatDate(paidUntil)}.` : (m.description ?? "Not part of your plan yet.")}
                     </p>
                   </div>

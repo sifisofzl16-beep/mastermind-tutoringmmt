@@ -10,6 +10,7 @@ export type CatalogueCourse = {
   slug: string;
   title: string;
   description: string | null;
+  semester: 1 | 2 | null;
   topics: CatalogueTopic[];
 };
 
