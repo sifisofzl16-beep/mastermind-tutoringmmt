@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PHONE_DISPLAY } from "@/lib/contact";
 import { getCatalogue, totals, type CatalogueCourse } from "@/lib/catalogue";
-import { FULL_COURSE_PRICES, MODULES, SESSION_PRICES, TUTOR_FORM, WA, liveStatus } from "@/lib/site";
+import { FULL_COURSE_PRICES, GOOGLE_REVIEWS, MODULES, SESSION_PRICES, TUTOR_FORM, WA, liveStatus } from "@/lib/site";
 import { BURSARIES } from "./bursaries/data";
 import { OPPORTUNITIES } from "./opportunities/data";
 import Icon from "./_site/Icons";
@@ -63,8 +63,8 @@ export default async function HomePage() {
       <main id="main" className="flex-1">
         {/* Hero */}
         <section className="paper-grid relative overflow-hidden">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-24 lg:pt-20">
-            <div className="pop">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:pb-24 lg:pt-20">
+            <div className="pop min-w-0">
               <p className="font-hand text-2xl font-bold text-amber sm:text-[1.7rem]">
                 For Wits students, taught by people who passed the module
               </p>
@@ -98,6 +98,22 @@ export default async function HomePage() {
                   Looking for one-on-one tutoring?
                 </a>
               </p>
+              <a
+                href={GOOGLE_REVIEWS.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-5 ring-1 ring-navy/10 hover:ring-gold"
+              >
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-navy font-display text-sm font-bold text-gold">
+                  {GOOGLE_REVIEWS.rating}
+                </span>
+                <span>
+                  <Stars className="h-4 w-4" />
+                  <span className="block text-sm text-navy/70">
+                    from {GOOGLE_REVIEWS.count} Google reviews
+                  </span>
+                </span>
+              </a>
             </div>
 
             <PortalPreview courses={courses} />
@@ -142,7 +158,7 @@ export default async function HomePage() {
 
           {/* Pricing */}
           <div className="rise mt-12 overflow-hidden rounded-[2rem] bg-navy text-white">
-            <div className="grid gap-10 p-7 sm:p-10 lg:grid-cols-[1fr_1.15fr] lg:p-12">
+            <div className="grid grid-cols-1 gap-10 p-7 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:p-12">
               <div>
                 <p className="font-hand text-3xl font-bold text-gold">What it costs</p>
                 <h3 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
@@ -215,7 +231,7 @@ export default async function HomePage() {
 
         {/* Tutoring */}
         <section id="tutoring" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <div className="rise">
               <Eyebrow>One-on-one tutoring</Eyebrow>
               <h2 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
@@ -351,6 +367,42 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* Reviews */}
+        <section className="bg-navy text-white">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-8 px-4 py-14 sm:px-6">
+            <div className="flex items-center gap-6">
+              <span className="font-display text-7xl font-bold leading-none tracking-tight text-gold sm:text-8xl">
+                {GOOGLE_REVIEWS.rating}
+              </span>
+              <div>
+                <Stars className="h-6 w-6" />
+                <p className="mt-2 font-display text-xl font-semibold sm:text-2xl">
+                  Rated by {GOOGLE_REVIEWS.count} students and parents on Google
+                </p>
+                <p className="mt-1 text-white/65">Every review is on our public Google profile. Read them for yourself.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={GOOGLE_REVIEWS.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-6 py-3 font-semibold text-navy hover:bg-gold-2"
+              >
+                Read the reviews <Icon name="external" className="h-4 w-4" />
+              </a>
+              <a
+                href={GOOGLE_REVIEWS.writeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center rounded-full px-6 py-3 font-semibold ring-1 ring-white/30 hover:ring-white"
+              >
+                Leave a review
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* How we work */}
         <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
           <div className="rise max-w-2xl">
@@ -481,6 +533,18 @@ export default async function HomePage() {
   );
 }
 
+function Stars({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <span className="flex gap-0.5 text-gold" role="img" aria-label={`Rated ${GOOGLE_REVIEWS.rating} out of 5`}>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <svg key={i} viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+          <path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4L2.8 9.5l6.4-.8z" />
+        </svg>
+      ))}
+    </span>
+  );
+}
+
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return <p className="font-hand text-3xl font-bold text-amber">{children}</p>;
 }
@@ -531,7 +595,7 @@ function PortalPreview({ courses }: { courses: CatalogueCourse[] }) {
   const leadParts = lead ? chapterParts(lead.title) : { num: "16", name: "Waves in one dimension" };
 
   return (
-    <div className="pop relative mx-auto w-full max-w-xl lg:max-w-none" aria-hidden="true">
+    <div className="pop relative mx-auto w-full min-w-0 max-w-xl lg:max-w-none" aria-hidden="true">
       <p className="absolute -top-12 right-10 z-10 hidden rotate-[-4deg] font-hand text-2xl font-bold text-navy sm:block">
         this is the real portal
         <svg viewBox="0 0 60 40" className="absolute -bottom-8 -left-12 h-9 w-14 text-navy" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">

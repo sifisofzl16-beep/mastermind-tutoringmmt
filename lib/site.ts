@@ -75,3 +75,11 @@ export function liveStatus(closingDate: string, fallback: string, now = new Date
   if (days <= 14) return "Closing soon";
   return "Open";
 }
+
+/** Google Business Profile. Update the numbers here when the rating changes. */
+export const GOOGLE_REVIEWS = {
+  rating: "4.8",
+  count: 54,
+  url: "https://share.google/vofx6H3cRAId8y1US",
+  writeUrl: "https://g.page/r/CbdZCEZW3YHKEAE/review",
+};
