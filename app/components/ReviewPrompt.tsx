@@ -1,7 +1,16 @@
 "use client";
 
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+
 const REVIEW_LINK = "https://g.page/r/CbdZCEZW3YHKEAE/review";
 
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy";
+
+/**
+ * Asks for an optional Google review before sending the visitor on to
+ * `destinationUrl` (an application page or the WhatsApp alerts chat).
+ * Pass a stable `onClose` (useCallback) so focus is not reset while it is open.
+ */
 export default function ReviewPrompt({
   open,
   destinationUrl,
@@ -13,6 +22,47 @@ export default function ReviewPrompt({
   continueLabel?: string;
   onClose: () => void;
 }) {
+  const titleId = useId();
+  const textId = useId();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const primaryRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    primaryRef.current?.focus();
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = cardRef.current?.querySelectorAll<HTMLElement>("button, a[href]");
+      if (!items || items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const current = document.activeElement;
+      if (e.shiftKey && (current === first || !cardRef.current?.contains(current))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (current === last || !cardRef.current?.contains(current))) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+      previous?.focus();
+    };
+  }, [open, onClose]);
+
   if (!open) return null;
 
   function goToDestination() {
@@ -28,93 +78,101 @@ export default function ReviewPrompt({
   return (
     <div
       onClick={goToDestination}
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(6,8,15,0.75)",
-        backdropFilter: "blur(4px)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "1.5rem",
-        animation: "reviewFadeIn 0.25s ease-out",
-      }}
+      className="fixed inset-0 z-[1000] grid place-items-center overflow-y-auto bg-navy/70 p-4 backdrop-blur-sm"
     >
-      <style>{`
-        @keyframes reviewFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes reviewPopIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-      `}</style>
       <div
+        ref={cardRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={textId}
         onClick={(e) => e.stopPropagation()}
-        style={{
-          position: "relative",
-          background: "#0d1117",
-          border: "1px solid rgba(201,168,76,0.25)",
-          borderRadius: "18px",
-          padding: "2.25rem",
-          maxWidth: "380px",
-          width: "100%",
-          textAlign: "center",
-          animation: "reviewPopIn 0.3s cubic-bezier(0.22,1,0.36,1)",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-        }}
+        className="pop relative w-full max-w-sm rounded-2xl bg-paper p-7 text-center text-navy shadow-2xl ring-1 ring-navy/10 sm:p-8"
       >
-        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: "1rem", fontWeight: 800, color: "#f1f5f9", marginBottom: "0.25rem" }}>
-          MMT<span style={{ color: "#c9a84c" }}>.</span>
-        </p>
-
-        <p style={{ fontSize: "1.7rem", letterSpacing: "0.15em", margin: "1rem 0 0.75rem", color: "#c9a84c" }}>
-          ★★★★★
-        </p>
-
-        <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: "1.15rem", fontWeight: 800, color: "#f1f5f9", marginBottom: "0.6rem", lineHeight: 1.3 }}>
-          Quick favour first?
-        </h3>
-
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.87rem", color: "#94a3b8", lineHeight: 1.6, marginBottom: "1.75rem" }}>
-          If MMT&apos;s bursary and opportunity hub has helped you, a Google review helps other Wits students find us. Totally optional, we&apos;ll take you through either way.
-        </p>
-
         <button
-          onClick={rateAndContinue}
-          style={{
-            display: "block",
-            width: "100%",
-            background: "linear-gradient(135deg, #c9a84c, #e8c96e)",
-            color: "#06080f",
-            fontFamily: "'Syne', sans-serif",
-            fontWeight: 700,
-            fontSize: "0.9rem",
-            padding: "0.85rem",
-            borderRadius: "8px",
-            border: "none",
-            cursor: "pointer",
-            marginBottom: "0.85rem",
-          }}
+          type="button"
+          onClick={onClose}
+          aria-label="Close and stay on this page"
+          className={`absolute right-2 top-2 grid h-11 w-11 place-items-center rounded-full text-navy/60 hover:bg-navy/5 hover:text-navy ${FOCUS}`}
         >
-          ⭐ Rate MMT & Continue
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true" className="h-5 w-5">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
         </button>
 
+        <p className="font-hand text-3xl font-bold leading-none">
+          Mastermind Tutoring<span className="text-gold">.</span>
+        </p>
+
+        <div aria-hidden="true" className="mt-5 flex justify-center gap-1.5">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <svg key={i} viewBox="0 0 24 24" className="h-7 w-7 fill-gold stroke-navy" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6-4.5-4.2 6.1-.8z" />
+            </svg>
+          ))}
+        </div>
+
+        <h2 id={titleId} className="mt-5 font-display text-2xl font-bold tracking-tight">
+          A quick favour first?
+        </h2>
+        <p id={textId} className="mt-3 leading-relaxed text-navy/75">
+          If these bursary and opportunity pages have helped you, a Google review helps other Wits students find Mastermind Tutoring. It is optional. We will take you through either way.
+        </p>
+
         <button
-          onClick={goToDestination}
-          style={{
-            display: "block",
-            width: "100%",
-            background: "none",
-            border: "1px solid rgba(255,255,255,0.12)",
-            borderRadius: "8px",
-            color: "#94a3b8",
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: 600,
-            fontSize: "0.85rem",
-            padding: "0.75rem",
-            cursor: "pointer",
-          }}
+          ref={primaryRef}
+          type="button"
+          onClick={rateAndContinue}
+          className={`mt-6 flex min-h-12 w-full items-center justify-center rounded-full bg-gold px-5 py-3 font-semibold text-navy hover:bg-gold-2 ${FOCUS}`}
         >
-          Skip → {continueLabel}
+          Leave a review and continue
+        </button>
+        <button
+          type="button"
+          onClick={goToDestination}
+          className={`mt-3 flex min-h-12 w-full items-center justify-center rounded-full px-5 py-3 font-semibold text-navy ring-1 ring-navy/25 hover:ring-navy ${FOCUS}`}
+        >
+          Skip. {continueLabel}
         </button>
       </div>
     </div>
+  );
+}
+
+/**
+ * A link that opens the review prompt first. It is a real link, so it still
+ * goes straight to `destinationUrl` if JavaScript has not loaded.
+ */
+export function ReviewGate({
+  destinationUrl,
+  continueLabel = "Continue",
+  className,
+  children,
+}: {
+  destinationUrl: string;
+  continueLabel?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
+
+  return (
+    <>
+      <a
+        href={destinationUrl}
+        rel="noopener noreferrer"
+        aria-haspopup="dialog"
+        className={className}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          e.preventDefault();
+          setOpen(true);
+        }}
+      >
+        {children}
+      </a>
+      <ReviewPrompt open={open} destinationUrl={destinationUrl} continueLabel={continueLabel} onClose={close} />
+    </>
   );
 }

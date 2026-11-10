@@ -2,7 +2,7 @@ export type Opportunity = {
   slug: string;
   org: string;
   emoji: string;
-  type: "Marking Contract" | "Internship" | "Vacation Work" | "Part-Time" | "Learnership";
+  type: "Graduate Programme" | "Marking Contract" | "Internship" | "Vacation Work" | "Part-Time" | "Learnership";
   status: "Open" | "Closing Soon" | "Closed";
   summary: string;
   about: string;
@@ -16,6 +16,66 @@ export type Opportunity = {
 };
 
 export const OPPORTUNITIES: Opportunity[] = [
+  {
+    slug: "engen-graduate-trainee-2027",
+    org: "Engen",
+    emoji: "",
+    type: "Graduate Programme",
+    status: "Open",
+    summary: "A 24-month graduate trainee programme in Cape Town for graduates in engineering, finance, supply chain, legal and other fields.",
+    about:
+      "Engen's Graduate Trainee Programme is a structured two-year development programme with mentorship, coaching and practical workplace experience. Details are as reported by StudentPage on 12 October 2026. Confirm them on Engen's careers site before you apply.",
+    positions: [
+      { group: "Fields", count: "Engineering, Finance, Supply Chain, Operations Management, Transport Management, Marketing, Sales and Marketing Management, Retail Management, Human Resources and Industrial Psychology, Safety and Environmental Management, Legal, Property Development" },
+      { group: "Location", count: "Cape Town" },
+      { group: "Duration", count: "24 months" },
+    ],
+    requirements: [
+      "South African citizen",
+      "A relevant completed qualification, or studies completed by the end of 2026",
+      "A minimum overall academic average of 70%",
+      "Updated CV, certified copies of your qualifications and ID, and your academic transcript",
+    ],
+    duties: [
+      "Structured development in a professional working environment",
+      "Mentorship and coaching from experienced professionals",
+      "Practical workplace experience",
+    ],
+    keyDates: [{ label: "Applications close", date: "15 December 2026" }],
+    closingDate: "15 December 2026",
+    applyUrl: "https://careers.engenoil.com/job/Cape-Town-Graduate-Trainee-Programme/1444952733",
+    source: "https://studentpage.co.za/2026/10/12/engen-graduate-trainee-programme-2026-2027-applications-open-for-south-african-graduates/",
+  },
+  {
+    slug: "bmw-graduate-programme-2027",
+    org: "BMW Group South Africa",
+    emoji: "",
+    type: "Graduate Programme",
+    status: "Closing Soon",
+    summary: "Graduate programme for 2027 across engineering, finance, IT, data, law and more at BMW sites in Gauteng.",
+    about:
+      "BMW Group South Africa is taking graduates for 2027 with on-the-job training linked to your field of study, technical and leadership development, and mentoring. Details are as listed on Graduates24. Confirm them on the listing before you apply.",
+    positions: [
+      { group: "Fields", count: "Engineering (electrical, mechanical, industrial, mechatronic, chemical), Finance and Accounting, Business Management, IT, Data and Analytics, Logistics and Supply Chain, Law, Human Resources, Internal Audit, Architecture, Occupational Health and Safety, Media and Communications, Education" },
+      { group: "Location", count: "Rosslyn, Midrand and Menlyn, Gauteng" },
+      { group: "Duration", count: "Not specified" },
+    ],
+    requirements: [
+      "A relevant degree or higher qualification, completed or to be completed by the end of 2026",
+      "Currently unemployed if you have already graduated",
+      "Have not taken part in a graduate programme before",
+      "An average academic mark of 65% or above",
+    ],
+    duties: [
+      "On-the-job training linked to your field of study",
+      "Technical and leadership development",
+      "Mentoring and coaching, working with cross-functional teams",
+    ],
+    keyDates: [{ label: "Applications close", date: "13 November 2026" }],
+    closingDate: "13 November 2026",
+    applyUrl: "https://www.graduates24.com/bmw-group-south-africa-graduate-programme-2027",
+    source: "https://www.graduates24.com/bmw-group-south-africa-graduate-programme-2027",
+  },
   {
     slug: "jet-wced-markers",
     org: "JET Education Services",
@@ -99,7 +159,7 @@ export const OPPORTUNITIES: Opportunity[] = [
     source: "columbus.co.za (Columbus Stainless official careers portal)",
   },
   {
-    slug: "columbus-stainless",
+    slug: "columbus-stainless-internship",
     org: "Columbus Stainless",
     emoji: "⚙️",
     type: "Internship",

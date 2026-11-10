@@ -391,7 +391,7 @@ export default async function HomePage() {
               href="/opportunities"
               kicker={openOpportunities > 0 ? `${openOpportunities} open now` : "Work board"}
               title="Opportunities"
-              text="Internships, vacation work, learnerships and paid student work, checked against the original listing."
+              text="Internships, vacation work, learnerships and graduate programmes, each with a link to the original listing."
               cta="Browse opportunities"
             />
             <article className="rise flex flex-col rounded-3xl bg-gold p-7 text-navy sm:p-8">

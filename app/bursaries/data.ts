@@ -16,6 +16,96 @@ export type Bursary = {
 
 export const BURSARIES: Bursary[] = [
   {
+    slug: "nrf-honours-2027",
+    company: "NRF Postgraduate Scholarship (Honours)",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "National Research Foundation funding for Honours study in 2027 at a South African public university.",
+    about: "The National Research Foundation funds Honours students across science, engineering, technology, social sciences and humanities. Full Cost of Study awards are for financially needy students, students with disabilities and exceptional achievers; Partial Cost of Study awards are also available. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Science and Engineering", items: ["Science", "Engineering", "Technology"] }, { group: "Other fields", items: ["Social sciences", "Humanities"] }],
+    requirements: ["Studying Honours at a South African public university", "Full Cost of Study is for financially needy students, students with disabilities or exceptional achievers", "Other requirements: not specified on the listing"],
+    benefits: ["Honours: R180,000 a year (Full Cost of Study) or R140,000 a year (Partial Cost of Study)", "Full Cost of Study adds a R10,000 device allowance", "Up to R20,000 for assistive technology"],
+    closingDate: "23 November 2026",
+    applyUrl: "https://allbursaries.co.za/postgraduate/nrf-bursary",
+    source: "https://allbursaries.co.za/postgraduate/nrf-bursary",
+  },
+  {
+    slug: "kpmg-2027",
+    company: "KPMG Bursary Programme",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "Funding of up to R140,000 a year for students in accounting, auditing and advisory fields.",
+    about: "KPMG funds students heading into accounting, auditing and advisory careers. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Commerce", items: ["Accounting", "Auditing", "Advisory"] }],
+    requirements: ["Not specified on the listing"],
+    benefits: ["Up to R140,000 per year"],
+    closingDate: "29 December 2026",
+    applyUrl: "https://allbursaries.co.za/accounting/kpmg-bursary",
+    source: "https://allbursaries.co.za/accounting/kpmg-bursary",
+  },
+  {
+    slug: "ppc-2027",
+    company: "PPC Bursary Scheme",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "Full-time undergraduate funding in engineering, geology and science, administered by CareerWise.",
+    about: "PPC funds South African undergraduates through a community stream and a stream for employees' children. The scheme is administered by CareerWise. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Engineering", items: ["Engineering"] }, { group: "Science", items: ["Geology", "Science"] }],
+    requirements: ["South African students studying full time at undergraduate level", "Other requirements: not specified on the listing"],
+    benefits: ["Tuition, accommodation, meals and study expenses", "Mentorship", "Possible employment after graduating"],
+    closingDate: "31 December 2026",
+    applyUrl: "https://allbursaries.co.za/engineering/ppc-bursary",
+    source: "https://allbursaries.co.za/engineering/ppc-bursary",
+  },
+  {
+    slug: "moshal-2027",
+    company: "Moshal Scholarship Program",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "Full funding with living and meal allowances for low-income students with outstanding marks at partner universities.",
+    about: "The Moshal Scholarship Program supports academically outstanding South African students from low-income homes who study at one of its eight partner universities. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Science and Engineering", items: ["Science", "Medicine", "Technology", "Engineering", "Mathematics"] }, { group: "Commerce", items: ["Commerce"] }],
+    requirements: ["Academically outstanding", "From a low-income household", "Studying at one of the eight partner universities"],
+    benefits: ["Full funding", "Living and meal allowances", "A coordinator and mentoring"],
+    closingDate: "31 December 2026",
+    applyUrl: "https://allbursaries.co.za/general/moshal-scholarship",
+    source: "https://allbursaries.co.za/general/moshal-scholarship",
+  },
+  {
+    slug: "stanlib-absip-2027",
+    company: "STANLIB-ABSIP Bursary Fund",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "Funding for Black South African students studying investment management, commerce, economics or finance.",
+    about: "A bursary fund run by STANLIB with the Association of Black Securities and Investment Professionals for talented Black South African students from historically disadvantaged backgrounds at participating universities. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Commerce", items: ["Investment management", "Commerce", "Economics", "Finance"] }],
+    requirements: ["Black South African student from a historically disadvantaged background", "Studying at a participating university", "Other requirements: not specified on the listing"],
+    benefits: ["Tuition, books and accommodation", "A laptop", "A needs-based stipend"],
+    closingDate: "17 January 2027",
+    applyUrl: "https://allbursaries.co.za/finance/stanlib-absip-bursary",
+    source: "https://allbursaries.co.za/finance/stanlib-absip-bursary",
+  },
+  {
+    slug: "sars-2027",
+    company: "SARS Bursary",
+    emoji: "",
+    status: "Open",
+    year: "2027",
+    summary: "Funding across accounting, tax, law, IT, actuarial science, science and engineering, with possible vacation work at SARS.",
+    about: "The South African Revenue Service funds academically strong students with financial need. The bursary is administered by CareerWise. Details are as listed on AllBursaries on 10 November 2026. Confirm the closing date and requirements on the funder's own page before you apply.",
+    fields: [{ group: "Commerce", items: ["Chartered Accountancy", "Taxation", "Law", "Actuarial science"] }, { group: "Science and Engineering", items: ["Information technology", "Science", "Engineering"] }],
+    requirements: ["South African student", "Academically strong", "Demonstrated financial need"],
+    benefits: ["Tuition, accommodation, meals and textbooks", "A monthly allowance", "Possible vacation work at SARS"],
+    closingDate: "30 May 2027",
+    applyUrl: "https://allbursaries.co.za/government/sars-bursary",
+    source: "https://allbursaries.co.za/government/sars-bursary",
+  },
+  {
     slug: "toyota",
     company: "Toyota South Africa Motors",
     emoji: "🚗",
@@ -271,4 +361,19 @@ export const BURSARIES: Bursary[] = [
 
 export function getBursary(slug: string) {
   return BURSARIES.find((b) => b.slug === slug);
+}
+
+/** The broad filters shown on the bursaries page, in display order. */
+export const FIELD_CATEGORY_ORDER = ["Engineering", "Commerce", "Science", "Other"] as const;
+export type FieldCategory = (typeof FIELD_CATEGORY_ORDER)[number];
+
+/** Sorts a bursary into the broad filters by reading its field groups and items. */
+export function fieldCategories(b: Bursary): FieldCategory[] {
+  const text = b.fields.map((f) => `${f.group} ${f.items.join(" ")}`).join(" ").toLowerCase();
+  const out: FieldCategory[] = [];
+  if (/engineer|stem|built environment|artisan|mechatronic/.test(text)) out.push("Engineering");
+  if (/commerce|account|financ|econom|business|market|actuar/.test(text)) out.push("Commerce");
+  if (/scien|stem|computer|information tech|mathemat|statistic|environment/.test(text)) out.push("Science");
+  if (out.length === 0) out.push("Other");
+  return out;
 }
