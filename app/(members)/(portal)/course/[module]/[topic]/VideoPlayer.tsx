@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore, useState } from "react";
 import Icon from "../../../../../_site/Icons";
 import { markOpened } from "../../progress";
 
@@ -13,6 +13,25 @@ export type PlayerVideo = {
   opened: boolean;
 };
 
+/**
+ * Private Google Drive videos only play inside our page when the browser sends the
+ * student's Google login along with the embedded player. Chrome and Edge on a computer
+ * or Android do. Safari, every browser on iPhone and iPad, and Firefox block it, and
+ * Drive answers with "There was a problem playing this video". On those we open the
+ * video in Google Drive itself, where the student is signed in.
+ */
+function embedBlocked() {
+  const ua = navigator.userAgent;
+  const iOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const safari = /Safari/.test(ua) && !/Chrome|Chromium|CriOS|Edg|OPR|SamsungBrowser/.test(ua);
+  const firefox = /Firefox|FxiOS/.test(ua);
+  return iOS || safari || firefox;
+}
+const noop = () => () => {};
+function useEmbedBlocked() {
+  return useSyncExternalStore(noop, embedBlocked, () => false);
+}
+
 export default function VideoPlayer({
   videos,
   initialId,
@@ -23,6 +42,8 @@ export default function VideoPlayer({
   const start = videos.find((v) => v.id === initialId) ?? videos.find((v) => !v.opened) ?? videos[0];
   const [activeId, setActiveId] = useState(start.id);
   const [playing, setPlaying] = useState(false);
+  const blocked = useEmbedBlocked();
+  const [tryHere, setTryHere] = useState(false);
   const [seen, setSeen] = useState<Set<string>>(() => new Set(videos.filter((v) => v.opened).map((v) => v.id)));
   const index = Math.max(0, videos.findIndex((v) => v.id === activeId));
   const active = videos[index];
@@ -37,7 +58,13 @@ export default function VideoPlayer({
 
   function play(id: string) {
     setActiveId(id);
-    setPlaying(true);
+    if (blocked && !tryHere) {
+      // Open straight in Google Drive: it plays there.
+      const v = videos.find((x) => x.id === id);
+      if (v) window.open(v.openUrl, "_blank", "noopener,noreferrer");
+    } else {
+      setPlaying(true);
+    }
     setSeen((s) => new Set(s).add(id));
     void markOpened(id);
   }
@@ -67,7 +94,8 @@ export default function VideoPlayer({
               </span>
               <span className="max-w-md font-display text-xl font-semibold leading-snug">{active.title}</span>
               <span className="text-sm text-white/60">
-                Video {index + 1} of {videos.length}. Select to play.
+                Video {index + 1} of {videos.length}.{" "}
+                {blocked && !tryHere ? "Opens in Google Drive." : "Select to play."}
               </span>
             </button>
           )}
@@ -83,9 +111,13 @@ export default function VideoPlayer({
               href={active.openUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                setSeen((s) => new Set(s).add(active.id));
+                void markOpened(active.id);
+              }}
               className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold ring-1 ring-navy/20 hover:ring-navy"
             >
-              Open in new tab <Icon name="external" className="h-4 w-4" />
+              Open in Google Drive <Icon name="external" className="h-4 w-4" />
             </a>
             {next && (
               <button
@@ -98,9 +130,29 @@ export default function VideoPlayer({
             )}
           </div>
         </div>
-        <p className="mt-3 text-sm text-navy/55">
-          If the video asks you to sign in, use the Google account you gave Mastermind Tutoring when you joined.
-        </p>
+        {blocked && !tryHere ? (
+          <div className="mt-3 rounded-2xl bg-gold/15 p-4 text-sm ring-1 ring-gold/40">
+            <p>
+              On this phone or browser, videos open in Google Drive. Sign in with the Google account you gave
+              Mastermind Tutoring when you joined. Come back here and select the next video when you are done.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setTryHere(true);
+                setPlaying(true);
+              }}
+              className="mt-2 font-semibold underline decoration-gold decoration-2 underline-offset-4"
+            >
+              Try playing it on this page instead
+            </button>
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-navy/55">
+            Video not playing? Use <span className="font-semibold">Open in Google Drive</span>, and sign in with the
+            Google account you gave Mastermind Tutoring when you joined.
+          </p>
+        )}
       </div>
 
       <aside aria-label="Video list" className="max-h-[34rem] overflow-y-auto rounded-2xl bg-white p-2.5 ring-1 ring-navy/10">
