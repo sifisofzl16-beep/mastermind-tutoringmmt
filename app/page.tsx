@@ -1,876 +1,599 @@
-"use client";
+import Link from "next/link";
+import { PHONE_DISPLAY } from "@/lib/contact";
+import { getCatalogue, totals, type CatalogueCourse } from "@/lib/catalogue";
+import { FULL_COURSE_PRICES, MODULES, SESSION_PRICES, TUTOR_FORM, WA, liveStatus } from "@/lib/site";
+import { BURSARIES } from "./bursaries/data";
+import { OPPORTUNITIES } from "./opportunities/data";
+import Icon from "./_site/Icons";
+import ModuleFinder from "./_site/ModuleFinder";
+import SiteFooter from "./_site/SiteFooter";
+import SiteHeader from "./_site/SiteHeader";
+import Syllabus from "./_site/Syllabus";
 
-import { useState, useEffect, useRef, type MouseEvent } from "react";
+export const revalidate = 3600;
 
-function Counter({ to, prefix = "", suffix = "", duration = 1400 }: { to: number; prefix?: string; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [val, setVal] = useState(0);
-  const startedRef = useRef(false);
+const FULL_COURSE_SLUGS = ["engineering-physics-1", "engineering-mathematics-1", "applied-physics"];
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !startedRef.current) {
-        startedRef.current = true;
-        const start = performance.now();
-        const tick = (now: number) => {
-          const p = Math.min(1, (now - start) / duration);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setVal(Math.round(to * eased));
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-        obs.disconnect();
-      }
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to, duration]);
-
-  return <span ref={ref}>{prefix}{val}{suffix}</span>;
+function chapterParts(title: string) {
+  const m = title.match(/^chapter\s+(\d+)\s*[:\-]?\s*(.*)$/i);
+  if (!m) return { num: null as string | null, name: title };
+  return { num: m[1], name: m[2].trim() || `Chapter ${m[1]}` };
 }
 
-export default function MastermindTutoringWebsite() {
-  const waLink = "https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27d%20like%20to%20book%20a%20tutoring%20session.";
-  const tutorLink = "https://docs.google.com/forms/d/e/1FAIpQLSeD6l_WL1IftliSprtDEADDjadc88V1zAKaDap2cSQAtX3sRg/viewform";
-  const [scrolled, setScrolled] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeTab, setActiveTab] = useState("modules");
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [moduleSearch, setModuleSearch] = useState("");
+export default async function HomePage() {
+  const courses = await getCatalogue();
+  const sum = totals(courses);
+  const hasData = sum.videos > 0;
+  const hasQuiz = courses.some((c) => c.topics.some((t) => t.quiz > 0));
 
-  useEffect(() => {
-    const h = () => {
-      const y = window.scrollY;
-      setScrolled(y > 60);
-      setScrollY(y);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(max > 0 ? Math.min(100, (y / max) * 100) : 0);
-    };
-    window.addEventListener("scroll", h, { passive: true });
-    h();
-    return () => window.removeEventListener("scroll", h);
-  }, []);
+  const openBursaries = BURSARIES.filter((b) => liveStatus(b.closingDate, b.status) !== "Closed").length;
+  const openOpportunities = OPPORTUNITIES.filter((o) => liveStatus(o.closingDate, o.status) !== "Closed").length;
 
-  // Scroll-triggered section reveals
-  useEffect(() => {
-    const sections = document.querySelectorAll(".reveal-section");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    sections.forEach((s) => obs.observe(s));
-    return () => obs.disconnect();
-  }, []);
+  const joinLinks = Object.fromEntries(courses.map((c) => [c.slug, WA.course(c.title)]));
+  const courseNames = courses.filter((c) => FULL_COURSE_SLUGS.includes(c.slug)).map((c) => c.title);
 
-  // Card tilt effect
-  function tiltMove(e: MouseEvent<HTMLDivElement>) {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(700px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg) translateY(-4px)`;
-  }
-  function tiltLeave(e: MouseEvent<HTMLDivElement>) {
-    e.currentTarget.style.transform = "translateY(0)";
-  }
-
-  // Magnetic button effect
-  function magMove(e: MouseEvent<HTMLAnchorElement>) {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    const x = e.clientX - r.left - r.width / 2;
-    const y = e.clientY - r.top - r.height / 2;
-    el.style.transform = `translate(${(x * 0.18).toFixed(1)}px, ${(y * 0.28).toFixed(1)}px)`;
-  }
-  function magLeave(e: MouseEvent<HTMLAnchorElement>) {
-    e.currentTarget.style.transform = "translate(0,0)";
-  }
-
-  const modules = {
-    "Common Engineering": ["Engineering Mathematics IA & IB","Engineering Physics IA & IB","Engineering Chemistry","Applied Physics I","Engineering Analysis & Design IA & IB","Introduction to Engineering Profession"],
-    "Mechanical Eng": ["Applied Mechanics A & B","Machine Elements","Fluid Mechanics I","Engineering Thermodynamics I","Mechatronics I","Engineering Design","Materials Science","Computing Skills & Software Dev"],
-    "Electrical Eng": ["Electric Circuits","Electronics I","Electrical & Magnetic Systems","Signals & Systems I","Microprocessors","Software Development I","Data Structures & Algorithms","Physics II (Electrical)"],
-    "Civil Eng": ["Materials & Structures I & II","Numerical Methods","Environmental Engineering","Engineering Computing","Geology for Civil Engineers","Engineering Surveying","Engineering Economics"],
-    "Construction Studies": ["Introduction to Structures","Building Science I","Construction Technology II","Site Management","Civil Engineering Theory I","Quantities & Specifications II","Accounting in Construction"],
-    "Computational Maths": ["Mathematical Methods I & II (APPM)","Mechanics I & II (APPM)","Scientific Computing I & II","Algebra I","Calculus I","Linear Algebra II","Multivariable Calculus","Basic & Advanced Analysis"],
-    "Actuarial Science": ["Actuarial Science I & II","Mathematical Statistics I & II","Abstract Mathematics","Differential Equations","Basic Analysis","Economic Theory IA & IB","Business Accounting I"],
-    "Accounting Science": ["Financial Accounting I, II, III","Management Accounting II, III","Taxation II, III","Auditing II, III","Business Enterprise Law","Mercantile Law","Commercial Law I","Business Statistics I"],
-    "BCom Accounting": ["Accounting I & II","Management Accounting II","Taxation II","Auditing II","Fundamentals of Information Systems","IS Data Analytics II","Consumer Behaviour","Principles of Marketing"],
-    "Information Systems": ["Information Systems IA, IB, IIA, IIB","Corporate Finance II","Investment II","Economics IA & IB","IS Data Analytics II","Human Resources IIA & IIB","Insurance & Risk Management"],
-    "Commerce General": ["Business Statistics (STAT1006)","Corporate Finance II (FINA3002)","Economics I & II","Financial Mathematics","Quantitative Methods","Investment Management","Business Law"],
-    "Science": ["Physics I (PHYS1000A)","Chemistry I","Biology (BIOL1035A)","Molecular & Cell Biology II","Biochemistry III","Genetics & Dev Biology III","Mathematics I & II","Statistics I"],
-  };
-
-  const allModules = Object.values(modules).flat();
-  const filteredModules = moduleSearch.length > 1
-    ? allModules.filter(m => m.toLowerCase().includes(moduleSearch.toLowerCase()))
-    : [];
-
-  const testimonials = [
-    { quote: "I was failing Physics and nearly dropped the module. After four MMT sessions I passed with 68%. The way they explain things actually makes sense.", name: "K. Dlamini", detail: "BSc Physics · Wits" },
-    { quote: "Corporate Finance was destroying my average. MMT had me go from 44% to 71% in one semester. Worth every rand of the monthly package.", name: "T. Mokoena", detail: "BCom Finance · Wits" },
-    { quote: "Booked two days before my Linear Algebra test. Walked in confident and came out with a distinction. The in-person sessions are next level.", name: "L. Sithole", detail: "BSc Mechanical Engineering · Wits" },
-    { quote: "I was repeating Engineering Maths for the second time. The MMT tutor explained it differently from my lecturer and it finally clicked. Passed comfortably.", name: "S. Mahlangu", detail: "BSc Electrical Engineering · Wits" },
-    { quote: "The monthly in-person package is genuinely the best investment I've made at Wits. My tutor knows the module inside out and pushes me every session.", name: "R. Khumalo", detail: "BSc Civil Engineering · Wits" },
-    { quote: "Taxation 3 is brutal. My MMT tutor had past papers, notes, and a study plan ready from session one. I passed with 66% when I expected to fail.", name: "A. Shaik", detail: "BCom Accounting Science · Wits" },
-    { quote: "I thought I was just bad at maths. Turns out I had gaps from first year that nobody helped me fix. MMT found them in session one and we worked through everything.", name: "L. Moagi", detail: "BSc Engineering · Wits" },
-    { quote: "Auditing II felt impossible. My tutor had a framework for answering questions that the textbook never gives you. I used it in my exam and it worked perfectly.", name: "S. Ngcobo", detail: "BCom Accounting Science · Wits" },
+  const features = [
+    { icon: "play", title: "Recorded lessons", text: "Every section explained on video, in the order your lecturer teaches it. Pause, rewind and watch again before a test." },
+    { icon: "book", title: "Study guides", text: "Our own notes for each chapter, written to be read by someone seeing the work for the first time." },
+    { icon: "pencil", title: "Problem sets", text: "Practice questions at test level, plus past papers and tut tests, so you know what the marks are given for." },
+    { icon: "live", title: "A live class every week", text: "Bring your questions to a live online class. If you miss it, the recording goes into the portal." },
+    ...(hasQuiz
+      ? [{ icon: "quiz", title: "Quizzes that mark themselves", text: "Answer, then see why the right answer is right. We are adding these chapter by chapter." }]
+      : []),
+    { icon: "chat", title: "A tutor you can message", text: "Stuck at 9pm on question 4? Send it on WhatsApp and a tutor who passed the module will help you through it." },
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "Mastermind Tutoring",
+    url: "https://www.mastermindtutoring.co.za",
+    logo: "https://www.mastermindtutoring.co.za/icon-512.png",
+    slogan: "Discipline. Understanding. Systems. Results.",
+    areaServed: "Johannesburg, South Africa",
+    telephone: "+27655112416",
+  };
+
   return (
-    <div style={{ background: "#06080f", minHeight: "100vh", color: "#e2e8f0", fontFamily: "system-ui, sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        .syne { font-family: 'Syne', sans-serif; }
-        .inter { font-family: 'Inter', sans-serif; }
-        a { text-decoration: none; color: inherit; }
-        ::selection { background: rgba(201,168,76,0.3); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #06080f; }
-        ::-webkit-scrollbar-thumb { background: #1a1f2e; border-radius: 2px; }
-        .btn-gold {
-          display: inline-flex; align-items: center; gap: 0.5rem;
-          background: linear-gradient(135deg, #c9a84c, #e8c96e);
-          color: #06080f; font-family: 'Syne', sans-serif; font-weight: 700;
-          font-size: 0.9rem; letter-spacing: 0.04em; padding: 0.85rem 2rem;
-          border-radius: 6px; border: none; cursor: pointer;
-          transition: opacity 0.2s, transform 0.15s; white-space: nowrap;
-        }
-        .btn-gold:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-outline {
-          display: inline-flex; align-items: center; gap: 0.5rem;
-          background: transparent; color: #e2e8f0; font-family: 'Inter', sans-serif;
-          font-weight: 500; font-size: 0.9rem; padding: 0.85rem 2rem;
-          border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;
-          transition: border-color 0.2s, transform 0.15s;
-        }
-        .btn-outline:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-2px); }
-        .gold { color: #c9a84c; }
-        .gold-dim { color: #8a6f2e; }
-        .card-dark {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 16px;
-          transition: border-color 0.3s, transform 0.3s;
-        }
-        .card-dark:hover { border-color: rgba(201,168,76,0.2); transform: translateY(-4px); }
-        .tab-btn {
-          font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500;
-          padding: 0.5rem 1.25rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.08);
-          background: transparent; color: #64748b; cursor: pointer; transition: all 0.2s; white-space: nowrap;
-        }
-        .tab-btn.active { background: rgba(201,168,76,0.12); color: #c9a84c; border-color: rgba(201,168,76,0.3); }
-        .tab-btn:hover:not(.active) { color: #94a3b8; border-color: rgba(255,255,255,0.15); }
-        .nav-a { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500; color: #64748b; transition: color 0.2s; letter-spacing: 0.02em; }
-        .nav-a:hover { color: #c9a84c; }
-        .module-pill {
-          font-family: 'Inter', sans-serif; font-size: 0.78rem; color: #94a3b8;
-          padding: 0.4rem 0.85rem; border-radius: 100px;
-          background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-          transition: all 0.2s;
-        }
-        .module-pill:hover { color: #c9a84c; border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.05); }
-        .step-num {
-          width: 48px; height: 48px; border-radius: 50%;
-          background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-          border: 1px solid rgba(201,168,76,0.3);
-          display: flex; align-items: center; justify-content: center;
-          font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: #c9a84c;
-          flex-shrink: 0;
-        }
-        .sticky-wa {
-          position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
-          background: #25D366; color: #fff; border: none; border-radius: 50px;
-          padding: 0.85rem 1.5rem; font-family: 'Syne', sans-serif; font-weight: 700;
-          font-size: 0.9rem; cursor: pointer; box-shadow: 0 8px 32px rgba(37,211,102,0.3);
-          display: flex; align-items: center; gap: 0.5rem; transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .sticky-wa:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(37,211,102,0.4); }
-        @media (max-width: 768px) { .sticky-wa { display: none; } }
-        .divider-gold { width: 40px; height: 3px; background: linear-gradient(90deg, #c9a84c, transparent); border-radius: 2px; margin: 1rem 0 1.5rem; }
-        .label-tag { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a84c; }
-        .search-input {
-          width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 10px; padding: 0.75rem 1rem; color: #e2e8f0; font-family: 'Inter', sans-serif;
-          font-size: 0.9rem; outline: none; transition: border-color 0.2s;
-        }
-        .search-input:focus { border-color: rgba(201,168,76,0.4); }
-        .search-input::placeholder { color: #475569; }
-        .show-mobile { display: none; }
-        .mobile-cta-bar { display: none; }
-        .mark-line { stroke-dasharray: 900; stroke-dashoffset: 900; animation: drawline 2.2s 0.4s cubic-bezier(0.65,0,0.35,1) forwards; }
-        @keyframes drawline { to { stroke-dashoffset: 0; } }
-        .mark-dot { opacity: 0; animation: popdot 0.4s ease forwards; }
-        @keyframes popdot { to { opacity: 1; } }
-
-        .reveal-section { opacity: 0; transform: translateY(36px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
-        .reveal-section.in-view { opacity: 1; transform: translateY(0); }
-
-        .card-dark { transition: border-color 0.3s, transform 0.15s ease-out; will-change: transform; }
-
-        .pill-in { animation: pillIn 0.45s cubic-bezier(0.22,1,0.36,1) backwards; }
-        @keyframes pillIn { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-        .btn-gold, .btn-outline { will-change: transform; }
-        @media (max-width: 768px) {
-          .hero-title { font-size: 2.8rem !important; line-height: 1.1 !important; }
-          .hide-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-          .stack-mobile { flex-direction: column !important; }
-          .full-mobile { width: 100% !important; }
-          .hero-visual { display: none !important; }
-          .mobile-cta-bar { display: flex !important; }
-          body { padding-bottom: 72px; }
-        }
-      `}</style>
-
-      {/* ── SCROLL PROGRESS BAR ───────────── */}
-      <div style={{ position: "fixed", top: 0, left: 0, height: "3px", width: `${scrollProgress}%`, background: "linear-gradient(90deg, #c9a84c, #e8c96e)", zIndex: 200, transition: "width 0.1s linear", boxShadow: "0 0 8px rgba(201,168,76,0.6)" }} />
-
-      {/* ── MOBILE BOTTOM CTA BAR ─────────── */}
-      <div className="mobile-cta-bar" style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 998, background: "rgba(6,8,15,0.98)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "0.75rem 1rem", alignItems: "center", gap: "0.75rem" }}>
-        <a href="tel:+27693126747" style={{ flex: "0 0 auto", width: "44px", height: "44px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px", color: "#e2e8f0", fontSize: "1.1rem" }}>📞</a>
-        <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ flex: 1, justifyContent: "center" }}>💬 Book via WhatsApp</a>
-      </div>
-
-      {/* ── STICKY WA BUTTON ───────────────── */}
-      <a href={waLink} target="_blank" rel="noreferrer" className="sticky-wa">
-        <span>💬</span> Book Now
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-navy focus:px-5 focus:py-3 focus:text-white">
+        Skip to content
       </a>
+      <SiteHeader whatsapp={WA.general} />
 
-      {/* ── NAV ───────────────────────────── */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, transition: "all 0.3s", background: scrolled || mobileMenu ? "rgba(6,8,15,0.95)" : "transparent", backdropFilter: scrolled || mobileMenu ? "blur(20px)" : "none", borderBottom: scrolled || mobileMenu ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "1.25rem 2rem" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="#" className="syne" style={{ fontSize: "1.1rem", fontWeight: "800", letterSpacing: "0.04em" }}>
-            MMT<span className="gold">.</span>
-          </a>
-          <div className="hide-mobile" style={{ display: "flex", gap: "2.5rem", alignItems: "center" }}>
-            {["modules","courses","highschool","packages","tutors","careers","contact"].map(s => (
-              <a key={s} href={`#${s}`} className="nav-a" style={{ textTransform: "capitalize" }}>{s}</a>
-            ))}
-            <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c" }}>Bursaries</a>
-            <a href="/opportunities" className="nav-a" style={{ color: "#c9a84c" }}>Opportunities</a>
-          </div>
-          <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold hide-mobile" onMouseMove={magMove} onMouseLeave={magLeave} style={{ padding: "0.6rem 1.25rem", fontSize: "0.82rem" }}>
-            Book a Session
-          </a>
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="show-mobile" aria-label="Toggle menu" style={{ background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", color: "#f1f5f9", width: "40px", height: "40px", fontSize: "1.1rem", cursor: "pointer" }}>
-            {mobileMenu ? "✕" : "☰"}
-          </button>
-        </div>
-        {mobileMenu && (
-          <div className="show-mobile" style={{ maxWidth: "1200px", margin: "1.25rem auto 0", display: "flex", flexDirection: "column", gap: "0.25rem", paddingBottom: "0.5rem" }}>
-            {["modules","courses","highschool","packages","tutors","careers","contact"].map(s => (
-              <a key={s} href={`#${s}`} onClick={() => setMobileMenu(false)} className="nav-a" style={{ textTransform: "capitalize", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>{s}</a>
-            ))}
-            <a href="/bursaries" className="nav-a" style={{ color: "#c9a84c", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>Bursaries</a>
-            <a href="/opportunities" className="nav-a" style={{ color: "#c9a84c", padding: "0.75rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.95rem" }}>Opportunities</a>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" style={{ marginTop: "1rem", justifyContent: "center" }}>Book a Session</a>
-          </div>
-        )}
-      </nav>
-
-      {/* ── HERO ──────────────────────────── */}
-      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden", padding: "0 2rem" }}>
-        {/* Background elements */}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 60% 50%, rgba(201,168,76,0.06) 0%, transparent 70%)", pointerEvents: "none", transform: `translateY(${scrollY * 0.15}px)` }}/>
-        <div style={{ position: "absolute", top: "20%", right: "5%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%)", pointerEvents: "none", transform: `translateY(${scrollY * 0.3}px)` }}/>
-        {/* Grid lines */}
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)", backgroundSize: "60px 60px", pointerEvents: "none", transform: `translateY(${scrollY * 0.08}px)` }}/>
-
-        <div style={{ maxWidth: "1200px", margin: "0 auto", width: "100%", paddingTop: "8rem", paddingBottom: "6rem", display: "flex", alignItems: "center", gap: "3rem" }}>
-          <div style={{ maxWidth: "780px", flex: "1 1 480px" }}>
-            <div className="label-tag" style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span style={{ width: "24px", height: "1px", background: "#c9a84c", display: "inline-block" }}/>
-              Wits University · Johannesburg
-            </div>
-
-            <h1 className="syne hero-title" style={{ fontSize: "5rem", fontWeight: "800", lineHeight: "1.05", letterSpacing: "-0.02em", marginBottom: "2rem" }}>
-              Your marks<br />
-              <span style={{ WebkitTextStroke: "1px rgba(201,168,76,0.6)", color: "transparent" }}>don&apos;t define</span><br />
-              your potential.
-            </h1>
-
-            <p className="inter" style={{ fontSize: "1.15rem", color: "#64748b", lineHeight: "1.8", maxWidth: "520px", marginBottom: "3rem" }}>
-              MMT connects Wits students with real peer tutors who passed the exact modules they teach. No generalists, no AI, just people who sat the same tests you&apos;re studying for right now.
-            </p>
-
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>
-                📲 Book a Session via WhatsApp
-              </a>
-              <a href="#modules" className="btn-outline" onMouseMove={magMove} onMouseLeave={magLeave}>
-                See Modules →
-              </a>
-            </div>
-
-            {/* Stats row */}
-            <div style={{ display: "flex", gap: "3rem", marginTop: "4rem", flexWrap: "wrap" }}>
-              {[
-                { to: 200, suffix: "+", label: "Students" },
-                { to: 37, suffix: "+", label: "Modules" },
-                { to: 90, suffix: "%", label: "Improved Marks" },
-                { to: 0, prefix: "R", label: "Free Sundays" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="syne" style={{ fontSize: "1.8rem", fontWeight: "800", color: "#c9a84c", lineHeight: 1 }}>
-                    <Counter to={s.to} prefix={s.prefix || ""} suffix={s.suffix || ""} />
-                  </p>
-                  <p className="inter" style={{ fontSize: "0.78rem", color: "#475569", marginTop: "0.3rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Signature visual — mark trajectory */}
-          <div className="hero-visual" style={{ flex: "1 1 340px", position: "relative", height: "420px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="100%" height="420" viewBox="0 0 400 420" fill="none" style={{ overflow: "visible" }}>
-              <defs>
-                <radialGradient id="glowA" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#e8c96e" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#e8c96e" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-
-              <text x="0" y="28" fill="#374151" fontFamily="Inter, sans-serif" fontSize="12" letterSpacing="0.1em">BEFORE MMT</text>
-              <text x="272" y="28" fill="#c9a84c" fontFamily="Inter, sans-serif" fontSize="12" letterSpacing="0.1em">AFTER MMT</text>
-
-              {[100,170,240,310,380].map(y => (
-                <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="rgba(255,255,255,0.045)" strokeWidth="1" />
-              ))}
-
-              <path d="M 0 260 L 45 300 L 90 245 L 135 320 L 180 265 L 210 305"
-                stroke="#374151" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-
-              <path className="mark-line" d="M 210 305 C 250 292, 265 195, 300 150 C 330 112, 355 85, 400 60"
-                stroke="#c9a84c" strokeWidth="4" fill="none" strokeLinecap="round" />
-
-              <circle cx="400" cy="60" r="48" fill="url(#glowA)" />
-
-              <circle className="mark-dot" style={{ animationDelay: "0.5s" }} cx="210" cy="305" r="5.5" fill="#374151" />
-              <circle className="mark-dot" style={{ animationDelay: "1.9s" }} cx="300" cy="150" r="5.5" fill="#c9a84c" />
-              <circle className="mark-dot" style={{ animationDelay: "2.5s" }} cx="400" cy="60" r="7" fill="#e8c96e" />
-
-              <g className="mark-dot" style={{ animationDelay: "2.7s" }}>
-                <rect x="340" y="18" width="60" height="34" rx="8" fill="#0d1117" stroke="#c9a84c" strokeWidth="1.5" />
-                <text x="370" y="41" fill="#e8c96e" fontFamily="Syne, sans-serif" fontWeight="800" fontSize="20" textAnchor="middle">A+</text>
-              </g>
-            </svg>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
-          <span className="inter" style={{ fontSize: "0.65rem", color: "#374151", letterSpacing: "0.15em", textTransform: "uppercase" }}>Scroll</span>
-          <div style={{ width: "1px", height: "40px", background: "linear-gradient(180deg, #c9a84c, transparent)" }}/>
-        </div>
-      </section>
-
-      {/* ── PROBLEM SECTION ───────────────── */}
-      <section className="reveal-section" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Sound familiar?</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3.5rem", maxWidth: "500px", lineHeight: 1.15 }}>
-            Every Wits student knows this feeling.
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
-            {[
-              ["😮‍💨", "You sit through lectures and understand nothing", "The lecturer moves too fast and you're too embarrassed to ask for the third time."],
-              ["📉", "Your test results don't reflect how hard you studied", "You put in the hours but the marks don't show it. Something isn't clicking."],
-              ["⏰", "Exams are in two weeks and you're already behind", "The semester crept up on you. There's too much to cover and not enough time."],
-              ["🤷", "You don't know where to start", "You open the textbook, read the same paragraph four times, and close it again."],
-            ].map(([icon, title, sub]) => (
-              <div key={title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
-                <span style={{ fontSize: "2rem", display: "block", marginBottom: "1rem" }}>{icon}</span>
-                <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.75rem" }}>{title}</h3>
-                <p className="inter" style={{ fontSize: "0.85rem", color: "#475569", lineHeight: "1.7" }}>{sub}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: "3rem", padding: "2rem 2.5rem", background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.15)", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem" }}>
-            <div>
-              <p className="syne" style={{ fontSize: "1.3rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.4rem" }}>This is exactly what MMT exists to fix.</p>
-              <p className="inter" style={{ fontSize: "0.9rem", color: "#475569" }}>One session with the right tutor changes everything.</p>
-            </div>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave}>Book Now via WhatsApp</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ──────────────────── */}
-      <section className="reveal-section" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>The Process</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "3.5rem", lineHeight: 1.15 }}>How it works</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "2rem" }}>
-            {[
-              ["1", "WhatsApp us your module", "Tell us what you need help with. We respond within minutes, not hours."],
-              ["2", "Get matched to a tutor", "We assign you a tutor who has passed that specific module and knows it deeply."],
-              ["3", "Book your first session", "Online or in-person. Flexible scheduling. First session can happen within 24 hours."],
-            ].map(([num, title, desc]) => (
-              <div key={num} style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start" }}>
-                <div className="step-num">{num}</div>
-                <div>
-                  <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{title}</h3>
-                  <p className="inter" style={{ fontSize: "0.85rem", color: "#475569", lineHeight: "1.7" }}>{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "1.5rem" }}>🌅</span>
-            <div>
-              <p className="inter" style={{ fontWeight: "600", color: "#f1f5f9", fontSize: "0.9rem" }}>Free Sunday Classes, every week</p>
-              <p className="inter" style={{ color: "#475569", fontSize: "0.82rem" }}>No booking, no payment. Just show up. Group sessions covering the most requested modules.</p>
-            </div>
-            <a href={waLink} target="_blank" rel="noreferrer" className="inter" style={{ marginLeft: "auto", color: "#c9a84c", fontSize: "0.85rem", fontWeight: "600" }}>Join Sunday Class →</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MODULES ───────────────────────── */}
-      <section className="reveal-section" id="modules" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>What we cover</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Modules</h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "2.5rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            We cover 37+ modules across all four Wits faculties. Search below or browse by faculty.
-          </p>
-
-          {/* Search */}
-          <div style={{ position: "relative", marginBottom: "2rem", maxWidth: "400px" }}>
-            <input className="search-input" value={moduleSearch} onChange={e => setModuleSearch(e.target.value)} placeholder="Search any module e.g. Phys1000A, Corporate Finance..."/>
-            {filteredModules.length > 0 && (
-              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", marginTop: "0.5rem", padding: "0.75rem", zIndex: 10, maxHeight: "200px", overflowY: "auto" }}>
-                {filteredModules.map(m => (
-                  <div key={m} className="inter" style={{ padding: "0.5rem 0.75rem", color: "#94a3b8", fontSize: "0.85rem", borderRadius: "6px", cursor: "pointer" }} onMouseEnter={e => (e.currentTarget.style.background = "rgba(201,168,76,0.08)")} onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-                    {m}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Faculty tabs */}
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-            {Object.keys(modules).map(tab => (
-              <button key={tab} className={`tab-btn ${activeTab === tab ? "active" : ""}`} onClick={() => setActiveTab(tab)}>{tab}</button>
-            ))}
-          </div>
-
-          {/* Module pills */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-            {modules[activeTab as keyof typeof modules]?.map((m, i) => (
-              <a key={activeTab + m} href={waLink} target="_blank" rel="noreferrer" className="module-pill pill-in" style={{ animationDelay: `${i * 0.025}s` }}>{m}</a>
-            ))}
-          </div>
-
-          <p className="inter" style={{ color: "#374151", fontSize: "0.8rem", marginTop: "1.5rem" }}>
-            Click any module to book via WhatsApp · Don&apos;t see yours?{" "}
-            <a href={waLink} target="_blank" rel="noreferrer" style={{ color: "#c9a84c" }}>Message us</a>
-          </p>
-        </div>
-      </section>
-
-      {/* ── COURSES ───────────────────────── */}
-      <section className="reveal-section" id="courses" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Degree Curricula</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Courses</h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            Detailed module breakdowns per degree and year. Find your exact curriculum.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
-            {[
-              { icon: "📈", color: "#c9a84c", label: "Commerce · Science", title: "Actuarial Science", years: [
-                { year: "Year 1", items: ["Actuarial Science I","Mathematical Statistics I","Algebra I","Calculus I","Economic Theory IA & IB","Business Accounting I"] },
-                { year: "Year 2", items: ["Actuarial Science II","Mathematical Statistics II","Abstract Mathematics","Differential Equations","Basic Analysis","Linear Algebra","Multivariable Calculus","Advanced Analysis"] },
-              ]},
-              { icon: "⚙️", color: "#818cf8", label: "FEBE · Engineering", title: "Mechanical Engineering", years: [
-                { year: "Year 2+", items: ["Applied Mechanics A & B","Machine Elements","Fluid Mechanics I","Engineering Thermodynamics I","Mechatronics I","Engineering Design","Materials Science","Engineering Investigation","Computing Skills & Software Dev","Engineering Tools I"] },
-              ]},
-              { icon: "⚡", color: "#22d3ee", label: "FEBE · Engineering", title: "Electrical Engineering", years: [
-                { year: "Year 2+", items: ["Electric Circuits","Electronics I","Electrical & Magnetic Systems","Signals & Systems I","Microprocessors","Software Development I","Data Structures & Algorithms","Physics II (Electrical)","Mathematics II"] },
-              ]},
-              { icon: "🏗️", color: "#4ade80", label: "FEBE · Engineering", title: "Civil Engineering", years: [
-                { year: "Modules", items: ["Materials & Structures I & II","Numerical Methods","Introduction to Environmental Engineering","Engineering Computing","Geology for Civil Engineers","Engineering Surveying","Engineering Economics","Probability Theory & Stats for Engineers"] },
-              ]},
-              { icon: "🏢", color: "#c084fc", label: "FEBE · Engineering", title: "Construction Studies", years: [
-                { year: "Modules", items: ["Introduction to Structures","Building Science I","Construction Technology II","Site Management","Civil Engineering Theory I","Quantities & Specifications II","Accounting in Construction","Economics IA & IB","Engineering Surveying"] },
-              ]},
-            ].map(course => (
-              <div key={course.title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
-                  <div style={{ width: "42px", height: "42px", background: `${course.color}15`, border: `1px solid ${course.color}30`, borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>{course.icon}</div>
-                  <div>
-                    <p className="inter" style={{ fontSize: "0.62rem", color: course.color, fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase" }}>{course.label}</p>
-                    <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9" }}>{course.title}</h3>
-                  </div>
-                </div>
-                {course.years.map(y => (
-                  <div key={y.year} style={{ marginBottom: "1rem" }}>
-                    <p className="inter" style={{ fontSize: "0.65rem", color: course.color, fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.6rem" }}>{y.year}</p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                      {y.items.map(item => (
-                        <span key={item} className="inter" style={{ fontSize: "0.75rem", color: "#64748b", padding: "0.25rem 0.6rem", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "4px" }}>{item}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* ── HIGH SCHOOL ─────────────────── */}
-      <section className="reveal-section" id="highschool" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-
-          {/* Header */}
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>For Parents</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", lineHeight: 1.1, marginBottom: "1rem" }}>
-            Your child is capable of<br/>
-            <span style={{ color: "#c9a84c" }}>more than their marks suggest.</span>
-          </h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#64748b", fontSize: "1rem", lineHeight: "1.8", maxWidth: "600px", marginBottom: "3.5rem" }}>
-            Every parent has felt it: watching your child study for hours, genuinely trying, and still coming home with results that don&apos;t reflect their effort. It&apos;s not a talent problem. It&apos;s not a work ethic problem. It&apos;s a support problem. The right tutor, explaining the right concept in the right way, changes everything.
-          </p>
-
-          {/* Emotional pain points */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem", marginBottom: "4rem" }}>
-            {[
-              { icon: "😔", title: "They study but the marks don't move", body: "Your child is putting in the hours. The problem isn't effort. It's that nobody has shown them how to study this subject specifically." },
-              { icon: "⏰", title: "June exams are approaching fast", body: "The academic calendar doesn't slow down. Every week without targeted support is a week harder to recover from." },
-              { icon: "🎓", title: "University acceptance depends on this year", body: "For Grade 11 and 12 students, this isn't just about passing. It's about keeping the right doors open." },
-              { icon: "💬", title: "They won't ask their teacher for help", body: "Most teenagers are too proud or too embarrassed. A peer tutor, someone closer in age, changes that dynamic completely." },
-            ].map(p => (
-              <div key={p.title} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.75rem" }}>
-                <span style={{ fontSize: "1.75rem", display: "block", marginBottom: "0.75rem" }}>{p.icon}</span>
-                <h3 className="syne" style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{p.title}</h3>
-                <p className="inter" style={{ fontSize: "0.83rem", color: "#475569", lineHeight: "1.7" }}>{p.body}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* The MMT difference */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", marginBottom: "4rem", alignItems: "center" }}>
-            <div>
-              <div className="label-tag" style={{ marginBottom: "0.75rem" }}>The MMT difference</div>
-              <h3 className="syne" style={{ fontSize: "2rem", fontWeight: "800", color: "#f1f5f9", lineHeight: 1.2, marginBottom: "1.25rem" }}>
-                Not a tutoring agency.<br/>A results company.
-              </h3>
-              <p className="inter" style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: "1.8", marginBottom: "1.5rem" }}>
-                Every MMT tutor is a current or recent top-performing university student. They&apos;ve sat in the same classrooms, written the same papers, and cracked the same problems your child is facing right now. They don&apos;t just know the content. They know exactly where students get stuck and why.
+      <main id="main" className="flex-1">
+        {/* Hero */}
+        <section className="paper-grid relative overflow-hidden">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-24 lg:pt-20">
+            <div className="pop">
+              <p className="font-hand text-2xl font-bold text-amber sm:text-[1.7rem]">
+                For Wits students, taught by people who passed the module
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                {[
-                  "Tutors vetted and trained by MMT before their first session",
-                  "Structured sessions, not just homework help",
-                  "Progress tracked so you always know where your child stands",
-                  "WhatsApp communication, a direct line to your child's tutor",
-                  "Flexible scheduling around school and extra-murals",
-                ].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-                    <span style={{ color: "#c9a84c", marginTop: "2px", flexShrink: 0 }}>✓</span>
-                    <span className="inter" style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {[
-                { school: "St John's College", area: "Houghton" },
-                { school: "King Edward VII", area: "Houghton" },
-                { school: "Parktown Boys High", area: "Parktown" },
-                { school: "Parktown Girls High", area: "Parktown" },
-                { school: "Sacred Heart College", area: "Observatory" },
-                { school: "Greenside High School", area: "Greenside" },
-                { school: "Northcliff High School", area: "Northcliff" },
-              ].map(s => (
-                <div key={s.school} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.85rem 1.25rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "8px" }}>
-                  <span className="inter" style={{ fontSize: "0.88rem", color: "#f1f5f9", fontWeight: "500" }}>{s.school}</span>
-                  <span className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>{s.area}</span>
-                </div>
-              ))}
-              <p className="inter" style={{ fontSize: "0.75rem", color: "#374151", textAlign: "center" }}>And all surrounding Johannesburg schools</p>
-            </div>
-          </div>
-
-          {/* Subjects */}
-          <div style={{ marginBottom: "3.5rem" }}>
-            <div className="label-tag" style={{ marginBottom: "1rem" }}>Subjects we cover</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
-              {[
-                { subject: "Mathematics", icon: "📐", desc: "Pure Maths and Maths Literacy. From algebra foundations to calculus. The subject most students need help with most.", grade: "Grades 8–12", color: "#c9a84c" },
-                { subject: "Physical Science", icon: "⚗️", desc: "Physics and Chemistry. Concepts, calculations, and the kind of exam technique that turns 50% into 75%.", grade: "Grades 10–12", color: "#818cf8" },
-                { subject: "Accounting", icon: "📊", desc: "From basic ledgers to financial statements. The subject where small concept gaps compound into big mark losses.", grade: "Grades 10–12", color: "#22d3ee" },
-                { subject: "English", icon: "✍️", desc: "Home Language and First Additional. Essays, language, literature. The subject that affects every other subject.", grade: "Grades 8–12", color: "#4ade80" },
-                { subject: "Economics", icon: "📈", desc: "Micro and macro. Concepts that make sense in theory but lose students in application.", grade: "Grades 10–12", color: "#f59e0b" },
-                { subject: "Life Sciences", icon: "🔬", desc: "Biology from cells to ecosystems. Strong memory work combined with understanding gets the marks.", grade: "Grades 10–12", color: "#ec4899" },
-                { subject: "Geography", icon: "🌍", desc: "Physical and human geography. Maps, case studies, and the structured answers examiners want to see.", grade: "Grades 10–12", color: "#06b6d4" },
-                { subject: "Business Studies", icon: "💼", desc: "Theory, application, scenarios. The subject where exam technique matters as much as content knowledge.", grade: "Grades 10–12", color: "#a78bfa" },
-              ].map(s => (
-                <div key={s.subject} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.5rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}>
-                  <div style={{ width: "42px", height: "42px", background: `${s.color}15`, border: `1px solid ${s.color}30`, borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>{s.icon}</div>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem" }}>
-                      <h3 className="syne" style={{ fontSize: "0.95rem", fontWeight: "700", color: "#f1f5f9" }}>{s.subject}</h3>
-                      <span className="inter" style={{ fontSize: "0.65rem", color: s.color, background: `${s.color}15`, padding: "0.15rem 0.5rem", borderRadius: "4px" }}>{s.grade}</span>
-                    </div>
-                    <p className="inter" style={{ fontSize: "0.8rem", color: "#475569", lineHeight: "1.6" }}>{s.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Pricing */}
-          <div style={{ marginBottom: "3.5rem" }}>
-            <div className="label-tag" style={{ marginBottom: "1rem" }}>High School Pricing</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "1rem" }}>
-              {[
-                { subject: "Maths / Physical Science", per: "R350/hr", monthly: "R2,400/mo" },
-                { subject: "Accounting / Economics", per: "R320/hr", monthly: "R2,200/mo" },
-                { subject: "English / Languages", per: "R300/hr", monthly: "R2,000/mo" },
-                { subject: "All other subjects", per: "R280/hr", monthly: "R1,800/mo" },
-              ].map((p, i) => (
-                <div key={p.subject} style={{ padding: "1.25rem 1.5rem", background: i === 0 ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${i === 0 ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.06)"}`, borderRadius: "12px" }}>
-                  <p className="inter" style={{ fontSize: "0.75rem", color: "#475569", marginBottom: "0.4rem" }}>{p.subject}</p>
-                  <p className="syne" style={{ fontSize: "1.4rem", fontWeight: "800", color: "#c9a84c" }}>{p.per}</p>
-                  <p className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>{p.monthly} · 8 sessions</p>
-                </div>
-              ))}
-            </div>
-            <p className="inter" style={{ fontSize: "0.8rem", color: "#374151" }}>
-              Online sessions: R50 discount per session &nbsp;·&nbsp; First session: R150 Academic Assessment (gap analysis + personalised study plan)
-            </p>
-          </div>
-
-          {/* Parent CTA */}
-          <div style={{ padding: "3rem", background: "linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03))", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "20px", textAlign: "center" }}>
-            <h3 className="syne" style={{ fontSize: "2rem", fontWeight: "800", color: "#f1f5f9", marginBottom: "1rem", lineHeight: 1.2 }}>
-              Your child&apos;s next exam<br/>doesn&apos;t have to be a gamble.
-            </h3>
-            <p className="inter" style={{ color: "#64748b", fontSize: "0.95rem", lineHeight: "1.7", maxWidth: "480px", margin: "0 auto 2rem" }}>
-              WhatsApp us today. Tell us your child&apos;s grade and subject. We&apos;ll match them with the right tutor and have a session booked within 24 hours.
-            </p>
-            <a href="https://wa.me/27693126747?text=Hi%20MMT%2C%20I%27m%20a%20parent%20looking%20for%20a%20high%20school%20tutor." target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 Book via WhatsApp: 069 312 6747
-            </a>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── PACKAGES ──────────────────────── */}
-      <section className="reveal-section" id="packages" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Pricing</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Simple, transparent pricing</h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", fontSize: "0.95rem", lineHeight: "1.7" }}>No hidden fees. No contracts. Book one session or commit to a month, your choice.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
-            {[
-              { name: "Single Session", tag: "Pay as you go", price: "R200", priceNote: "online / R250 in-person", features: ["1-hour focused session","Any module we cover","Online or in-person","WhatsApp support after"], highlight: false },
-              { name: "Monthly Package", tag: "Most Popular", price: "R1,440", priceNote: "online / R1,760 in-person", features: ["8 sessions per month","Dedicated tutor assigned","Flexible scheduling","Priority WhatsApp support"], highlight: true },
-            ].map(pkg => (
-              <div key={pkg.name} style={{ padding: "2.5rem", borderRadius: "16px", background: pkg.highlight ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${pkg.highlight ? "rgba(201,168,76,0.25)" : "rgba(255,255,255,0.06)"}`, position: "relative" }}>
-                {pkg.highlight && <div style={{ position: "absolute", top: "-1px", left: "2rem", background: "linear-gradient(135deg,#c9a84c,#e8c96e)", color: "#06080f", fontSize: "0.65rem", fontWeight: "700", fontFamily: "Syne,sans-serif", letterSpacing: "0.1em", textTransform: "uppercase", padding: "0.3rem 0.75rem", borderRadius: "0 0 6px 6px" }}>Most Popular</div>}
-                <p className="inter" style={{ fontSize: "0.7rem", color: "#475569", fontWeight: "600", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5rem" }}>{pkg.tag}</p>
-                <h3 className="syne" style={{ fontSize: "1.3rem", fontWeight: "800", color: "#f1f5f9", marginBottom: "0.5rem" }}>{pkg.name}</h3>
-                <div style={{ marginBottom: "1.5rem" }}>
-                  <span className="syne" style={{ fontSize: "2.5rem", fontWeight: "800", color: "#c9a84c" }}>{pkg.price}</span>
-                  <span className="inter" style={{ fontSize: "0.82rem", color: "#475569", marginLeft: "0.5rem" }}>{pkg.priceNote}</span>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "2rem" }}>
-                  {pkg.features.map(f => (
-                    <div key={f} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <span style={{ color: "#c9a84c", fontSize: "0.75rem" }}>✓</span>
-                      <span className="inter" style={{ fontSize: "0.85rem", color: "#94a3b8" }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <a href={waLink} target="_blank" rel="noreferrer" className={pkg.highlight ? "btn-gold" : "btn-outline"} style={{ width: "100%", justifyContent: "center" }}>
-                  Book via WhatsApp
+              <h1 className="mt-4 font-display text-[2.6rem] font-bold leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-[4.2rem]">
+                Your whole module, <span className="marker">in order</span>, in one place.
+              </h1>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy/75 sm:text-xl">
+                The Mastermind Tutoring Full Course takes you through first-year Engineering Physics, Mathematics and
+                Applied Physics chapter by chapter, with recorded lessons, study guides, problem sets and a live class
+                every week.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={WA.fullCourse}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-base font-semibold text-navy shadow-[0_6px_0_0_var(--color-navy)] transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_0_var(--color-navy)]"
+                >
+                  Join the Full Course <Icon name="arrow" className="h-5 w-5" />
+                </a>
+                <a
+                  href="#syllabus"
+                  className="inline-flex min-h-12 items-center rounded-full bg-white px-7 py-3.5 text-base font-semibold ring-1 ring-navy/20 hover:ring-navy"
+                >
+                  See what is inside
                 </a>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TUTORS ────────────────────────── */}
-      <section className="reveal-section" id="tutors" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>The Team</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>Tutors who know the work</h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            Every MMT tutor is a current or recent Wits student who excelled in the exact modules they teach. Meet three of our 20+ active tutors below.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
-            {[
-              { name: "Kagiso Mokoena", subject: "Linear Algebra · Business Statistics", year: "3rd Year, BSc Mathematics", bio: "Breaks down complex mathematical concepts into clear, structured frameworks. Specialises in first and second year quantitative modules." },
-              { name: "Zanele Moyo", subject: "Physics · APPM1014", year: "4th Year, BSc Physics", bio: "Combines deep theoretical understanding with an exam-focused approach that has helped dozens of Wits students pass Phys1000A." },
-              { name: "Luyanda Ntuli", subject: "Corporate Finance · Taxation", year: "Honours, BCom Accounting", bio: "Brings Honours-level insight to students tackling Corporate Finance II, Taxation 3 and advanced BCom modules." },
-            ].map(t => (
-              <div key={t.name} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
-                <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05))", border: "1px solid rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem" }}>
-                  <span className="syne" style={{ fontWeight: "800", color: "#c9a84c", fontSize: "1rem" }}>{t.name[0]}</span>
-                </div>
-                <h3 className="syne" style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.3rem" }}>{t.name}</h3>
-                <p className="inter" style={{ fontSize: "0.78rem", color: "#c9a84c", fontWeight: "600", marginBottom: "0.25rem" }}>{t.subject}</p>
-                <p className="inter" style={{ fontSize: "0.72rem", color: "#374151", marginBottom: "1rem" }}>{t.year}</p>
-                <p className="inter" style={{ fontSize: "0.85rem", color: "#475569", lineHeight: "1.7" }}>{t.bio}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ padding: "2rem 2.5rem", background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.12)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem" }}>
-            <div>
-              <p className="syne" style={{ fontWeight: "700", color: "#f1f5f9", marginBottom: "0.3rem" }}>Are you a top-performing Wits student?</p>
-              <p className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>Join the MMT tutor pool. Earn R150–R300/hr on your own schedule.</p>
+              <p className="mt-5 text-navy/70">
+                From R250 a month.{" "}
+                <a href="#tutoring" className="font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
+                  Looking for one-on-one tutoring?
+                </a>
+              </p>
             </div>
-            <a href={tutorLink} target="_blank" rel="noreferrer" className="btn-outline" onMouseMove={magMove} onMouseLeave={magLeave}>Apply as a Tutor →</a>
+
+            <PortalPreview courses={courses} />
           </div>
-        </div>
-      </section>
 
-      {/* ── HIRING ────────────────────────── */}
-      <section className="reveal-section" id="careers" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Join The Team</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>We&apos;re hiring tutors</h2>
-          <div className="divider-gold"/>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "600px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            We&apos;re expanding our tutor team and looking for high-performing students to join us. MMT clients invest real money into their education. We take that seriously, and we need tutors who do too.
-          </p>
+          {hasData && (
+            <div className="border-y border-navy/10 bg-paper">
+              <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 px-4 py-7 sm:px-6 md:grid-cols-4">
+                <Stat value={sum.videos} label="lesson and class videos" />
+                <Stat value={sum.files} label="study guides and problem files" />
+                <Stat value={sum.chapters} label="chapters and sections" />
+                <Stat value="Feb 2026" label="tutoring Wits students since" />
+              </dl>
+            </div>
+          )}
+        </section>
 
-          {/* Open roles */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "3rem" }}>
-            {[
-              { role: "Mathematics Tutor", req: "Strong academic record in Mathematics" },
-              { role: "Accounting Tutor", req: "BSc/BCom Accounting, 3rd year, strong academic standing" },
-              { role: "Mechanical Engineering Tutor", req: "3rd year, strong academic standing" },
-              { role: "Construction Studies Tutor", req: "3rd year, strong academic standing" },
-              { role: "Economics Tutor", req: "3rd year, strong academic standing" },
-            ].map(r => (
-              <div key={r.role} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "1.5rem" }}>
-                <h3 className="syne" style={{ fontSize: "1rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "0.6rem" }}>{r.role}</h3>
-                <p className="inter" style={{ fontSize: "0.82rem", color: "#64748b", lineHeight: "1.6" }}>{r.req}</p>
-              </div>
+        {/* Full Course */}
+        <section id="full-course" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <div className="rise max-w-2xl">
+            <Eyebrow>The Full Course</Eyebrow>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+              Everything you need to pass, not just one more hour of tutoring.
+            </h2>
+            <p className="mt-5 text-lg text-navy/75">
+              Most students fall behind in week three and spend the rest of the block catching up. The Full Course gives
+              you a set path through the module, so you always know what to do next.
+            </p>
+          </div>
+
+          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <li key={f.title} className="rise rounded-3xl bg-white p-7 ring-1 ring-navy/10">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-navy text-gold">
+                  <Icon name={f.icon} className="h-6 w-6" />
+                </span>
+                <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">{f.title}</h3>
+                <p className="mt-2 text-navy/70">{f.text}</p>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          {/* What we're looking for */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", marginBottom: "3rem" }}>
-            <div>
-              <p className="syne" style={{ fontSize: "1.05rem", fontWeight: "700", color: "#f1f5f9", marginBottom: "1.25rem" }}>What we&apos;re looking for</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+          {/* Pricing */}
+          <div className="rise mt-12 overflow-hidden rounded-[2rem] bg-navy text-white">
+            <div className="grid gap-10 p-7 sm:p-10 lg:grid-cols-[1fr_1.15fr] lg:p-12">
+              <div>
+                <p className="font-hand text-3xl font-bold text-gold">What it costs</p>
+                <h3 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+                  Pay by the month. Add modules and the price per module drops.
+                </h3>
+                <p className="mt-4 text-white/70">
+                  {courseNames.length > 0 ? `Available for ${listOf(courseNames)}.` : "Available for Engineering Physics I, Engineering Mathematics I and Applied Physics."}{" "}
+                  No contract. Your access runs for the month you have paid for.
+                </p>
+                <ol className="mt-7 space-y-3 text-white/85">
+                  {["Message us on WhatsApp and tell us your modules.", "Pay for the month.", "We set up your login and you start with Chapter 1."].map((s, i) => (
+                    <li key={s} className="flex items-start gap-3">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold font-display text-sm font-bold text-navy">{i + 1}</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div className="flex flex-col justify-between gap-6">
+                <ul className="grid gap-3 sm:grid-cols-3">
+                  {FULL_COURSE_PRICES.map((p, i) => (
+                    <li
+                      key={p.modules}
+                      className={`rounded-2xl p-5 ${i === 2 ? "bg-gold text-navy" : "bg-white/[0.06] ring-1 ring-white/10"}`}
+                    >
+                      <p className={`text-sm font-semibold ${i === 2 ? "text-navy/75" : "text-white/65"}`}>{p.modules}</p>
+                      <p className="mt-3 font-display text-4xl font-bold tracking-tight">{p.price}</p>
+                      <p className={`mt-1 text-sm ${i === 2 ? "text-navy/75" : "text-white/65"}`}>{p.note}</p>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap items-center gap-4">
+                  <a
+                    href={WA.fullCourse}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-7 py-3.5 font-semibold text-navy hover:bg-gold-2"
+                  >
+                    Join on WhatsApp <Icon name="arrow" className="h-5 w-5" />
+                  </a>
+                  <Link href="/login" className="font-semibold underline decoration-gold decoration-2 underline-offset-4">
+                    Already a student? Log in
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Syllabus */}
+        {courses.length > 0 && (
+          <section id="syllabus" className="night-grid bg-navy text-white">
+            <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+              <div className="rise max-w-2xl">
+                <p className="font-hand text-3xl font-bold text-gold">Look before you join</p>
+                <h2 className="mt-2 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+                  This is exactly what is in the portal today.
+                </h2>
+                <p className="mt-5 text-lg text-white/70">
+                  This list comes straight from the student portal and updates as we add material. Nothing here is a
+                  promise for later. It is what you can open the day you join.
+                </p>
+              </div>
+              <div className="rise mt-10">
+                <Syllabus courses={courses} joinLinks={joinLinks} />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Tutoring */}
+        <section id="tutoring" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+            <div className="rise">
+              <Eyebrow>One-on-one tutoring</Eyebrow>
+              <h2 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+                Stuck on one module? Sit with someone who passed it.
+              </h2>
+              <p className="mt-5 text-lg text-navy/75">
+                We match you with a tutor who has written the same tests for the same module at Wits, across
+                Engineering, Commerce and Science. Sessions are online or in person.
+              </p>
+              <ol className="mt-8 space-y-5">
                 {[
-                  "High academic performance in your field, not just a pass. We want proof you actually understand the work.",
-                  "Ability to explain concepts clearly, not just know them.",
-                  "Patience, especially with students who are struggling or anxious.",
-                  "Reliability. Showing up prepared, on time, every time.",
-                  "A genuine interest in helping students improve, not just earning an income.",
-                ].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-                    <span style={{ color: "#c9a84c", marginTop: "2px", flexShrink: 0 }}>✓</span>
-                    <span className="inter" style={{ fontSize: "0.88rem", color: "#94a3b8", lineHeight: "1.6" }}>{f}</span>
-                  </div>
+                  ["Tell us your module", "Send us a WhatsApp with the module and what you are struggling with."],
+                  ["Meet your tutor", "We pair you with a tutor who did well in that exact module."],
+                  ["Start working", "Book a single session, or lock in a weekly slot with the monthly package."],
+                ].map(([t, d], i) => (
+                  <li key={t} className="flex gap-4">
+                    <span className="font-hand text-5xl font-bold leading-none text-gold [-webkit-text-stroke:1px_var(--color-navy)]">{i + 1}</span>
+                    <div>
+                      <h3 className="font-display text-lg font-semibold">{t}</h3>
+                      <p className="text-navy/70">{d}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="rise space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
+                {SESSION_PRICES.map((p, i) => (
+                  <article key={p.name} className={`flex flex-col rounded-3xl p-7 ring-1 ${i === 1 ? "bg-white ring-2 ring-gold" : "bg-white ring-navy/10"}`}>
+                    <h3 className="font-display text-xl font-semibold tracking-tight">{p.name}</h3>
+                    <p className="mt-2 text-sm text-navy/70">{p.blurb}</p>
+                    <dl className="mt-5 grid grid-cols-2 gap-3 border-y border-navy/10 py-4">
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-wider text-navy/55">Online</dt>
+                        <dd className="mt-1 font-display text-2xl font-bold tracking-tight">{p.online}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-wider text-navy/55">In person</dt>
+                        <dd className="mt-1 font-display text-2xl font-bold tracking-tight">{p.inPerson}</dd>
+                      </div>
+                    </dl>
+                    <p className="mt-2 text-sm text-navy/60">{p.unit}</p>
+                    <ul className="mt-4 flex-1 space-y-2 text-sm">
+                      {p.points.map((pt) => (
+                        <li key={pt} className="flex items-start gap-2">
+                          <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href={WA.session}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`mt-6 inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 font-semibold ${
+                        i === 1 ? "bg-navy text-white hover:bg-navy-3" : "ring-1 ring-navy/25 hover:ring-navy"
+                      }`}
+                    >
+                      Book on WhatsApp
+                    </a>
+                  </article>
                 ))}
               </div>
             </div>
-            <div style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.12)", borderRadius: "14px", padding: "2rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <p className="syne" style={{ fontWeight: "700", color: "#f1f5f9", marginBottom: "0.75rem", fontSize: "1.05rem" }}>Ready to apply?</p>
-              <p className="inter" style={{ color: "#64748b", fontSize: "0.85rem", lineHeight: "1.7", marginBottom: "1.5rem" }}>
-                Tell us your module(s), your current average, and a bit about your teaching or tutoring experience, if any. Quality is non-negotiable. Let&apos;s build something students can actually trust.
+          </div>
+
+          <div className="rise mt-12">
+            <ModuleFinder modules={MODULES} />
+          </div>
+        </section>
+
+        {/* High school */}
+        <section id="high-school" className="bg-paper">
+          <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2">
+            <div className="rise">
+              <Eyebrow>Grades 10, 11 and 12</Eyebrow>
+              <h2 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+                Maths and Physical Sciences, taught by university students who were there not long ago.
+              </h2>
+              <p className="mt-5 text-lg text-navy/75">
+                Matric marks decide which degrees stay open. Our tutors are Wits students who earned their place in
+                Engineering, Science and Commerce, and they teach the method as well as the answer.
               </p>
-              <a href={tutorLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ alignSelf: "flex-start" }}>Apply to Join MMT →</a>
+              <p className="mt-4 text-lg text-navy/75">
+                Going into Grade 12 next year? The best time to close the gaps from Grade 11 is before the year starts.
+              </p>
+              <a
+                href={WA.highSchool}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-navy px-7 py-3.5 font-semibold text-white hover:bg-navy-3"
+              >
+                Talk to us about your child <Icon name="arrow" className="h-5 w-5" />
+              </a>
+            </div>
+            <div className="rise self-center rounded-3xl bg-white p-7 ring-1 ring-navy/10 sm:p-9">
+              <h3 className="font-display text-xl font-semibold tracking-tight">High school pricing</h3>
+              <table className="mt-5 w-full text-left">
+                <thead>
+                  <tr className="text-xs uppercase tracking-wider text-navy/55">
+                    <th className="pb-3 font-semibold">Per subject</th>
+                    <th className="pb-3 font-semibold">Online</th>
+                    <th className="pb-3 font-semibold">In person</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-navy/10 border-y border-navy/10">
+                  {SESSION_PRICES.map((p) => (
+                    <tr key={p.name}>
+                      <th scope="row" className="py-4 pr-3 font-medium">
+                        {p.name}
+                        <span className="block text-sm font-normal text-navy/60">{p.unit}</span>
+                      </th>
+                      <td className="py-4 font-display text-xl font-bold">{p.online}</td>
+                      <td className="py-4 font-display text-xl font-bold">{p.inPerson}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <ul className="mt-5 space-y-2 text-navy/75">
+                {[
+                  "Mathematics and Physical Sciences",
+                  "Taking both subjects? Split one monthly package across the two",
+                  "A direct WhatsApp line to the tutor",
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2">
+                    <Icon name="check" className="mt-1 h-4 w-4 shrink-0 text-amber" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── REVIEWS ───────────────────────── */}
-      <section className="reveal-section" style={{ padding: "6rem 2rem", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Results</div>
-          <h2 className="syne" style={{ fontSize: "2.8rem", fontWeight: "800", marginBottom: "0.75rem", lineHeight: 1.15 }}>What students say</h2>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", maxWidth: "480px", fontSize: "0.95rem", lineHeight: "1.7" }}>
-            A few of the results from MMT&apos;s 200+ students this year.
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
-            {testimonials.map((t, i) => (
-              <div key={i} className="card-dark" onMouseMove={tiltMove} onMouseLeave={tiltLeave} style={{ padding: "2rem" }}>
-                <div style={{ display: "flex", gap: "0.2rem", marginBottom: "1.25rem" }}>
-                  {[1,2,3,4,5].map(s => <span key={s} style={{ color: "#c9a84c", fontSize: "0.85rem" }}>★</span>)}
-                </div>
-                <p className="inter" style={{ fontSize: "0.9rem", color: "#94a3b8", lineHeight: "1.75", marginBottom: "1.5rem", fontStyle: "italic" }}>&ldquo;{t.quote}&rdquo;</p>
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1rem" }}>
-                  <p className="syne" style={{ fontSize: "0.88rem", fontWeight: "700", color: "#f1f5f9" }}>{t.name}</p>
-                  <p className="inter" style={{ fontSize: "0.75rem", color: "#475569" }}>{t.detail}</p>
-                </div>
-              </div>
+        {/* How we work */}
+        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+          <div className="rise max-w-2xl">
+            <Eyebrow>How we work</Eyebrow>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
+              Four words we hold every tutor and every student to.
+            </h2>
+          </div>
+          <ol className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Discipline", "A weekly rhythm you can keep: lessons, then problems, then the live class. Small work done every week beats a panic before the test."],
+              ["Understanding", "We explain where a formula comes from before we use it. If you understand it, you do not need to memorise it."],
+              ["Systems", "Every chapter is laid out the same way, so you never waste time working out where to start."],
+              ["Results", "The point is the mark on your transcript. Everything we make is built around how the tests are set and marked."],
+            ].map(([t, d], i) => (
+              <li key={t} className="rise border-t-2 border-navy pt-5">
+                <span className="font-hand text-3xl font-bold text-amber">0{i + 1}</span>
+                <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight">{t}</h3>
+                <p className="mt-2 text-navy/70">{d}</p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ol>
+        </section>
 
-      {/* ── CONTACT ───────────────────────── */}
-      <section className="reveal-section" id="contact" style={{ padding: "6rem 2rem", background: "rgba(255,255,255,0.01)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
-          <div className="label-tag" style={{ marginBottom: "1rem" }}>Get in touch</div>
-          <h2 className="syne" style={{ fontSize: "3rem", fontWeight: "800", marginBottom: "1rem", lineHeight: 1.1 }}>
-            Ready to turn things around?
-          </h2>
-          <p className="inter" style={{ color: "#475569", marginBottom: "3rem", fontSize: "1rem", lineHeight: "1.7" }}>
-            WhatsApp us your module and we&apos;ll match you with the right tutor, usually within the hour.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center" }}>
-            <a href={waLink} target="_blank" rel="noreferrer" className="btn-gold" onMouseMove={magMove} onMouseLeave={magLeave} style={{ fontSize: "1rem", padding: "1rem 2.5rem" }}>
-              📲 WhatsApp: 069 312 6747
-            </a>
-            <a href="mailto:mastermindtutoringmmt@gmail.com" className="inter" style={{ color: "#475569", fontSize: "0.85rem" }}>
-              mastermindtutoringmmt@gmail.com
-            </a>
-            <a href="https://mastermindtutoring.co.za" className="inter" style={{ color: "#c9a84c", fontSize: "0.85rem" }}>
-              mastermindtutoring.co.za
-            </a>
+        {/* Bursaries, opportunities, tutors */}
+        <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 sm:pb-28">
+          <div className="grid gap-5 lg:grid-cols-3">
+            <TeaserCard
+              href="/bursaries"
+              kicker={openBursaries > 0 ? `${openBursaries} open now` : "Bursary board"}
+              title="Bursaries"
+              text="Funding for Engineering, Commerce and Science students, with requirements, closing dates and the official link to apply."
+              cta="Browse bursaries"
+            />
+            <TeaserCard
+              href="/opportunities"
+              kicker={openOpportunities > 0 ? `${openOpportunities} open now` : "Work board"}
+              title="Opportunities"
+              text="Internships, vacation work, learnerships and paid student work, checked against the original listing."
+              cta="Browse opportunities"
+            />
+            <article className="rise flex flex-col rounded-3xl bg-gold p-7 text-navy sm:p-8">
+              <p className="font-hand text-2xl font-bold">Did well in a Wits module?</p>
+              <h3 className="mt-1 font-display text-3xl font-bold tracking-tight">Tutor with us</h3>
+              <p className="mt-3 flex-1 text-navy/80">
+                Earn R150 to R300 an hour teaching the modules you did well in, on a schedule that fits around your own
+                lectures.
+              </p>
+              <a
+                href={TUTOR_FORM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex min-h-11 items-center gap-2 self-start rounded-full bg-navy px-6 py-3 font-semibold text-white hover:bg-navy-3"
+              >
+                Apply to tutor <Icon name="external" className="h-4 w-4" />
+              </a>
+            </article>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── FOOTER ────────────────────────── */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.04)", padding: "2.5rem 2rem" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-          <div>
-            <span className="syne" style={{ fontWeight: "800", fontSize: "1rem" }}>MMT<span className="gold">.</span></span>
-            <p className="inter" style={{ fontSize: "0.75rem", color: "#374151", marginTop: "0.25rem" }}>CEO: Fezile Nkosi · COO: Thandeka Valelo</p>
+        {/* FAQ */}
+        <section id="faq" className="bg-paper">
+          <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28">
+            <Eyebrow>Questions</Eyebrow>
+            <h2 className="mt-3 font-display text-4xl font-bold tracking-[-0.025em] sm:text-5xl">Before you message us</h2>
+            <div className="mt-10 divide-y divide-navy/15 border-y border-navy/15">
+              <Faq q="How do I join the Full Course?">
+                Message us on WhatsApp on {PHONE_DISPLAY} and tell us which modules you want. Once your payment for the
+                month is in, we create your login and you can open the portal straight away.
+              </Faq>
+              <Faq q="Which modules does the Full Course cover?">
+                {courseNames.length > 0 ? listOf(courseNames) : "Engineering Physics I, Engineering Mathematics I and Applied Physics"}.
+                {courses.some((c) => c.slug === "isms") ? " We also run material for Integrated Science for Medical Students. Message us for details." : ""}{" "}
+                For any other module, one-on-one tutoring is the way to go.
+              </Faq>
+              <Faq q="Can I use the portal on my phone?">
+                Yes. It works in any browser, and you can add it to your home screen so it opens like an app. Everything
+                is laid out for a phone first.
+              </Faq>
+              <Faq q="Why does a video ask me to sign in to Google?">
+                Our videos are stored privately so that only enrolled students can watch them. Sign in with the Google
+                account you gave us when you joined and the video will play.
+              </Faq>
+              <Faq q="What happens if I miss the live class?">
+                The recording is added to that chapter in the portal, under Live classes, so you can watch it when it
+                suits you.
+              </Faq>
+              <Faq q="Is tutoring online or in person?">
+                Both. Online sessions cost a little less. In-person sessions happen in Johannesburg at a place and time
+                you agree with your tutor.
+              </Faq>
+              <Faq q="Is Mastermind Tutoring part of Wits?">
+                No. We are an independent tutoring business started by a Wits graduate and run with current and recent
+                Wits students. We are not affiliated with the university.
+              </Faq>
+            </div>
           </div>
-          <p className="inter" style={{ fontSize: "0.75rem", color: "#374151" }}>© 2026 Mastermind Tutoring · Wits University · Johannesburg</p>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
-            {["modules","courses","highschool","packages","careers","contact"].map(l => (
-              <a key={l} href={`#${l}`} className="inter" style={{ fontSize: "0.75rem", color: "#374151", textTransform: "capitalize" }}>{l}</a>
-            ))}
-            <a href="/bursaries" className="inter" style={{ fontSize: "0.75rem", color: "#c9a84c" }}>Bursaries</a>
-            <a href="/opportunities" className="inter" style={{ fontSize: "0.75rem", color: "#c9a84c" }}>Opportunities</a>
-          </div>
-        </div>
-      </footer>
+        </section>
 
+        {/* Closing call */}
+        <section className="night-grid bg-navy text-white">
+          <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
+            <p className="font-hand text-3xl font-bold text-gold">Start with one module</p>
+            <h2 className="mt-2 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-6xl">
+              The next test is closer than it feels.
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-lg text-white/70">
+              Tell us what you are studying and where you are stuck. A real person replies.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <a
+                href={WA.general}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-8 py-4 text-lg font-semibold text-navy hover:bg-gold-2"
+              >
+                <Icon name="chat" className="h-5 w-5" /> WhatsApp {PHONE_DISPLAY}
+              </a>
+              <Link href="/login" className="inline-flex min-h-12 items-center rounded-full px-8 py-4 text-lg font-semibold ring-1 ring-white/30 hover:ring-white">
+                Student login
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
+  );
+}
+
+function listOf(items: string[]) {
+  if (items.length <= 1) return items.join("");
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="font-hand text-3xl font-bold text-amber">{children}</p>;
+}
+
+function Stat({ value, label }: { value: number | string; label: string }) {
+  return (
+    <div className="px-1">
+      <dd className="font-display text-4xl font-bold tracking-tight sm:text-5xl">{value}</dd>
+      <dt className="mt-1 max-w-[11rem] text-sm text-navy/65">{label}</dt>
+    </div>
+  );
+}
+
+function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <details className="group py-1">
+      <summary className="flex min-h-14 items-center justify-between gap-4 py-3 font-display text-lg font-semibold outline-offset-4 focus-visible:outline-2 focus-visible:outline-gold sm:text-xl">
+        {q}
+        <span className="chev grid h-8 w-8 shrink-0 place-items-center rounded-full bg-navy text-gold transition-transform">
+          <Icon name="plus" className="h-4 w-4" />
+        </span>
+      </summary>
+      <p className="pb-5 pr-10 text-navy/75">{children}</p>
+    </details>
+  );
+}
+
+function TeaserCard({ href, kicker, title, text, cta }: { href: string; kicker: string; title: string; text: string; cta: string }) {
+  return (
+    <Link href={href} className="rise group flex flex-col rounded-3xl bg-white p-7 ring-1 ring-navy/10 transition-shadow hover:ring-2 hover:ring-gold sm:p-8">
+      <p className="font-hand text-2xl font-bold text-amber">{kicker}</p>
+      <h3 className="mt-1 font-display text-3xl font-bold tracking-tight">{title}</h3>
+      <p className="mt-3 flex-1 text-navy/70">{text}</p>
+      <span className="mt-6 inline-flex items-center gap-2 font-semibold">
+        {cta} <Icon name="arrow" className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+      </span>
+    </Link>
+  );
+}
+
+/** A drawing of the student portal built from the real chapter list. */
+function PortalPreview({ courses }: { courses: CatalogueCourse[] }) {
+  const course = courses.find((c) => c.slug === "engineering-physics-1") ?? courses[0];
+  const chapters = (course?.topics ?? []).filter((t) => /^chapter/i.test(t.title) && t.videos > 0);
+  const lead = [...chapters].sort((a, b) => b.videos - a.videos)[0];
+  const start = lead ? chapters.indexOf(lead) : 0;
+  const next = chapters.slice(start + 1, start + 4);
+  const leadParts = lead ? chapterParts(lead.title) : { num: "16", name: "Waves in one dimension" };
+
+  return (
+    <div className="pop relative mx-auto w-full max-w-xl lg:max-w-none" aria-hidden="true">
+      <p className="absolute -top-12 right-10 z-10 hidden rotate-[-4deg] font-hand text-2xl font-bold text-navy sm:block">
+        this is the real portal
+        <svg viewBox="0 0 60 40" className="absolute -bottom-8 -left-12 h-9 w-14 text-navy" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+          <path d="M50 3C40 6 22 12 14 32M14 32l-3-11M14 32l11-5" />
+        </svg>
+      </p>
+      <div className="rotate-[1.2deg] rounded-[1.75rem] bg-navy p-2.5 shadow-[0_30px_60px_-20px_rgb(13_27_42/0.55)] ring-1 ring-navy">
+        <div className="flex items-center gap-1.5 px-3 pb-2.5 pt-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-white/25" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/25" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/25" />
+          <span className="ml-3 truncate rounded-full bg-white/10 px-3 py-1 text-[0.7rem] text-white/60">mastermindtutoring.co.za/course</span>
+        </div>
+        <div className="rounded-[1.25rem] bg-cream p-4 sm:p-5">
+          <div className="flex items-center gap-4 rounded-2xl bg-navy p-4 text-white">
+            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-white/10 font-hand text-4xl font-bold text-gold">{leadParts.num}</span>
+            <div className="min-w-0">
+              <p className="truncate font-display text-lg font-semibold leading-tight">{leadParts.name}</p>
+              <p className="text-sm text-white/60">{course?.title ?? "Engineering Physics I"}</p>
+            </div>
+          </div>
+          <div className="mt-3 flex gap-1 overflow-hidden border-b border-navy/15 text-[0.8rem] font-semibold">
+            <span className="-mb-px border-b-[3px] border-gold px-2.5 py-2">Videos {lead ? <span className="ml-1 rounded-full bg-gold/30 px-1.5">{lead.videos}</span> : null}</span>
+            <span className="px-2.5 py-2 text-navy/55">Study guide</span>
+            <span className="px-2.5 py-2 text-navy/55">Problem set</span>
+            <span className="hidden px-2.5 py-2 text-navy/55 sm:inline">Live classes</span>
+          </div>
+          <div className="mt-3 grid aspect-video place-items-center rounded-2xl bg-night">
+            <span className="grid justify-items-center gap-3 text-center">
+              <span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-navy">
+                <Icon name="play" className="ml-1 h-8 w-8" />
+              </span>
+              <span className="text-sm text-white/60">Video 1 of {lead?.videos ?? 16}</span>
+            </span>
+          </div>
+          {next.length > 0 && (
+            <ul className="mt-3 space-y-2">
+              {next.map((t) => {
+                const p = chapterParts(t.title);
+                return (
+                  <li key={t.title} className="flex items-center gap-3 rounded-xl bg-white px-3 py-2.5 ring-1 ring-navy/10">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-navy font-hand text-lg font-bold text-gold">{p.num}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-semibold">{p.name}</span>
+                    <span className="shrink-0 text-xs text-navy/55">{t.videos} videos</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
+      <p className="absolute -bottom-8 left-4 hidden rotate-[3deg] font-hand text-2xl font-bold text-navy sm:block">
+        works on your phone too
+      </p>
     </div>
   );
 }

@@ -11,7 +11,10 @@ export default async function PortalLayout({
   return (
     <>
       <Header />
-      <main className="mx-auto w-full max-w-5xl px-4 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-10">{children}</main>
+      <footer className="border-t border-navy/10 py-6 text-center text-sm text-navy/55">
+        Mastermind Tutoring. Discipline. Understanding. Systems. Results.
+      </footer>
     </>
   );
 }

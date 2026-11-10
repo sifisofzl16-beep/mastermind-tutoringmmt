@@ -1,25 +1,33 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Bricolage_Grotesque, Caveat, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--ff-display", display: "swap" });
+const body = DM_Sans({ subsets: ["latin"], variable: "--ff-body", display: "swap" });
+const hand = Caveat({ subsets: ["latin"], weight: ["600", "700"], variable: "--ff-hand", display: "swap" });
+
+const title = "Mastermind Tutoring | Wits Full Courses and Tutoring, Johannesburg";
+const description =
+  "Full Courses for Wits first-year Engineering Physics, Mathematics and Applied Physics: videos, study guides, problem sets and live classes in one student portal. Plus one-on-one tutoring for Wits modules and Grades 10 to 12.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mastermindtutoring.co.za"),
-  title: "Mastermind Tutoring | Wits University Tutoring, Johannesburg",
-  description:
-    "Peer tutoring for Wits University students across Engineering, Commerce and Science, by tutors who passed the same modules. Online and in-person sessions. High school tutoring also available in Johannesburg.",
+  title,
+  description,
   keywords: [
     "Wits tutoring",
     "Wits University tutor",
+    "Wits Engineering Physics",
+    "MATH1043",
+    "PHYS1034",
     "tutoring Johannesburg",
-    "Wits Engineering tutor",
-    "Wits Commerce tutor",
-    "high school tutoring Johannesburg",
+    "high school maths tutor Johannesburg",
   ],
   authors: [{ name: "Mastermind Tutoring" }],
   openGraph: {
-    title: "Mastermind Tutoring | Wits University Tutoring, Johannesburg",
-    description:
-      "Peer tutoring for Wits University students, by tutors who passed the same modules. Online and in-person.",
+    title,
+    description,
     url: "https://www.mastermindtutoring.co.za",
     siteName: "Mastermind Tutoring",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -28,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mastermind Tutoring | Wits University Tutoring",
-    description: "Peer tutoring for Wits students, by tutors who passed the same modules.",
+    title,
+    description,
     images: ["/og-image.png"],
   },
   icons: {
@@ -41,8 +49,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
-  themeColor: "#06080f",
+export const viewport: Viewport = {
+  themeColor: "#0D1B2A",
 };
 
 export default function RootLayout({
@@ -51,8 +59,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <head>
+    <html lang="en" className={`${display.variable} ${body.variable} ${hand.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col">
+        {children}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-NHC974LQ6P"
           strategy="afterInteractive"
@@ -65,8 +74,7 @@ export default function RootLayout({
             gtag('config', 'G-NHC974LQ6P');
           `}
         </Script>
-      </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      </body>
     </html>
   );
 }

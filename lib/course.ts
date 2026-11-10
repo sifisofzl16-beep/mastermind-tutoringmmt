@@ -119,6 +119,24 @@ export type CourseState =
       daysLeft: number | null;
     };
 
+/** Every resource this student has opened, with when they last opened it. One lookup per request. */
+export const loadOpened = cache(async (): Promise<Map<string, string>> => {
+  const { supabase, user } = await getSession();
+  if (!user) return new Map();
+  const { data } = await supabase
+    .from("resource_progress")
+    .select("resource_id,last_opened_at")
+    .eq("user_id", user.id)
+    .order("last_opened_at", { ascending: false });
+  return new Map(((data ?? []) as { resource_id: string; last_opened_at: string }[]).map((r) => [r.resource_id, r.last_opened_at]));
+});
+
+/** Where a resource lives in the portal, so we can link straight to it. */
+export function resourceHref(moduleSlug: string, topicSlug: string, r: Resource) {
+  const base = `/course/${moduleSlug}/${topicSlug}`;
+  return isPlayable(r) ? `${base}?tab=videos&v=${r.id}` : `${base}?tab=${slugify(sectionOf(r))}`;
+}
+
 /** Loads a course and checks the signed-in student's access. One lookup per request. */
 export const loadCourse = cache(async (slug: string): Promise<CourseState> => {
   const { supabase, user, profile } = await getSession();
