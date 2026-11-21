@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PHONE_DISPLAY } from "@/lib/contact";
 import { getCatalogue, totals, type CatalogueCourse } from "@/lib/catalogue";
-import { FULL_COURSE_PRICES, GOOGLE_REVIEWS, MODULES, SESSION_PRICES, TUTOR_FORM, WA, liveStatus } from "@/lib/site";
+import { BOOK, FULL_COURSE_PRICES, GOOGLE_REVIEWS, MODULES, SESSION_PRICES, TUTOR_FORM, WA, liveStatus } from "@/lib/site";
 import { BURSARIES } from "../bursaries/data";
 import { OPPORTUNITIES } from "../opportunities/data";
 import Icon from "../_site/Icons";
@@ -36,7 +36,7 @@ export default async function UniversityPage() {
   const openBursaries = BURSARIES.filter((b) => liveStatus(b.closingDate, b.status) !== "Closed").length;
   const openOpportunities = OPPORTUNITIES.filter((o) => liveStatus(o.closingDate, o.status) !== "Closed").length;
 
-  const joinLinks = Object.fromEntries(courses.map((c) => [c.slug, WA.course(c.title)]));
+  const joinLinks = Object.fromEntries(courses.map((c) => [c.slug, BOOK.course(c.title)]));
 
   const features = [
     { icon: "play", title: "Recorded lessons", text: "Every section explained on video, in the order your lecturer teaches it. Pause, rewind and watch again before a test." },
@@ -57,7 +57,7 @@ export default async function UniversityPage() {
     logo: "https://www.mastermindtutoring.co.za/icon-512.png",
     slogan: "Discipline. Understanding. Systems. Results.",
     areaServed: "Johannesburg, South Africa",
-    telephone: "+27655112416",
+    telephone: "+27693126747",
   };
 
   return (
@@ -89,14 +89,12 @@ export default async function UniversityPage() {
                 a live class every week.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={WA.fullCourse}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={BOOK.fullCourse}
                   className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-base font-semibold text-navy shadow-[0_6px_0_0_var(--color-navy)] transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_0_var(--color-navy)]"
                 >
                   Join the Full Course <Icon name="arrow" className="h-5 w-5" />
-                </a>
+                </Link>
                 <a
                   href="#syllabus"
                   className="inline-flex min-h-12 items-center rounded-full bg-white px-7 py-3.5 text-base font-semibold ring-1 ring-navy/20 hover:ring-navy"
@@ -203,14 +201,12 @@ export default async function UniversityPage() {
                   ))}
                 </ul>
                 <div className="flex flex-wrap items-center gap-4">
-                  <a
-                    href={WA.fullCourse}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={BOOK.fullCourse}
                     className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-7 py-3.5 font-semibold text-navy hover:bg-gold-2"
                   >
-                    Join on WhatsApp <Icon name="arrow" className="h-5 w-5" />
-                  </a>
+                    Join the Full Course <Icon name="arrow" className="h-5 w-5" />
+                  </Link>
                   <Link href="/login" className="font-semibold underline decoration-gold decoration-2 underline-offset-4">
                     Already a student? Log in
                   </Link>
@@ -295,16 +291,14 @@ export default async function UniversityPage() {
                         </li>
                       ))}
                     </ul>
-                    <a
-                      href={WA.session}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={BOOK.session}
                       className={`mt-6 inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 font-semibold ${
                         i === 1 ? "bg-navy text-white hover:bg-navy-3" : "ring-1 ring-navy/25 hover:ring-navy"
                       }`}
                     >
-                      Book on WhatsApp
-                    </a>
+                      Book a session
+                    </Link>
                   </article>
                 ))}
               </div>

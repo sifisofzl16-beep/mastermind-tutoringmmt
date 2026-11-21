@@ -13,7 +13,7 @@ const links: { href: string; label: string; section: Section }[] = [
   { href: "/opportunities", label: "Opportunities", section: "other" },
 ];
 
-export default function SiteHeader({ whatsapp, current = "other" }: { whatsapp: string; current?: Section }) {
+export default function SiteHeader({ current = "other" }: { whatsapp?: string; current?: Section }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,9 +54,9 @@ export default function SiteHeader({ whatsapp, current = "other" }: { whatsapp: 
           <Link href="/login" className="rounded-full px-4 py-2 text-[0.95rem] font-semibold text-navy ring-1 ring-navy/25 hover:ring-navy">
             Student login
           </Link>
-          <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-navy px-5 py-2.5 text-[0.95rem] font-semibold text-white hover:bg-navy-3">
-            WhatsApp us
-          </a>
+          <Link href="/book" className="rounded-full bg-navy px-5 py-2.5 text-[0.95rem] font-semibold text-white hover:bg-navy-3">
+            Book a tutor
+          </Link>
         </div>
 
         <button
@@ -86,9 +86,9 @@ export default function SiteHeader({ whatsapp, current = "other" }: { whatsapp: 
             <Link href="/login" className="rounded-full px-4 py-3 text-center font-semibold ring-1 ring-navy/30">
               Student login
             </Link>
-            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-navy px-4 py-3 text-center font-semibold text-white">
-              WhatsApp us
-            </a>
+            <Link href="/book" onClick={() => setOpen(false)} className="rounded-full bg-navy px-4 py-3 text-center font-semibold text-white">
+              Book a tutor
+            </Link>
           </div>
         </nav>
       )}

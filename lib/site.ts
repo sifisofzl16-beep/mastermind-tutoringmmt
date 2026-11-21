@@ -84,3 +84,19 @@ export const GOOGLE_REVIEWS = {
   url: "https://share.google/vofx6H3cRAId8y1US",
   writeUrl: "https://g.page/r/CbdZCEZW3YHKEAE/review",
 };
+
+/** Links to the booking form, with the right options picked in advance. */
+function bookHref(params: Record<string, string>) {
+  return `/book?${new URLSearchParams(params).toString()}`;
+}
+export const BOOK = {
+  any: "/book",
+  school: bookHref({ for: "school" }),
+  grade12: bookHref({ for: "school", grade: "Grade 12" }),
+  university: bookHref({ for: "university" }),
+  session: bookHref({ for: "university", service: "One-on-one tutoring" }),
+  fullCourse: bookHref({ for: "university", service: "Full Course" }),
+  course: (title: string) => bookHref({ for: "university", service: "Full Course", module: title }),
+  module: (name: string) => bookHref({ for: "university", service: "One-on-one tutoring", module: name }),
+  schoolWith: (p: { grade: string; subject: string; mode: string }) => bookHref({ for: "school", ...p }),
+};

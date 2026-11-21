@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { whatsappLink } from "@/lib/contact";
+import Link from "next/link";
+import { BOOK } from "@/lib/site";
 import Icon from "./Icons";
 
 export default function ModuleFinder({ modules }: { modules: Record<string, string[]> }) {
@@ -18,7 +19,7 @@ export default function ModuleFinder({ modules }: { modules: Record<string, stri
       .filter((m) => m.toLowerCase().includes(q) && !seen.has(m) && seen.add(m));
   }, [q, faculty, modules]);
 
-  const link = (name: string) => whatsappLink(`Hi Mastermind Tutoring, I need help with ${name}.`);
+  const link = (name: string) => BOOK.module(name);
 
   return (
     <div className="rounded-3xl bg-white p-5 ring-1 ring-navy/10 sm:p-8">
@@ -61,26 +62,24 @@ export default function ModuleFinder({ modules }: { modules: Record<string, stri
       <ul className="mt-5 flex flex-wrap gap-2" aria-live="polite">
         {results.map((m) => (
           <li key={m}>
-            <a
+            <Link
               href={link(m)}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center rounded-xl bg-cream px-4 py-2 text-sm font-medium ring-1 ring-navy/10 hover:bg-gold/25 hover:ring-gold"
             >
               {m}
-            </a>
+            </Link>
           </li>
         ))}
         {results.length === 0 && (
           <li className="text-navy/70">
             Nothing by that name on our list yet.{" "}
-            <a href={link(query.trim())} target="_blank" rel="noopener noreferrer" className="font-semibold underline decoration-gold decoration-2 underline-offset-4">
+            <Link href={link(query.trim())} className="font-semibold underline decoration-gold decoration-2 underline-offset-4">
               Ask us about {query.trim()}
-            </a>
+            </Link>
           </li>
         )}
       </ul>
-      <p className="mt-4 text-sm text-navy/60">Select a module to message us about it on WhatsApp.</p>
+      <p className="mt-4 text-sm text-navy/60">Select a module to book a tutor for it.</p>
     </div>
   );
 }

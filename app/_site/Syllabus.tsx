@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import type { CatalogueCourse } from "@/lib/catalogue";
 import Icon from "./Icons";
@@ -85,14 +86,12 @@ export default function Syllabus({
             </p>
           </div>
           {joinLinks[course.slug] && (
-            <a
+            <Link
               href={joinLinks[course.slug]}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-navy hover:bg-gold-2"
             >
               Join this course <Icon name="arrow" className="h-4 w-4" />
-            </a>
+            </Link>
           )}
         </div>
 

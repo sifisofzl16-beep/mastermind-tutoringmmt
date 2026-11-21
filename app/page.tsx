@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PHONE_DISPLAY } from "@/lib/contact";
-import { GOOGLE_REVIEWS, SESSION_PRICES, TUTOR_FORM, WA } from "@/lib/site";
+import { BOOK, GOOGLE_REVIEWS, SESSION_PRICES, TUTOR_FORM, WA } from "@/lib/site";
 import { Eyebrow, Faq, Stars } from "./_site/Bits";
 import GradeEnquiry from "./_site/GradeEnquiry";
 import Icon from "./_site/Icons";
@@ -58,7 +58,7 @@ export default function HomePage() {
     logo: "https://www.mastermindtutoring.co.za/icon-512.png",
     slogan: "Discipline. Understanding. Systems. Results.",
     areaServed: "Johannesburg, South Africa",
-    telephone: "+27655112416",
+    telephone: "+27693126747",
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: GOOGLE_REVIEWS.rating,
@@ -138,14 +138,12 @@ export default function HomePage() {
                   Maths and Physical Sciences decide which university courses stay open, from engineering and
                   medicine to actuarial science and commerce. Our tutors went through exactly that, and got in.
                 </p>
-                <a
-                  href={WA.grade12}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={BOOK.grade12}
                   className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-7 py-3.5 font-semibold text-navy hover:bg-gold-2"
                 >
                   <Icon name="chat" className="h-5 w-5" /> Book matric tutoring
-                </a>
+                </Link>
               </div>
 
               <ol className="rise grid gap-4 sm:grid-cols-2">
@@ -272,16 +270,14 @@ export default function HomePage() {
                   </div>
                 </dl>
                 <p className={`mt-2 text-sm ${i === 1 ? "text-white/60" : "text-navy/60"}`}>{p.unit}, per subject</p>
-                <a
-                  href={WA.highSchool}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href={BOOK.school}
                   className={`mt-7 inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-semibold ${
                     i === 1 ? "bg-gold text-navy hover:bg-gold-2" : "ring-1 ring-navy/25 hover:ring-navy"
                   }`}
                 >
-                  Book on WhatsApp
-                </a>
+                  Book this
+                </Link>
               </article>
             ))}
           </div>
@@ -411,14 +407,12 @@ export default function HomePage() {
               Tell us your child&apos;s grade, the subject and where they are stuck. We will take it from there.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
-              <a
-                href={WA.highSchool}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={BOOK.school}
                 className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gold px-8 py-4 text-lg font-semibold text-navy hover:bg-gold-2"
               >
-                <Icon name="chat" className="h-5 w-5" /> WhatsApp {PHONE_DISPLAY}
-              </a>
+                Book a tutor <Icon name="arrow" className="h-5 w-5" />
+              </Link>
               <Link href="/university" className="inline-flex min-h-12 items-center rounded-full px-8 py-4 text-lg font-semibold ring-1 ring-white/30 hover:ring-white">
                 I am a university student
               </Link>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { whatsappLink } from "@/lib/contact";
+import Link from "next/link";
+import { BOOK } from "@/lib/site";
 import Icon from "./Icons";
 
 const GRADES = ["Grade 12", "Grade 11", "Grade 10"];
@@ -14,9 +15,6 @@ export default function GradeEnquiry() {
   const [subject, setSubject] = useState(SUBJECTS[0]);
   const [mode, setMode] = useState(MODES[0]);
 
-  const subjectText = subject === "Both" ? "Mathematics and Physical Sciences" : subject;
-  const modeText = mode === "Not sure yet" ? "We have not decided between online and in person." : `We would like ${mode.toLowerCase()} sessions.`;
-  const message = `Hi Mastermind Tutoring, I'm looking for a tutor for my child in ${grade} for ${subjectText}. ${modeText}`;
 
   return (
     <div className="rounded-[1.75rem] bg-white p-6 shadow-[0_30px_60px_-30px_rgb(13_27_42/0.45)] ring-1 ring-navy/10 sm:p-8">
@@ -27,15 +25,13 @@ export default function GradeEnquiry() {
       <Choice label="Subject" options={SUBJECTS} value={subject} onChange={setSubject} />
       <Choice label="Sessions" options={MODES} value={mode} onChange={setMode} />
 
-      <a
-        href={whatsappLink(message)}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={BOOK.schoolWith({ grade, subject, mode })}
         className="mt-7 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-base font-semibold text-navy shadow-[0_5px_0_0_var(--color-navy)] transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_2px_0_0_var(--color-navy)]"
       >
-        <Icon name="chat" className="h-5 w-5" /> Send on WhatsApp
-      </a>
-      <p className="mt-3 text-center text-sm text-navy/60">Your message is written for you. A real person replies.</p>
+        Continue to booking <Icon name="arrow" className="h-5 w-5" />
+      </Link>
+      <p className="mt-3 text-center text-sm text-navy/60">Next: a few details, then it goes to us on WhatsApp.</p>
     </div>
   );
 }

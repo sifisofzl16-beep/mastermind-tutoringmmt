@@ -34,6 +34,7 @@ export default function SiteFooter() {
           </FooterLink>
         </FooterCol>
         <FooterCol title="Contact">
+          <FooterLink href="/book">Book a tutor</FooterLink>
           <FooterLink href={WA.general} external>
             WhatsApp {PHONE_DISPLAY}
           </FooterLink>
