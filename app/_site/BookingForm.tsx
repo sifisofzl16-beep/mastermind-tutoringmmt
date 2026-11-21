@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PHONE_DISPLAY, whatsappLink } from "@/lib/contact";
 import Icon from "./Icons";
 
@@ -27,6 +27,7 @@ function pick(value: string | null, options: string[], fallback = "") {
  */
 export default function BookingForm() {
   const sp = useSearchParams();
+  const router = useRouter();
   const [who, setWho] = useState<Who | null>(sp.get("for") === "university" ? "university" : sp.get("for") === "school" ? "school" : null);
 
   // Shared
@@ -110,7 +111,13 @@ export default function BookingForm() {
 
     const link = whatsappLink(buildMessage());
     setSentLink(link);
+    try {
+      sessionStorage.setItem("mmt-booking-link", link);
+    } catch {
+      // Private browsing: the confirmation page falls back to a plain WhatsApp link.
+    }
     window.open(link, "_blank", "noopener,noreferrer");
+    router.push(`/book/sent?for=${who}`);
   }
 
   if (!who) {

@@ -7,7 +7,7 @@ import SiteFooter from "../_site/SiteFooter";
 import SiteHeader from "../_site/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Book a tutor | Mastermind Tutoring",
+  title: "Book sessions | Mastermind Tutoring",
   description:
     "Book Maths and Physical Sciences tutoring for Grades 10 to 12, or tutoring and Full Courses for university modules. Fill in a short form and send it to us on WhatsApp.",
   alternates: { canonical: "/book" },
@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 export default function BookPage() {
   return (
     <>
-      <SiteHeader whatsapp={WA.general} />
+      <SiteHeader whatsapp={WA.general} current="book" />
       <main id="main" className="paper-grid flex-1">
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-          <p className="font-hand text-3xl font-bold text-amber">Book a tutor</p>
+          <p className="font-hand text-3xl font-bold text-amber">Book sessions</p>
           <h1 className="mt-1 font-display text-4xl font-bold leading-[1.05] tracking-[-0.025em] sm:text-5xl">
             Tell us what you need. We reply on WhatsApp.
           </h1>

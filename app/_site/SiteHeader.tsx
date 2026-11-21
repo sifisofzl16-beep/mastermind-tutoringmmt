@@ -2,18 +2,22 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { WA } from "@/lib/site";
 import Icon from "./Icons";
 
-type Section = "school" | "university" | "other";
+const WA_GENERAL = WA.general;
+
+type Section = "school" | "university" | "book" | "other";
 
 const links: { href: string; label: string; section: Section }[] = [
   { href: "/", label: "High school", section: "school" },
   { href: "/university", label: "University", section: "university" },
+  { href: "/book", label: "Book sessions", section: "book" },
   { href: "/bursaries", label: "Bursaries", section: "other" },
   { href: "/opportunities", label: "Opportunities", section: "other" },
 ];
 
-export default function SiteHeader({ current = "other" }: { whatsapp?: string; current?: Section }) {
+export default function SiteHeader({ whatsapp = WA_GENERAL, current = "other" }: { whatsapp?: string; current?: Section }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,9 +58,9 @@ export default function SiteHeader({ current = "other" }: { whatsapp?: string; c
           <Link href="/login" className="rounded-full px-4 py-2 text-[0.95rem] font-semibold text-navy ring-1 ring-navy/25 hover:ring-navy">
             Student login
           </Link>
-          <Link href="/book" className="rounded-full bg-navy px-5 py-2.5 text-[0.95rem] font-semibold text-white hover:bg-navy-3">
-            Book a tutor
-          </Link>
+          <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-navy px-5 py-2.5 text-[0.95rem] font-semibold text-white hover:bg-navy-3">
+            WhatsApp us
+          </a>
         </div>
 
         <button
@@ -86,9 +90,9 @@ export default function SiteHeader({ current = "other" }: { whatsapp?: string; c
             <Link href="/login" className="rounded-full px-4 py-3 text-center font-semibold ring-1 ring-navy/30">
               Student login
             </Link>
-            <Link href="/book" onClick={() => setOpen(false)} className="rounded-full bg-navy px-4 py-3 text-center font-semibold text-white">
-              Book a tutor
-            </Link>
+            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-navy px-4 py-3 text-center font-semibold text-white">
+              WhatsApp us
+            </a>
           </div>
         </nav>
       )}
